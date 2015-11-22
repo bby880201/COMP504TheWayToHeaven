@@ -1,4 +1,4 @@
-package view.chatwindow;
+package xz42_bb26.view.chatwindow;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

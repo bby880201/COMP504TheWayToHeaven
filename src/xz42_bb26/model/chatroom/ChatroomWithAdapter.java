@@ -1,4 +1,4 @@
-package model.chatroom;
+package xz42_bb26.model.chatroom;
 
 import java.awt.Container;
 import java.net.InetAddress;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.swing.JLabel;
-import model.messages.StringMessage;
-import model.user.Connect;
-import model.user.IConnectToWorldAdapter;
-import model.user.User;
+import xz42_bb26.model.messages.StringMessage;
+import xz42_bb26.model.user.Connect;
+import xz42_bb26.model.user.IConnectToWorldAdapter;
+import xz42_bb26.model.user.User;
 import provided.datapacket.ADataPacket;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;

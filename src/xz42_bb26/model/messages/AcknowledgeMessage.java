@@ -1,4 +1,4 @@
-package model.messages;
+package xz42_bb26.model.messages;
 
 import java.io.Serializable;
 
