@@ -36,7 +36,7 @@ public class GameView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GameView() {
+	public GameView(IModelAdapter iModelAdapter) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -48,5 +48,6 @@ public class GameView extends JFrame {
 		panel.start();
 		contentPane.add(panel, BorderLayout.CENTER);
 	}
+
 
 }
