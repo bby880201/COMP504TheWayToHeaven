@@ -1,4 +1,4 @@
-package view;
+package xz42_bb26.view;
 
 import java.util.HashSet;
 

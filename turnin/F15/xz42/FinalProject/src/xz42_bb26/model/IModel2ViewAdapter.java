@@ -1,7 +1,7 @@
-package model;
+package xz42_bb26.model;
 
-import model.chatroom.ChatroomWithAdapter;
-import model.chatroom.IChatRoom2WorldAdapter;
+import xz42_bb26.model.chatroom.ChatroomWithAdapter;
+import xz42_bb26.model.chatroom.IChatRoom2WorldAdapter;
 
 /**
  * Adapter that enables the model to talk to the view.

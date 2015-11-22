@@ -1,4 +1,4 @@
-package model.chatroom;
+package xz42_bb26.model.chatroom;
 
 import java.awt.Container;
 import java.util.List;

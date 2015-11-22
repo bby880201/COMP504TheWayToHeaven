@@ -1,4 +1,4 @@
-package view;
+package xz42_bb26.view;
 
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -15,8 +15,8 @@ import java.util.HashSet;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EtchedBorder;
-import view.chatwindow.ChattingWindow;
-import view.chatwindow.IChatWindow2Model;
+import xz42_bb26.view.chatwindow.ChattingWindow;
+import xz42_bb26.view.chatwindow.IChatWindow2Model;
 import javax.swing.JComboBox;
 
 /**
