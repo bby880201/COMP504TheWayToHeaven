@@ -17,6 +17,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
+import gov.nasa.worldwind.geom.Position;
+import map.IRightClickAction;
 import map.MapPanel;
 
 import javax.swing.JScrollPane;
@@ -179,6 +181,13 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		map_panel = new MapPanel();
 		map_panel.setPreferredSize(new java.awt.Dimension(600, 400));
 //		map_panel.addRightClickAction(rightClick);
+		map_panel.addRightClickAction(new IRightClickAction(){
+			@Override
+			public void apply(Position p) {
+				// TODO Auto-generated method stub
+				System.out.println(p);
+			}
+		});
 		map_panel.start();
 		GridBagConstraints gbc_map_panel = new GridBagConstraints();
 		gbc_map_panel.fill = GridBagConstraints.BOTH;
