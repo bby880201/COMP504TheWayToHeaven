@@ -16,6 +16,9 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+
+import map.MapPanel;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextField;
@@ -49,6 +52,7 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	private JButton btnSend;
 	private JButton btnLeave;
 	private JButton btnInvite;
+	private MapPanel map_panel;
 
 	/**
 	 * Constructor that takes an instance of IChatWindow2Model
@@ -66,18 +70,103 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		JPanel panel_2 = new JPanel();
 		this.setLeftComponent(panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[] { 0, 0, 0 };
+		gbl_panel_2.columnWidths = new int[] { 0, 0, 0, 0 };
 		gbl_panel_2.rowHeights = new int[] { 0, 0 };
-		gbl_panel_2.columnWeights = new double[] { 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_2.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		gbl_panel_2.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel_2.setLayout(gbl_panel_2);
+		
+				JPanel panel_4 = new JPanel();
+				panel_4.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+				GridBagConstraints gbc_panel_4 = new GridBagConstraints();
+				gbc_panel_4.insets = new Insets(0, 0, 0, 5);
+				gbc_panel_4.fill = GridBagConstraints.BOTH;
+				gbc_panel_4.gridx = 0;
+				gbc_panel_4.gridy = 0;
+				panel_2.add(panel_4, gbc_panel_4);
+				GridBagLayout gbl_panel_4 = new GridBagLayout();
+				gbl_panel_4.columnWidths = new int[] { 0, 0 };
+				gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 150, 0, 0, 0, 20, 0, 0 };
+				gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+				gbl_panel_4.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+				panel_4.setLayout(gbl_panel_4);
+				
+						JLabel lblInviteFriend = new JLabel("Invite Friend:");
+						GridBagConstraints gbc_lblInviteFriend = new GridBagConstraints();
+						gbc_lblInviteFriend.fill = GridBagConstraints.HORIZONTAL;
+						gbc_lblInviteFriend.insets = new Insets(0, 0, 5, 0);
+						gbc_lblInviteFriend.gridx = 0;
+						gbc_lblInviteFriend.gridy = 0;
+						panel_4.add(lblInviteFriend, gbc_lblInviteFriend);
+						
+								tfInvite = new JTextField();
+								tfInvite.setToolTipText("Enter the IP address of the remote user you want to invite to the current chatroom.");
+								GridBagConstraints gbc_tfInvite = new GridBagConstraints();
+								gbc_tfInvite.fill = GridBagConstraints.HORIZONTAL;
+								gbc_tfInvite.insets = new Insets(0, 0, 5, 0);
+								gbc_tfInvite.gridx = 0;
+								gbc_tfInvite.gridy = 1;
+								panel_4.add(tfInvite, gbc_tfInvite);
+								tfInvite.setColumns(10);
+								
+										btnInvite = new JButton("Invite");
+										btnInvite.setToolTipText("Invite the remote user as specified by the IP address to the current chatroom.");
+										
+												GridBagConstraints gbc_btnInvite = new GridBagConstraints();
+												gbc_btnInvite.fill = GridBagConstraints.HORIZONTAL;
+												gbc_btnInvite.insets = new Insets(0, 0, 5, 0);
+												gbc_btnInvite.gridx = 0;
+												gbc_btnInvite.gridy = 2;
+												panel_4.add(btnInvite, gbc_btnInvite);
+												
+														JLabel lblMemberList = new JLabel("Member List:");
+														GridBagConstraints gbc_lblMemberList = new GridBagConstraints();
+														gbc_lblMemberList.fill = GridBagConstraints.BOTH;
+														gbc_lblMemberList.insets = new Insets(0, 0, 5, 0);
+														gbc_lblMemberList.gridx = 0;
+														gbc_lblMemberList.gridy = 3;
+														panel_4.add(lblMemberList, gbc_lblMemberList);
+														
+																JPanel panel_6 = new JPanel();
+																GridBagConstraints gbc_panel_6 = new GridBagConstraints();
+																gbc_panel_6.insets = new Insets(0, 0, 5, 0);
+																gbc_panel_6.fill = GridBagConstraints.BOTH;
+																gbc_panel_6.gridx = 0;
+																gbc_panel_6.gridy = 4;
+																panel_4.add(panel_6, gbc_panel_6);
+																panel_6.setLayout(new BorderLayout(0, 0));
+																
+																		lsMember = new JList<Usr>();
+																		lsMember.setToolTipText("Display the current members in the chatroom.");
+																		lsMember.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+																		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+																		panel_6.add(lsMember, BorderLayout.CENTER);
+																		
+																				btnSpeakTo = new JButton("Speak To");
+																				btnSpeakTo.setToolTipText("Speak to a chosen member from the member list of this chatroom.");
+																				
+																						GridBagConstraints gbc_btnSpeakTo = new GridBagConstraints();
+																						gbc_btnSpeakTo.fill = GridBagConstraints.HORIZONTAL;
+																						gbc_btnSpeakTo.insets = new Insets(0, 0, 5, 0);
+																						gbc_btnSpeakTo.gridx = 0;
+																						gbc_btnSpeakTo.gridy = 5;
+																						panel_4.add(btnSpeakTo, gbc_btnSpeakTo);
+																						
+																								btnLeave = new JButton("Leave");
+																								btnLeave.setToolTipText("Leave the current chatroom.");
+																								
+																										GridBagConstraints gbc_btnLeave = new GridBagConstraints();
+																										gbc_btnLeave.fill = GridBagConstraints.HORIZONTAL;
+																										gbc_btnLeave.gridx = 0;
+																										gbc_btnLeave.gridy = 9;
+																										panel_4.add(btnLeave, gbc_btnLeave);
 
 		scDisplay = new JScrollPane();
 		scDisplay.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scDisplay = new GridBagConstraints();
 		gbc_scDisplay.insets = new Insets(0, 0, 0, 5);
 		gbc_scDisplay.fill = GridBagConstraints.BOTH;
-		gbc_scDisplay.gridx = 0;
+		gbc_scDisplay.gridx = 1;
 		gbc_scDisplay.gridy = 0;
 		panel_2.add(scDisplay, gbc_scDisplay);
 
@@ -86,90 +175,16 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		scDisplay.setViewportView(plDisplay);
 		plDisplay.setBackground(Color.WHITE);
 		plDisplay.setLayout(new BoxLayout(plDisplay, BoxLayout.Y_AXIS));
-
-		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		GridBagConstraints gbc_panel_4 = new GridBagConstraints();
-		gbc_panel_4.fill = GridBagConstraints.BOTH;
-		gbc_panel_4.gridx = 1;
-		gbc_panel_4.gridy = 0;
-		panel_2.add(panel_4, gbc_panel_4);
-		GridBagLayout gbl_panel_4 = new GridBagLayout();
-		gbl_panel_4.columnWidths = new int[] { 0, 0 };
-		gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 150, 0, 0, 0, 20, 0, 0 };
-		gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_4.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panel_4.setLayout(gbl_panel_4);
-
-		JLabel lblInviteFriend = new JLabel("Invite Friend:");
-		GridBagConstraints gbc_lblInviteFriend = new GridBagConstraints();
-		gbc_lblInviteFriend.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblInviteFriend.insets = new Insets(0, 0, 5, 0);
-		gbc_lblInviteFriend.gridx = 0;
-		gbc_lblInviteFriend.gridy = 0;
-		panel_4.add(lblInviteFriend, gbc_lblInviteFriend);
-
-		tfInvite = new JTextField();
-		tfInvite.setToolTipText("Enter the IP address of the remote user you want to invite to the current chatroom.");
-		GridBagConstraints gbc_tfInvite = new GridBagConstraints();
-		gbc_tfInvite.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tfInvite.insets = new Insets(0, 0, 5, 0);
-		gbc_tfInvite.gridx = 0;
-		gbc_tfInvite.gridy = 1;
-		panel_4.add(tfInvite, gbc_tfInvite);
-		tfInvite.setColumns(10);
-
-		btnInvite = new JButton("Invite");
-		btnInvite.setToolTipText("Invite the remote user as specified by the IP address to the current chatroom.");
-
-		GridBagConstraints gbc_btnInvite = new GridBagConstraints();
-		gbc_btnInvite.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnInvite.insets = new Insets(0, 0, 5, 0);
-		gbc_btnInvite.gridx = 0;
-		gbc_btnInvite.gridy = 2;
-		panel_4.add(btnInvite, gbc_btnInvite);
-
-		JLabel lblMemberList = new JLabel("Member List:");
-		GridBagConstraints gbc_lblMemberList = new GridBagConstraints();
-		gbc_lblMemberList.fill = GridBagConstraints.BOTH;
-		gbc_lblMemberList.insets = new Insets(0, 0, 5, 0);
-		gbc_lblMemberList.gridx = 0;
-		gbc_lblMemberList.gridy = 3;
-		panel_4.add(lblMemberList, gbc_lblMemberList);
-
-		JPanel panel_6 = new JPanel();
-		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
-		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_6.fill = GridBagConstraints.BOTH;
-		gbc_panel_6.gridx = 0;
-		gbc_panel_6.gridy = 4;
-		panel_4.add(panel_6, gbc_panel_6);
-		panel_6.setLayout(new BorderLayout(0, 0));
-
-		lsMember = new JList<Usr>();
-		lsMember.setToolTipText("Display the current members in the chatroom.");
-		lsMember.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		panel_6.add(lsMember, BorderLayout.CENTER);
-
-		btnSpeakTo = new JButton("Speak To");
-		btnSpeakTo.setToolTipText("Speak to a chosen member from the member list of this chatroom.");
-
-		GridBagConstraints gbc_btnSpeakTo = new GridBagConstraints();
-		gbc_btnSpeakTo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnSpeakTo.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSpeakTo.gridx = 0;
-		gbc_btnSpeakTo.gridy = 5;
-		panel_4.add(btnSpeakTo, gbc_btnSpeakTo);
-
-		btnLeave = new JButton("Leave");
-		btnLeave.setToolTipText("Leave the current chatroom.");
-
-		GridBagConstraints gbc_btnLeave = new GridBagConstraints();
-		gbc_btnLeave.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnLeave.gridx = 0;
-		gbc_btnLeave.gridy = 9;
-		panel_4.add(btnLeave, gbc_btnLeave);
+		
+		map_panel = new MapPanel();
+		map_panel.setPreferredSize(new java.awt.Dimension(600, 400));
+//		map_panel.addRightClickAction(rightClick);
+		map_panel.start();
+		GridBagConstraints gbc_map_panel = new GridBagConstraints();
+		gbc_map_panel.fill = GridBagConstraints.BOTH;
+		gbc_map_panel.gridx = 2;
+		gbc_map_panel.gridy = 0;
+		panel_2.add(map_panel, gbc_map_panel);
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
