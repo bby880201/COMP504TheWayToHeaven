@@ -1,4 +1,4 @@
-package xz42_bb26.view;
+package xz42_bb26.client.view;
 
 import java.util.HashSet;
 

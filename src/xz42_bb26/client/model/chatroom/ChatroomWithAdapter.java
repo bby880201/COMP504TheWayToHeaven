@@ -1,4 +1,4 @@
-package xz42_bb26.model.chatroom;
+package xz42_bb26.client.model.chatroom;
 
 import java.awt.Container;
 import java.net.InetAddress;
@@ -8,11 +8,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
+
 import javax.swing.JLabel;
-import xz42_bb26.model.messages.StringMessage;
-import xz42_bb26.model.user.Connect;
-import xz42_bb26.model.user.IConnectToWorldAdapter;
-import xz42_bb26.model.user.User;
+
+import xz42_bb26.client.model.messages.StringMessage;
+import xz42_bb26.client.model.user.Connect;
+import xz42_bb26.client.model.user.IConnectToWorldAdapter;
+import xz42_bb26.client.model.user.User;
 import provided.datapacket.ADataPacket;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;

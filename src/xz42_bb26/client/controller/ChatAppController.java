@@ -1,4 +1,4 @@
-package xz42_bb26.controller;
+package xz42_bb26.client.controller;
 
 import java.awt.Container;
 import java.awt.EventQueue;
@@ -8,14 +8,14 @@ import java.util.UUID;
 
 import common.IChatroom;
 import common.IUser;
-import xz42_bb26.model.ChatAppMainModel;
-import xz42_bb26.model.IModel2ViewAdapter;
-import xz42_bb26.model.chatroom.ChatroomWithAdapter;
-import xz42_bb26.model.chatroom.IChatRoom2WorldAdapter;
-import xz42_bb26.view.IView2ModelAdapter;
-import xz42_bb26.view.MainGUI;
-import xz42_bb26.view.chatwindow.ChattingWindow;
-import xz42_bb26.view.chatwindow.IChatWindow2Model;
+import xz42_bb26.client.model.ChatAppMainModel;
+import xz42_bb26.client.model.IModel2ViewAdapter;
+import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
+import xz42_bb26.client.model.chatroom.IChatRoom2WorldAdapter;
+import xz42_bb26.client.view.IView2ModelAdapter;
+import xz42_bb26.client.view.MainGUI;
+import xz42_bb26.client.view.chatwindow.ChattingWindow;
+import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
 
 /**
  * MVC Controller for the system, which oversees the model and view of the system

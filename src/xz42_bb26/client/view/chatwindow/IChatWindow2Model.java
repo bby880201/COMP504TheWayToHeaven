@@ -1,4 +1,4 @@
-package xz42_bb26.view.chatwindow;
+package xz42_bb26.client.view.chatwindow;
 
 /**
  * Mini-View2Model adapter that enables the mini-view (chat window) to communicate 
