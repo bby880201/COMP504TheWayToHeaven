@@ -1,4 +1,4 @@
-package xz42_bb26.model;
+package xz42_bb26.client.model;
 
 import java.net.InetAddress;
 import java.rmi.RemoteException;
@@ -7,10 +7,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-import xz42_bb26.model.chatroom.ChatroomWithAdapter;
-import xz42_bb26.model.user.Connect;
-import xz42_bb26.model.user.IConnectToWorldAdapter;
-import xz42_bb26.model.user.User;
+
+import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
+import xz42_bb26.client.model.user.Connect;
+import xz42_bb26.client.model.user.IConnectToWorldAdapter;
+import xz42_bb26.client.model.user.User;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
 import common.IConnect;

@@ -1,4 +1,4 @@
-package xz42_bb26.model.user;
+package xz42_bb26.client.model.user;
 
 import java.net.InetAddress;
 import java.text.Format;

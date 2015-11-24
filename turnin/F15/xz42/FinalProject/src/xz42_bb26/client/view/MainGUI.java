@@ -1,22 +1,33 @@
-package xz42_bb26.view;
+package xz42_bb26.client.view;
 
 import java.awt.Toolkit;
+
 import javax.swing.JFrame;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+
 import javax.swing.JLabel;
+
 import java.awt.Insets;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JTabbedPane;
 import javax.swing.border.EtchedBorder;
-import xz42_bb26.view.chatwindow.ChattingWindow;
-import xz42_bb26.view.chatwindow.IChatWindow2Model;
+
+import xz42_bb26.client.view.chatwindow.ChattingWindow;
+import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
+
 import javax.swing.JComboBox;
 
 /**
