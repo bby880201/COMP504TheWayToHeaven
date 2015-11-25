@@ -20,7 +20,6 @@ public class GameModel {
 	 * @param view A model to view adapter.
 	 */
 	public GameModel(IViewAdapter iViewAdapter) {
-		// TODO Auto-generated constructor stub
 		view = iViewAdapter;
 	}
 	
@@ -29,6 +28,10 @@ public class GameModel {
 	}
 	
 	public void moveTo(Position pos){
+		
+	}
+
+	public void start() {
 		
 	}
 
