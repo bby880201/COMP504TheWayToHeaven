@@ -24,6 +24,11 @@ public class GameController {
 	 */
 	public GameController() {
 		model = new GameModel(new IViewAdapter() {
+
+			@Override
+			public void update() {
+				view.update();
+			}
 			
 		});
 		view = new GameView(new IModelAdapter() {

@@ -7,7 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.geom.LatLon;
+import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.RenderableLayer;
+import gov.nasa.worldwind.render.Box;
 import map.MapPanel;
+import map.IRightClickAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
@@ -21,6 +27,9 @@ public class GameView extends JFrame {
 	 */
 	private static final long serialVersionUID = -2733797230967669361L;
 	private JPanel contentPane;
+	
+	private RenderableLayer sLayer = new RenderableLayer();
+
 	MapPanel mapPanel;
 	IModelAdapter model;
 	/**
@@ -32,6 +41,7 @@ public class GameView extends JFrame {
 			@Override
 			public void run() {
 				mapPanel.start();
+				mapPanel.addLayer(sLayer);
 			    setVisible(true);
 			}
 		});
@@ -60,6 +70,13 @@ public class GameView extends JFrame {
 		mapPanel.setPreferredSize(new java.awt.Dimension(600, 400));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
+		mapPanel.addRightClickAction(new IRightClickAction(){
+
+			@Override
+			public void apply(Position p) {
+				System.out.println(p);
+			}});
+		
 		
 		
 		JPanel infoPanel = new JPanel();
@@ -78,29 +95,34 @@ public class GameView extends JFrame {
 		gbc_btnBeTheNavigator.gridx = 0;
 		gbc_btnBeTheNavigator.gridy = 0;
 		infoPanel.add(btnBeTheNavigator, gbc_btnBeTheNavigator);
-		if(model.isNavigator()){
-			
-		}
-		else{
-			JLabel cashLabel = new JLabel("Current Cash: $100");
-			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
-			gbc_cashLabel.insets = new Insets(0, 0, 5, 0);
-			gbc_cashLabel.anchor = GridBagConstraints.WEST;
-			gbc_cashLabel.gridx = 0;
-			gbc_cashLabel.gridy = 1;
-			infoPanel.add(cashLabel, gbc_cashLabel);
-			
-			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
-			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
-			gbc_supplyLabel.gridx = 0;
-			gbc_supplyLabel.gridy = 2;
-			infoPanel.add(supplyLabel, gbc_supplyLabel);
-		}
+//		if(model.isNavigator()){
+//			
+//		}
+//		else{
+//			JLabel cashLabel = new JLabel("Current Cash: $100");
+//			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
+//			gbc_cashLabel.insets = new Insets(0, 0, 5, 0);
+//			gbc_cashLabel.anchor = GridBagConstraints.WEST;
+//			gbc_cashLabel.gridx = 0;
+//			gbc_cashLabel.gridy = 1;
+//			infoPanel.add(cashLabel, gbc_cashLabel);
+//			
+//			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
+//			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
+//			gbc_supplyLabel.gridx = 0;
+//			gbc_supplyLabel.gridy = 2;
+//			infoPanel.add(supplyLabel, gbc_supplyLabel);
+//		}
 		
-		
+		/**
+		 * Update the layer.
+		 */
+
 		
 		
 	}
-
+	public void update(){
+		sLayer.firePropertyChange(AVKey.LAYER, null, null);
+	}
 
 }

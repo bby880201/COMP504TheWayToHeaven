@@ -39,16 +39,17 @@ public class Chatroom implements IChatroom {
 		return false;
 	}
 
-	@Override
-	public boolean RemoveUser(IChatUser user) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public void send(IChatUser sender, IChatMessage message) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean removeUser(IChatUser user) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
