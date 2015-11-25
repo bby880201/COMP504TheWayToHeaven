@@ -9,7 +9,10 @@ import javax.swing.border.EmptyBorder;
 
 import map.MapPanel;
 import javax.swing.JButton;
-import javax.swing.JLayeredPane;
+import javax.swing.JLabel;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class GameView extends JFrame {
 
@@ -62,11 +65,41 @@ public class GameView extends JFrame {
 		JPanel infoPanel = new JPanel();
 		contentPane.add(infoPanel, BorderLayout.EAST);
 		
+		GridBagLayout gbl_infoPanel = new GridBagLayout();
+		gbl_infoPanel.columnWidths = new int[]{145, 0};
+		gbl_infoPanel.rowHeights = new int[]{29, 0, 0, 0};
+		gbl_infoPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		infoPanel.setLayout(gbl_infoPanel);
 		JButton btnBeTheNavigator = new JButton("Be the navigator");
-		infoPanel.add(btnBeTheNavigator);
+		GridBagConstraints gbc_btnBeTheNavigator = new GridBagConstraints();
+		gbc_btnBeTheNavigator.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnBeTheNavigator.insets = new Insets(0, 0, 5, 0);
+		gbc_btnBeTheNavigator.gridx = 0;
+		gbc_btnBeTheNavigator.gridy = 0;
+		infoPanel.add(btnBeTheNavigator, gbc_btnBeTheNavigator);
+		if(model.isNavigator()){
+			
+		}
+		else{
+			JLabel cashLabel = new JLabel("Current Cash: $100");
+			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
+			gbc_cashLabel.insets = new Insets(0, 0, 5, 0);
+			gbc_cashLabel.anchor = GridBagConstraints.WEST;
+			gbc_cashLabel.gridx = 0;
+			gbc_cashLabel.gridy = 1;
+			infoPanel.add(cashLabel, gbc_cashLabel);
+			
+			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
+			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
+			gbc_supplyLabel.gridx = 0;
+			gbc_supplyLabel.gridy = 2;
+			infoPanel.add(supplyLabel, gbc_supplyLabel);
+		}
 		
-		JLayeredPane layeredPane = new JLayeredPane();
-		infoPanel.add(layeredPane);
+		
+		
+		
 	}
 
 

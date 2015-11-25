@@ -27,6 +27,11 @@ public class GameController {
 			
 		});
 		view = new GameView(new IModelAdapter() {
+
+			@Override
+			public boolean isNavigator() {
+				return model.isNavigator();
+			}
 			
 		});
 	}

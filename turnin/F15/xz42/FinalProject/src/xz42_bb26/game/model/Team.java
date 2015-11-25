@@ -1,13 +1,31 @@
 package xz42_bb26.game.model;
 
+import java.util.HashSet;
+
 import gov.nasa.worldwind.geom.Position;
-public class Team extends Chatroom {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5558521695697815165L;
+
+public class Team {
+	public Integer supply;
 	
-	Navigator navigator;
-	Manager manager;
-	Position current;
+	public Integer cash;
+	
+	public Position myPosition;
+	
+	public HashSet<Depot> depots;
+	
+	public boolean isNavigator;
+	
+	public Position destination;
+
+	public void buySupply(){
+
+	}
+	
+	public void moveTo(Position aPos){
+		
+	}
+	
+	public void checkWin(){
+		
+	}
 }
