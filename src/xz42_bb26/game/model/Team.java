@@ -13,7 +13,7 @@ public class Team {
 	
 	public HashSet<Depot> depots;
 	
-	public boolean isNavigator;
+	public boolean isNavigator= true;
 	
 	public Position destination;
 
