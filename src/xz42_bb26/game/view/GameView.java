@@ -1,13 +1,15 @@
 package xz42_bb26.game.view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import map.MapPanel;
+import javax.swing.JButton;
+import javax.swing.JLayeredPane;
 
 public class GameView extends JFrame {
 
@@ -18,17 +20,14 @@ public class GameView extends JFrame {
 	private JPanel contentPane;
 
 	/**
-	 * Launch the application.
+	 * Start the game view.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+	public void start(){
+//		this.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
-				try {
-					GameView frame = new GameView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			    setVisible(true);
 			}
 		});
 	}
@@ -44,9 +43,22 @@ public class GameView extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		MapPanel panel = new MapPanel();
-		panel.start();
+		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
+		
+		MapPanel mapPanel = new MapPanel();
+		panel.add(mapPanel, BorderLayout.CENTER);
+		
+		JPanel infoPanel = new JPanel();
+		contentPane.add(infoPanel, BorderLayout.EAST);
+		
+		JButton btnBeTheNavigator = new JButton("Be the navigator");
+		infoPanel.add(btnBeTheNavigator);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+		infoPanel.add(layeredPane);
+		
+		
 	}
 
 
