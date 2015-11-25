@@ -38,10 +38,10 @@ import javax.swing.JComboBox;
  * @param <Room> Generic type for chatroom
  * @param <Usr> Generic type for user
  */
-public class MainGUI<Room, Usr> {
+public class MainGUI<Room, Usr, ChatUsr> {
 
 	@SuppressWarnings({ "unchecked" })
-	private IView2ModelAdapter<Room, Usr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
+	private IView2ModelAdapter<Room, Usr,ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
 	private JFrame frame;
 	private JTextField tfIPInput;
 	private JTabbedPane tabbedPane;
@@ -56,7 +56,7 @@ public class MainGUI<Room, Usr> {
 	 * Create the application.
 	 * @param modelAdapter An instance of the IView2ModelAdapter
 	 */
-	public MainGUI(IView2ModelAdapter<Room, Usr> modelAdapter) {
+	public MainGUI(IView2ModelAdapter<Room, Usr,ChatUsr> modelAdapter) {
 		initialize();
 		toModelAdapter = modelAdapter;
 	}
@@ -225,9 +225,9 @@ public class MainGUI<Room, Usr> {
 	 * @param mv2mmAdapt An instance of IChatWindow2Model
 	 * @return An instance of ChattingWindow
 	 */
-	public ChattingWindow<Usr> makeChatRoom(IChatWindow2Model<Usr> mv2mmAdapt) {
+	public ChattingWindow<ChatUsr> makeChatRoom(IChatWindow2Model<ChatUsr> mv2mmAdapt) {
 
-		ChattingWindow<Usr> cw = new ChattingWindow<Usr>(mv2mmAdapt);
+		ChattingWindow<ChatUsr> cw = new ChattingWindow<ChatUsr>(mv2mmAdapt);
 		tabbedPane.addTab(mv2mmAdapt.getName(), null, cw, null);
 
 		return cw;

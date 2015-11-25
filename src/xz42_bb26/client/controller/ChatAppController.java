@@ -5,7 +5,9 @@ import java.awt.EventQueue;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
+import common.IChatUser;
 import common.IChatroom;
 import common.IInitUser;
 import xz42_bb26.client.model.ChatAppMainModel;
@@ -23,7 +25,7 @@ import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
  */
 public class ChatAppController {
 	// field representing the view of the system
-	private MainGUI<IChatroom, IInitUser> view;
+	private MainGUI<IChatroom, IInitUser, IChatUser> view;
 	// field representing the model of the system
 	private ChatAppMainModel model;
 
@@ -32,7 +34,7 @@ public class ChatAppController {
 	 */
 	public ChatAppController() {
 		// set the view field
-		view = new MainGUI<IChatroom, IInitUser>(new IView2ModelAdapter<IChatroom, IInitUser>() {
+		view = new MainGUI<IChatroom, IInitUser,IChatUser>(new IView2ModelAdapter<IChatroom, IInitUser, IChatUser>() {
 			/**
 			 * Quits the current connection and closes the application.   
 			 * Causes the model to stop and thus end the application. 
@@ -76,7 +78,7 @@ public class ChatAppController {
 		});
 
 		// set the model field
-		model = new ChatAppMainModel(new IModel2ViewAdapter<IInitUser>() {
+		model = new ChatAppMainModel(new IModel2ViewAdapter<IInitUser,IChatUser>() {
 
 			@Override
 			/**
@@ -85,12 +87,12 @@ public class ChatAppController {
 			 * @param chatRoom the mini-model given as a parameter
 			 * @return the mini-model2view adapter, which will be installed into the mini-model
 			 */
-			public IChatRoom2WorldAdapter<IInitUser> makeChatRoom(ChatroomWithAdapter chatRoom) {
+			public IChatRoom2WorldAdapter<IChatUser> makeChatRoom(ChatroomWithAdapter chatRoom) {
 				/**
 				 * Factory method makes a new mini-view and installs the 
 				 * mini-View2Model adapter in it.
 				 */
-				ChattingWindow<IInitUser> cw = view.makeChatRoom(new IChatWindow2Model<IInitUser>() {
+				ChattingWindow<IChatUser> cw = view.makeChatRoom(new IChatWindow2Model<IChatUser>() {
 
 					@Override
 					/**
@@ -154,15 +156,16 @@ public class ChatAppController {
 					 * 
 					 * @param user the specific user to speak to in this chatroom
 					 */
-					public void speakTo(IInitUser user) {
+					public void speakTo(IChatUser user) {
 						if (user != null) {
-							model.chatWith(user.getIP().getCanonicalHostName());
+							model.speakTo(user);
 						}
 					}
+
 				});
 
 				// return the mini-model2world adapter
-				return new IChatRoom2WorldAdapter<IInitUser>() {
+				return new IChatRoom2WorldAdapter<IChatUser>() {
 
 					@Override
 					/**
@@ -178,7 +181,7 @@ public class ChatAppController {
 					 * Refresh the member list on the chatroom 
 					 * @param users the list of users to show on chatroom member list panel
 					 */
-					public void refreshList(List<IInitUser> users) {
+					public void refreshList(List<IChatUser> users) {
 						cw.refreshList(users);
 					}
 
@@ -208,6 +211,15 @@ public class ChatAppController {
 					 */
 					public Container Scrollable() {
 						return cw.Scrollable();
+					}
+
+					/**
+					 * Display a container to view
+					 * @param containerSupplier a supplier contains a container
+					 */
+					@Override
+					public void display(Supplier<Container> containerSupplier) {
+						cw.display(containerSupplier);
 					}
 				};
 			}

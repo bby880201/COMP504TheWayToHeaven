@@ -1,10 +1,8 @@
 package xz42_bb26.client.model.chatroom;
 
 import java.awt.Container;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,15 +13,10 @@ import javax.swing.JLabel;
 
 import xz42_bb26.client.model.messages.StringMessage;
 import xz42_bb26.client.model.user.ChatUser;
-import xz42_bb26.client.model.user.Connect;
 import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
-import xz42_bb26.client.model.user.IConnectToWorldAdapter;
-import xz42_bb26.client.model.user.User;
-import provided.datapacket.ADataPacket;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
-import provided.mixedData.MixedDataDictionary;
 import provided.mixedData.MixedDataKey;
 import common.IChatUser;
 import common.IChatroom;
@@ -120,8 +113,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			@Override
 			public void provideUpdatableContainer(
 					Supplier<Container> containerSupplier) {
-				// TODO Auto-generated method stub
-				
+				chatWindowAdapter.display(containerSupplier);
 			}
 
 			@Override
@@ -157,6 +149,7 @@ public class ChatroomWithAdapter implements IChatroom {
 				
 				CommandRequest reqForAlgo = new CommandRequest(newCmdType, UUID.randomUUID());
 				
+				//TODO handle unknown data type
 				// request the AlgoCmd from the remote user
 				ADataPacketAlgoCmd<String, ?, IChatUser> cmd = null;
 				
@@ -209,10 +202,15 @@ public class ChatroomWithAdapter implements IChatroom {
 				IChatUser remote = params[0];
 
 				JLabel content = new JLabel(remote.toString() + " says:\n" + host.getData() + "\n");
+				
+				_cmd2ModelAdpt.provideUpdatableContainer(new Supplier<Container>(){
 
-				_cmd2ModelAdpt.scrollable().add(content);
-				_cmd2ModelAdpt.scrollable().revalidate();
-				_cmd2ModelAdpt.scrollable().repaint();
+					@Override
+					public Container get() {
+						return content;
+					}
+					
+				});
 
 				// return status information
 				return "String Message received from: " + remote;
@@ -270,7 +268,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			public String apply(Class<?> index, DataPacket<RemoveMe> host,
 					IChatUser... params) {
 				chatWindowAdapter.append("User left: " + host.getData().getChatConnect());
-				RemoveUser(host.getData().getChatConnect());
+				removeUser(host.getData().getChatConnect());
 				return "User left: " + host.getData().getChatConnect();
 			}
 		});
@@ -482,7 +480,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * 			successfully deleted to the chatroom
 	 */
 	@Override
-	public boolean RemoveUser(IChatUser user) {
+	public boolean removeUser(IChatUser user) {
 		boolean removed = users.remove(user);
 		if (users.size() == 0) {
 			chatWindowAdapter.deleteWindow();
@@ -522,4 +520,5 @@ public class ChatroomWithAdapter implements IChatroom {
 	public UUID getID() {
 		return id;
 	}
+
 }

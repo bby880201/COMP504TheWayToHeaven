@@ -3,6 +3,7 @@ package xz42_bb26.client.model.chatroom;
 import java.awt.Container;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * Mini-Model2World adapter that enables the mini-model (chat room) to communicate 
@@ -74,5 +75,13 @@ public interface IChatRoom2WorldAdapter<T> {
 			// this method will be override in the controller
 			return null;
 		}
+
+		@Override
+		public void display(Supplier containerSupplier) {
+			// TODO Auto-generated method stub
+			
+		}
 	};
+
+	public void display(Supplier<Container> containerSupplier);
 }

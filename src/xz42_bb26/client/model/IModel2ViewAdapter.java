@@ -8,7 +8,7 @@ import xz42_bb26.client.model.chatroom.IChatRoom2WorldAdapter;
  * 
  * @author bb26, xc7
  */
-public interface IModel2ViewAdapter<T2> {
+public interface IModel2ViewAdapter<T1,T2> {
 
 	/**
 	 * Creates a chatroom, which is a MINI-MVC structure, by using factory methods

@@ -6,7 +6,7 @@ import java.util.HashSet;
  * Adapter that the view uses to communicate to the model.
  * @author bb26, xc7
  */
-public interface IView2ModelAdapter<Room, User> {
+public interface IView2ModelAdapter<Room, User, ChatUser> {
 
 	/**
 	 * Quits the applications and gracefully shuts down the RMI-related resources.
