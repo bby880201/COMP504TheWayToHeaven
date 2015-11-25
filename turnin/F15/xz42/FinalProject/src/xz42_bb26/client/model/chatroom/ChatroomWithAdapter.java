@@ -558,17 +558,19 @@ public class ChatroomWithAdapter implements IChatroom {
 	}
 
 	public void startGame() {
-		StartGameMessage startGame = new StartGameMessage();
-		for (IChatUser user : users) {
-			try {
-				// send startgame message to users in the chatroom other than myself
-				user.receive(me, startGame);
-			} catch (RemoteException e) {
-				System.out.println(
-						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
-				e.printStackTrace();
-			}
-		}
+//		StartGameMessage startGame = new StartGameMessage();
+//		for (IChatUser user : users) {
+//			try {
+//				// send startgame message to users in the chatroom other than myself
+//				user.receive(me, startGame);
+//			} catch (RemoteException e) {
+//				System.out.println(
+//						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
+//				e.printStackTrace();
+//			}
+//		}
+		GameController gameController = new GameController();
+		gameController.start();
 		
 	}
 
