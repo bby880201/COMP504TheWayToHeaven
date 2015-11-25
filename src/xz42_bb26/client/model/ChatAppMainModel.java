@@ -130,7 +130,7 @@ public class ChatAppMainModel {
 					}
 					
 					// creates a new local copy of the chatroom 
-					ChatroomWithAdapter room = new ChatroomWithAdapter(userName, remoteRoom.getName());
+					ChatroomWithAdapter room = new ChatroomWithAdapter(userName, me, remoteRoom.getID());
 					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
 
 					// add user to chatroom after adapter is installed
@@ -168,7 +168,7 @@ public class ChatAppMainModel {
 
 		rmiUtils.startRMI(IRMI_Defs.CLASS_SERVER_PORT_SERVER);
 		try {
-			me = new InitUser(userName,rmiUtils.getLocalAddress(), new IInitUser2ModelAdapter(){
+			InitUser preStub = new InitUser(userName,rmiUtils.getLocalAddress(), new IInitUser2ModelAdapter(){
 
 				@Override
 				public <T> void receive(IInitUser remote, IInitMessage message) {
@@ -176,14 +176,14 @@ public class ChatAppMainModel {
 					System.out.println(str);
 				}
 			});
-			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT);
+			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(preStub, IInitUser.BOUND_PORT);
+			me = stub;
 
 			registry = rmiUtils.getLocalRegistry();
 			// put the user's stub onto the registry
 			registry.rebind(IInitUser.BOUND_NAME, stub);
 
 			System.out.println("Waiting..." + "\n");
-
 		} catch (Exception e) {
 			System.err.println("Connect exception:" + "\n");
 			e.printStackTrace();

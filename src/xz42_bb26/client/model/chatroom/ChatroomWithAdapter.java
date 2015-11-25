@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import common.message.IChatMessage;
 import common.message.chat.AddMe;
 import common.message.chat.RemoveMe;
 import common.message.chat.CommandRequest;
+import common.message.init.Invitation2Chatroom;
 
 /**
  * This class implements the IChatroom interface. 
@@ -66,6 +68,8 @@ public class ChatroomWithAdapter implements IChatroom {
 
 	private IChatroom thisRoom = this;
 
+	private IInitUser initMe;
+
 	/**
 	 * Constructor that takes in user name and user id as parameter
 	 * @param name The local user name
@@ -73,8 +77,8 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter(String name, UUID uuid) throws UnknownHostException, RemoteException {
-		this(name);
+	public ChatroomWithAdapter(String name, IInitUser init, UUID uuid) throws UnknownHostException, RemoteException {
+		this(name,init);
 		id = uuid;
 	}
 
@@ -84,7 +88,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter(String name) throws UnknownHostException, RemoteException {
+	public ChatroomWithAdapter(String name, IInitUser init) throws UnknownHostException, RemoteException {
 
 		initAlgo();
 		ChatUser me = new ChatUser(name, new IChatUser2ModelAdapter(){
@@ -95,6 +99,7 @@ public class ChatroomWithAdapter implements IChatroom {
 		
 		id = UUID.randomUUID();
 		users.add(stub);
+		initMe = init;
 	}
 
 	/**
@@ -275,7 +280,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Get the IChatRoom2WorldAdapter associated with this chatroom
 	 * @return An instance of IChatRoom2WorldAdapter
 	 */
-	public IChatRoom2WorldAdapter<IUser> getChatWindowAdapter() {
+	public IChatRoom2WorldAdapter<IChatUser> getChatWindowAdapter() {
 		return chatWindowAdapter;
 	}
 
@@ -285,7 +290,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param chatWindowAdapter An instance of IChatRoom2WorldAdapter
 	 * @return return boolean value for synchronize purpose
 	 */
-	public boolean setChatWindowAdapter(IChatRoom2WorldAdapter<IUser> chatWindowAdapter) {
+	public boolean setChatWindowAdapter(IChatRoom2WorldAdapter<IChatUser> chatWindowAdapter) {
 		this.chatWindowAdapter = chatWindowAdapter;
 		refreshList();
 		return true;
@@ -306,7 +311,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Get an instance of IUser 
 	 * @return An instance of IUser which represents the local user
 	 */
-	public IUser getMe() {
+	public IChatUser getMe() {
 		return me;
 	}
 
@@ -314,7 +319,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Set the IUser associated with the local user
 	 * @param me An instance of IUser
 	 */
-	public void setMe(IUser me) {
+	public void setMe(IChatUser me) {
 		this.me = me;
 	}
 
@@ -322,16 +327,15 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Send the remote user an InviteToChatroom message.
 	 * @param friend the remote user to be invited to this chatroom
 	 */
-	public void invite(IUser friend) {
-		InviteToChatroom invite = new InviteToChatroom(thisRoom);
+	public void invite(IInitUser friend) {
+		Invitation2Chatroom invite = new Invitation2Chatroom(thisRoom);
 
 		(new Thread() {
 			@Override
 			public void run() {
 				try {
 					// send friend an InviteToChatroom message
-					friend.getConnect().sendReceive(me,
-							new DataPacket<InviteToChatroom>(InviteToChatroom.class, invite));
+					friend.receive(initMe, invite);
 				} catch (RemoteException e) {
 					System.out.println("Invite " + friend + " to room failed: " + e + "\n");
 					e.printStackTrace();
@@ -342,10 +346,16 @@ public class ChatroomWithAdapter implements IChatroom {
 
 	@Override
 	/**
-	 * Get the id of this chatroom
-	 * @return id of this chatroom
+	 * Return the chatroom name for display
+	 * @return display of this chatroom
 	 */
 	public String getName() {
+		if (users.size() > 0) {
+			IChatUser[] lstUser = users.toArray(new IChatUser[users.size()]);
+			displayName = "Chatroom with members: " + lstUser[0] + " et, al.";
+		} else {
+			displayName = "Chat with " + me + " et, al.";
+		}
 		return displayName;
 	}
 
@@ -354,46 +364,10 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Get a list of IUser in this chatroom
 	 * @return A list of IUser in this chatroom
 	 */
-	public HashSet<IUser> getUsers() {
-		return new HashSet<IUser>(users);
+	public HashSet<IChatUser> getUsers() {
+		return new HashSet<IChatUser>(users);
 	}	
 
-	@Override
-	/**
-	 * Send a message to all the users in the chatroom
-	 * @param me An instance of IUser which represents the sender of the message
-	 * @param message An instance of ADataPacket which wraps around the message
-	 */
-	public void send(IUser me, ADataPacket message) {
-		(new Thread() {
-			@Override
-			public void run() {
-				for (IUser user : users) {
-					// send message to users other than myself
-					if (!user.equals(me)) {
-						try {
-							user.getConnect().sendReceive(me, message);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}).start();
-	}
-
-	/**
-	 * Return the chatroom name for display
-	 */
-	public String getDisName() {
-		if (users.size() > 0) {
-			IUser[] lstUser = users.toArray(new IUser[users.size()]);
-			displayName = "Chatroom with members: " + lstUser[0].getName() + " et, al.";
-		} else {
-			displayName = "Chatroom with members: " + me.getName() + " et, al.";
-		}
-		return displayName;
-	}
 
 	@Override
 	/**
@@ -409,7 +383,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param text The string message to send over
 	 */
 	public void sendMsg(String text) {
-		send(me, new DataPacket<String>(String.class, text));
+		send(me, new StringMessage(text));
 		/**
 		 * The following two lines are for testing purpose
 		 */
@@ -446,19 +420,19 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * one of their specific chatrooms
 	 */
 	public void addMe() {
-		AddMe addMe = new AddMe(me, id);
+		AddMe addMe = new AddMe(me);
 		(new Thread() {
 			@Override
 			public void run() {
-				for (IUser user : users) {
+				for (IChatUser user : users) {
 					try {
 						// send addMe message to users in the chatroom other than myself
 						if (!user.equals(me)) {
-							user.getConnect().sendReceive(me, new DataPacket<AddMe>(AddMe.class, addMe));
+							user.receive(me, addMe);
 						}
 					} catch (RemoteException e) {
 						System.out.println("Broadcast to add user failed!\nRemote exception invite " + ": "
-								+ user.getIP() + e + "\n");
+								+ user + e + "\n");
 						e.printStackTrace();
 					}
 				}
@@ -472,16 +446,16 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * one of their specific chatrooms
 	 */
 	public void removeMe() {
-		RemoveMe rmMe = new RemoveMe(this.me, id);
-		for (IUser user : users) {
+		RemoveMe rmMe = new RemoveMe(me);
+		for (IChatUser user : users) {
 			try {
 				// send removeMe message to users in the chatroom other than myself
 				if (!user.equals(me)) {
-					user.getConnect().sendReceive(me, new DataPacket<RemoveMe>(RemoveMe.class, rmMe));
+					user.receive(me, rmMe);
 				}
 			} catch (RemoteException e) {
 				System.out.println(
-						"Broadcast to remove user failed!\nRemote exception invite " + ": " + user.getIP() + e + "\n");
+						"Broadcast to remove user failed!\nRemote exception invite " + ": " + user + e + "\n");
 				e.printStackTrace();
 			}
 		}
@@ -520,8 +494,27 @@ public class ChatroomWithAdapter implements IChatroom {
 	}
 
 	@Override
+	/**
+	 * Send a message to all the users in the chatroom
+	 * @param me An instance of IUser which represents the sender of the message
+	 * @param message An instance of ADataPacket which wraps around the message
+	 */
 	public void send(IChatUser sender, IChatMessage message) {
-		// TODO Auto-generated method stub
+		(new Thread() {
+			@Override
+			public void run() {
+				for (IChatUser user : users) {
+					// send message to users other than myself
+					if (!user.equals(me)) {
+						try {
+							user.receive(me, message);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}).start();
 		
 	}
 
