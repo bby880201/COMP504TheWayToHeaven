@@ -1,26 +1,50 @@
 package xz42_bb26.client.model.messages;
 
-import java.io.Serializable;
+import java.util.UUID;
+
+import provided.datapacket.ADataPacket;
+import provided.datapacket.DataPacket;
+import common.message.IChatMessage;
 
 /**
  * This class wraps around a String. Served as testing Unknown Data Type purpose
  * @author bb26, xc7
  */
-public class StringMessage implements Serializable {
+public class StringMessage implements IChatMessage {
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -7033804153209704355L;
 
-	private String msg;
+	/**
+	 * Content need to be sent
+	 */
+	private final String msg;
+	
+	/**
+	 * ID of this message. 
+	 */
+	private final UUID msgID;
 
 	/**
-	 * Constructor that takes a string message
+	 * Constructs a new message containing a string. 
+	 * UUID for the message is auto-generated.
 	 * @param str A String message
 	 */
 	public StringMessage(String str) {
-		setMsg(str);
+		this(UUID.randomUUID(),str);
+	}
+
+	/**
+	 * Constructs a new message containing a string. 
+	 * UUID for the message is given.
+	 * @param msgID UUID
+	 * @param str A String message
+	 */
+	public StringMessage(UUID msgID,String str) {
+		this.msgID = msgID;
+		this.msg = str;
 	}
 
 	/**
@@ -31,11 +55,13 @@ public class StringMessage implements Serializable {
 		return msg;
 	}
 
-	/**
-	 * Set the string message
-	 * @param msg The string message to set
-	 */
-	public void setMsg(String msg) {
-		this.msg = msg;
+	@Override
+	public UUID getID() {
+		return msgID;
+	}
+
+	@Override
+	public ADataPacket getDataPacket() {
+		return new DataPacket<String>(String.class, this.msg);
 	}
 }
