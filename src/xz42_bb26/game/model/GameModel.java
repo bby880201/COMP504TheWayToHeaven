@@ -1,7 +1,9 @@
 package xz42_bb26.game.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
+import common.IChatUser;
 import gov.nasa.worldwind.geom.Position;
 import xz42_bb26.game.controller.IViewAdapter;
 
@@ -11,9 +13,12 @@ public class GameModel {
 	 */
 	private IViewAdapter view;
 	
-	private Team myTeam;
+	private Chatroom globalChatroom;
 	
-	private HashSet<Team> teams;
+	private HashMap<IChatUser,Position> teams;
+	
+	private Team team;
+
 	
 	/**
 	 * Constructor of the game model.
@@ -28,11 +33,17 @@ public class GameModel {
 	}
 	
 	public void moveTo(Position pos){
-		
+		team.moveTo(pos);;
 	}
 
 	public void start() {
 		
 	}
+
+	public boolean isNavigator() {
+		return team.isNavigator;
+	}
+	
+
 
 }
