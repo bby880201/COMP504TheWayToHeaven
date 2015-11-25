@@ -89,4 +89,5 @@ public interface IChatWindow2Model<T> {
 			// this method will be override in the controller
 		}
 	};
+
 }

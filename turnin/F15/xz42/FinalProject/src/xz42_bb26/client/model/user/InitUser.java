@@ -20,7 +20,7 @@ public class InitUser implements IInitUser {
 	// for the purpose of distinguishing multiple stubs representing the same user
 	private long time;
 	// an adapter communicate to model
-	private IInitUser2ModelAdapter toModelAdap;
+	private transient IInitUser2ModelAdapter toModelAdap;
 
 	/**
 	 * The constructor method
