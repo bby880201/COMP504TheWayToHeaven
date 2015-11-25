@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -11,13 +12,15 @@ import java.util.UUID;
 import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
 import xz42_bb26.client.model.user.Connect;
 import xz42_bb26.client.model.user.IConnectToWorldAdapter;
+import xz42_bb26.client.model.user.IInitUser2ModelAdapter;
+import xz42_bb26.client.model.user.InitUser;
 import xz42_bb26.client.model.user.User;
+import common.IChatUser;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
-import common.IConnect;
-import common.IUser;
-import common.messages.InviteToChatroom;
-import common.messages.RequestForAlgo;
+import common.IInitUser;
+import common.message.IInitMessage;
+import common.message.init.Invitation2Chatroom;
 import provided.datapacket.ADataPacket;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
@@ -45,40 +48,42 @@ public class ChatAppMainModel {
 	 */
 	private IRMIUtils rmiUtils;
 
-	private IUser me = null;
+	private IInitUser me = null;
 	// field stores a list of room 
-	private HashMap<UUID, IChatroom> rooms;
+	private ArrayList<IChatroom> rooms;
 	// instance of model2view adapter
-	private IModel2ViewAdapter<IUser> toView;
+	private IModel2ViewAdapter<IInitUser> toView;
 
-	private DataPacketAlgo<String, IUser> msgAlgo;
+	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
-	private String userName = "xc7_bb26";
+	private String userName = "xz42_bb26";
 
 	/**
 	 * Constructor that takes an instance of IModel2ViewAdapter
 	 * @param toViewAdapter An instance of IModel2ViewAdapter
 	 */
-	public ChatAppMainModel(IModel2ViewAdapter<IUser> toViewAdapter) {
+	public ChatAppMainModel(IModel2ViewAdapter<IInitUser> toViewAdapter) {
 
 		toView = toViewAdapter;
 		// initialize an empty set of rooms
-		rooms = new HashMap<UUID, IChatroom>();
+		rooms = new ArrayList<IChatroom>();
 
-		msgAlgo = new DataPacketAlgo<String, IUser>(new ADataPacketAlgoCmd<String, Object, IUser>() {
+		msgAlgo = new DataPacketAlgo<String, IInitUser>(new ADataPacketAlgoCmd<String, Object, IInitUser>() {
 			/**
 			 * declare a static final serialVersionUID of type long to fix the warning
 			 */
 			private static final long serialVersionUID = -4329950671092819917L;
 
-			@Override
+			
 			/**
 			 * default cmd
 			 */
-			public String apply(Class<?> index, DataPacket<Object> host, IUser... params) {
+			@Override
+			public String apply(Class<?> index, DataPacket<Object> host,
+					IInitUser... params) {
 				return "Stub on registry: Unknow data type asking for command!";
 			}
-
+			
 			@Override
 			/**
 			 * Set the ICmd2ModelAdapter of this command
@@ -87,12 +92,14 @@ public class ChatAppMainModel {
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 				// empty method
 			}
+
+			
 		});
 
 		/**
 		 * Handle InviteToChatroom command
 		 */
-		msgAlgo.setCmd(InviteToChatroom.class, new ADataPacketAlgoCmd<String, InviteToChatroom, IUser>() {
+		msgAlgo.setCmd(Invitation2Chatroom.class, new ADataPacketAlgoCmd<String, Invitation2Chatroom, IInitUser>() {
 
 			/**
 			 * declare a static final serialVersionUID of type long to fix the warning
@@ -100,42 +107,46 @@ public class ChatAppMainModel {
 			private static final long serialVersionUID = 6397860207466953790L;
 
 			@Override
-			public String apply(Class<?> index, DataPacket<InviteToChatroom> host, IUser... params) {
-
-				try {
-					IChatroom remoteRoom = host.getData().chatroom;
-
-					if (rooms.containsKey(remoteRoom.id())) {
-						throw new IllegalArgumentException(
-								"Got invitation to join a chatroom in which user already exists.");
-					}
-					// creates a new local copy of the chatroom 
-					ChatroomWithAdapter room = new ChatroomWithAdapter(userName, remoteRoom.id());
-					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
-
-					// add user to chatroom after adapter is installed
-					if (adptAdded) {
-						for (IUser user : remoteRoom.getUsers()) {
-							room.addUser(user);
-						}
-						room.addMe();
-
-						rooms.put(room.id(), (IChatroom) room);
-					}
-				} catch (Exception e) {
-					System.out.println("create room failed: " + e + "\n");
-					e.printStackTrace();
-				}
-				return "Invitation from: " + (IUser) params[0];
-			}
-
-			@Override
 			/**
 			 * Set the ICmd2ModelAdapter of this command
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 				// empty method
+			}
+
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<Invitation2Chatroom> host, IInitUser... params) {
+
+				try {
+					IChatroom remoteRoom = host.getData().getChatroom();
+					for (IChatroom rm: rooms){
+						if (rm.getName() == remoteRoom.getName()){
+							throw new IllegalArgumentException(
+									"Got invitation to join a chatroom in which user already exists.");
+
+						}
+					}
+					
+					// creates a new local copy of the chatroom 
+					ChatroomWithAdapter room = new ChatroomWithAdapter(userName, remoteRoom.getName());
+					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
+
+					// add user to chatroom after adapter is installed
+					if (adptAdded) {
+						for (IChatUser user : remoteRoom.getUsers()) {
+							room.addUser(user);
+						}
+						room.addMe();
+
+						rooms.add((IChatroom) room);
+					}
+				} catch (Exception e) {
+					System.out.println("create room failed: " + e + "\n");
+					e.printStackTrace();
+				}
+				return "Invitation from: " + (IInitUser) params[0];
 			}
 		});
 	}
@@ -157,58 +168,21 @@ public class ChatAppMainModel {
 
 		rmiUtils.startRMI(IRMI_Defs.CLASS_SERVER_PORT_SERVER);
 		try {
-			Connect connect = new Connect(new IConnectToWorldAdapter() {
+			me = new InitUser(userName,rmiUtils.getLocalAddress(), new IInitUser2ModelAdapter(){
 
 				@Override
-				/**
-				 * Get a list of IChatroom the local user currently joined
-				 * @return a list of IChatroom holds by the local system 
-				 */
-				public HashSet<IChatroom> getChatrooms() {
-					return new HashSet<IChatroom>(rooms.values());
-				}
-
-				@Override
-				/**
-				 * Request the AlgoCmd with type specified by the RequestForAlgo 
-				 * from the remote user 
-				 * @param request A wrapper which wraps around the class type of the algo
-				 * @return an instance of ADataPacketAlgoCmd
-				 */
-				public <T> ADataPacketAlgoCmd<String, ?, IUser> getCommand(RequestForAlgo request) {
-					return null;
-				}
-
-				@Override
-				/**
-				 * Returns an IUser wrapper class which wraps around the stub
-				 * @param stub The stub puts on the registry
-				 */
-				public IUser getUser(IConnect stub) {
-					return me;
-				}
-
-				@Override
-				/**
-				 * Receives an ADataPacket from the remove user
-				 * @param remote The remove IUser, the sender of the ADataPacket
-				 * @param data An instance of ADatPacket class which wraps the data being sent
-				 */
-				public <T> void receive(IUser remote, ADataPacket data) {
-					String str = data.execute(msgAlgo, remote);
+				public <T> void receive(IInitUser remote, IInitMessage message) {
+					String str = message.getDataPacket().execute(msgAlgo, remote);
 					System.out.println(str);
 				}
 			});
-
-			IConnect stub = (IConnect) UnicastRemoteObject.exportObject(connect, IConnect.BOUND_PORT);
+			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT);
 
 			registry = rmiUtils.getLocalRegistry();
 			// put the user's stub onto the registry
-			registry.rebind(IConnect.BOUND_NAME, stub);
+			registry.rebind(IInitUser.BOUND_NAME, stub);
 
 			System.out.println("Waiting..." + "\n");
-
-			me = new User(connect, userName, InetAddress.getLocalHost());
 
 		} catch (Exception e) {
 			System.err.println("Connect exception:" + "\n");
