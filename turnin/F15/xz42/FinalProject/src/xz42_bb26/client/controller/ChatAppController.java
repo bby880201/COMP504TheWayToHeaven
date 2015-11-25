@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.EventQueue;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -181,7 +182,7 @@ public class ChatAppController {
 					 * Refresh the member list on the chatroom 
 					 * @param users the list of users to show on chatroom member list panel
 					 */
-					public void refreshList(List<IChatUser> users) {
+					public void refreshList(Set<IChatUser> users) {
 						cw.refreshList(users);
 					}
 

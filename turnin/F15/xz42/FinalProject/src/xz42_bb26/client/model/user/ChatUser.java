@@ -22,11 +22,14 @@ public class ChatUser implements IChatUser {
 	
 	private String name;
 	
+	private long time;
+	
 	
 	
 	public ChatUser(String name, IChatUser2ModelAdapter toModel) {
 		this.toModelAdap = toModel;
 		this.name = name;
+		this.time = System.currentTimeMillis();
 	}
 
 	/* (non-Javadoc)
@@ -35,7 +38,7 @@ public class ChatUser implements IChatUser {
 	@Override
 	public void receive(IChatUser sender, IChatMessage message)
 			throws RemoteException {
-		//TODO need implement 
+		toModelAdap.receive(sender,message);
 	}
 	
 	@Override
@@ -48,7 +51,7 @@ public class ChatUser implements IChatUser {
 		int hash = 1;
 //		hash = hash * 17 + IP.hashCode();
 		hash = hash * 31 + name.hashCode();
-//		hash = hash * 7 + Long.valueOf(time).hashCode();
+		hash = hash * 7 + Long.valueOf(time).hashCode();
 		return hash;
 	}
 	
@@ -57,7 +60,8 @@ public class ChatUser implements IChatUser {
 	 */
 	@Override
 	public String toString() {
-		return name;
+		Date date = new Date(time);
+		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
+		return name + " " + format.format(date);	
 	}
-
 }

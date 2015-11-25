@@ -16,8 +16,8 @@ import common.message.IInitMessage;
 public interface IInitUser2ModelAdapter {
 
 	/**
-	 * Receives an ADataPacket from the remove user
-	 * @param remote The remove IUser, the sender of the ADataPacket
+	 * Receives an ADataPacket from the remote user
+	 * @param remote The remove IInitUser, the sender of the ADataPacket
 	 * @param message An instance of ADatPacket class which wraps the data being sent
 	 */
 	public <T> void receive(IInitUser remote, IInitMessage message);
