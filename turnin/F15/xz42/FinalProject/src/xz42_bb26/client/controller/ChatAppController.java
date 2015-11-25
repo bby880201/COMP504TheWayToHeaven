@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import common.IChatroom;
-import common.IUser;
+import common.IInitUser;
 import xz42_bb26.client.model.ChatAppMainModel;
 import xz42_bb26.client.model.IModel2ViewAdapter;
 import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
@@ -23,7 +23,7 @@ import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
  */
 public class ChatAppController {
 	// field representing the view of the system
-	private MainGUI<IChatroom, IUser> view;
+	private MainGUI<IChatroom, IInitUser> view;
 	// field representing the model of the system
 	private ChatAppMainModel model;
 
@@ -32,7 +32,7 @@ public class ChatAppController {
 	 */
 	public ChatAppController() {
 		// set the view field
-		view = new MainGUI<IChatroom, IUser>(new IView2ModelAdapter<IChatroom, IUser>() {
+		view = new MainGUI<IChatroom, IInitUser>(new IView2ModelAdapter<IChatroom, IInitUser>() {
 			/**
 			 * Quits the current connection and closes the application.   
 			 * Causes the model to stop and thus end the application. 
@@ -76,7 +76,7 @@ public class ChatAppController {
 		});
 
 		// set the model field
-		model = new ChatAppMainModel(new IModel2ViewAdapter<IUser>() {
+		model = new ChatAppMainModel(new IModel2ViewAdapter<IInitUser>() {
 
 			@Override
 			/**
@@ -85,12 +85,12 @@ public class ChatAppController {
 			 * @param chatRoom the mini-model given as a parameter
 			 * @return the mini-model2view adapter, which will be installed into the mini-model
 			 */
-			public IChatRoom2WorldAdapter<IUser> makeChatRoom(ChatroomWithAdapter chatRoom) {
+			public IChatRoom2WorldAdapter<IInitUser> makeChatRoom(ChatroomWithAdapter chatRoom) {
 				/**
 				 * Factory method makes a new mini-view and installs the 
 				 * mini-View2Model adapter in it.
 				 */
-				ChattingWindow<IUser> cw = view.makeChatRoom(new IChatWindow2Model<IUser>() {
+				ChattingWindow<IInitUser> cw = view.makeChatRoom(new IChatWindow2Model<IInitUser>() {
 
 					@Override
 					/**
@@ -130,7 +130,7 @@ public class ChatAppController {
 					 * @param ip the remote IP address of the remote user
 					 */
 					public void invite(String ip) {
-						IUser friend = model.connectTo(ip);
+						IInitUser friend = model.connectTo(ip);
 						if (null != friend)
 							chatRoom.invite(friend);
 					}
@@ -154,7 +154,7 @@ public class ChatAppController {
 					 * 
 					 * @param user the specific user to speak to in this chatroom
 					 */
-					public void speakTo(IUser user) {
+					public void speakTo(IInitUser user) {
 						if (user != null) {
 							model.chatWith(user.getIP().getCanonicalHostName());
 						}
@@ -162,7 +162,7 @@ public class ChatAppController {
 				});
 
 				// return the mini-model2world adapter
-				return new IChatRoom2WorldAdapter<IUser>() {
+				return new IChatRoom2WorldAdapter<IInitUser>() {
 
 					@Override
 					/**
@@ -178,7 +178,7 @@ public class ChatAppController {
 					 * Refresh the member list on the chatroom 
 					 * @param users the list of users to show on chatroom member list panel
 					 */
-					public void refreshList(List<IUser> users) {
+					public void refreshList(List<IInitUser> users) {
 						cw.refreshList(users);
 					}
 
@@ -187,7 +187,7 @@ public class ChatAppController {
 					 * Delete the certain chat window from the main GUI panel
 					 */
 					public void deleteWindow() {
-						model.deleteChatroom(chatRoom.id());
+						model.deleteChatroom(chatRoom.getID());
 						cw.deleteWindow();
 					}
 
