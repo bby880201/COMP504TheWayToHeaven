@@ -40,6 +40,7 @@ public class GameView extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				initGUI();
 				mapPanel.start();
 				mapPanel.addLayer(sLayer);
 			    setVisible(true);
@@ -52,7 +53,7 @@ public class GameView extends JFrame {
 	 */
 	public GameView(IModelAdapter iModelAdapter) {
 		this.model = iModelAdapter;
-		initGUI();
+
 	}
 	
 	private void initGUI(){
