@@ -1,7 +1,7 @@
 package xz42_bb26.client.model.chatroom;
 
 import java.awt.Container;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -35,7 +35,7 @@ public interface IChatRoom2WorldAdapter<T> {
 	 * Refresh the member list on the chatroom 
 	 * @param users the list of users to show on chatroom member list panel
 	 */
-	void refreshList(List<T> users);
+	void refreshList(Set<T> users);
 
 	/**
 	 * Give a Container (e.g. JPanel) as the accessible part of the local system 
@@ -66,7 +66,7 @@ public interface IChatRoom2WorldAdapter<T> {
 		}
 
 		@Override
-		public void refreshList(List users) {
+		public void refreshList(Set users) {
 			// this method will be override in the controller
 		}
 

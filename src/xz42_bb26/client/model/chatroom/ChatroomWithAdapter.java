@@ -4,8 +4,8 @@ import java.awt.Container;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -49,7 +49,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	// name of the chatroom
 	private String displayName;
 
-	private ArrayList<IChatUser> users = new ArrayList<IChatUser>();
+	private Set<IChatUser> users = new HashSet<IChatUser>();
 
 	private DataPacketAlgo<String, IChatUser> msgAlgo;
 
@@ -84,7 +84,13 @@ public class ChatroomWithAdapter implements IChatroom {
 	public ChatroomWithAdapter(String name, IInitUser init) throws UnknownHostException, RemoteException {
 
 		initAlgo();
-		ChatUser me = new ChatUser(name, new IChatUser2ModelAdapter(){
+		me = new ChatUser(name, new IChatUser2ModelAdapter(){
+
+			@Override
+			public <T> void receive(IChatUser remote, IChatMessage message) {
+				String str = message.getDataPacket().execute(msgAlgo, remote);
+				System.out.println(str);
+			}
 			
 		});
 		
@@ -349,10 +355,9 @@ public class ChatroomWithAdapter implements IChatroom {
 	 */
 	public String getName() {
 		if (users.size() > 0) {
-			IChatUser[] lstUser = users.toArray(new IChatUser[users.size()]);
-			displayName = "Chatroom with members: " + lstUser[0] + " et, al.";
+			displayName = "Chat with " + Integer.toString(users.size()) + "members";
 		} else {
-			displayName = "Chat with " + me + " et, al.";
+			displayName = "Chat with " + me;
 		}
 		return displayName;
 	}
