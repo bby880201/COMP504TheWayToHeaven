@@ -163,6 +163,12 @@ public class ChatAppController {
 						}
 					}
 
+					@Override
+					public void startGame() {
+						chatRoom.startGame();
+						
+					}
+
 				});
 
 				// return the mini-model2world adapter

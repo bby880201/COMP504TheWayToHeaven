@@ -88,6 +88,14 @@ public interface IChatWindow2Model<T> {
 		public void speakTo(Object user) {
 			// this method will be override in the controller
 		}
+
+		@Override
+		public void startGame() {
+			// TODO Auto-generated method stub
+			
+		}
 	};
+
+	public void startGame();
 
 }

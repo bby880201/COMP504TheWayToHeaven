@@ -11,9 +11,11 @@ import java.util.function.Supplier;
 
 import javax.swing.JLabel;
 
+import xz42_bb26.client.model.messages.StartGameMessage;
 import xz42_bb26.client.model.messages.StringMessage;
 import xz42_bb26.client.model.user.ChatUser;
 import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
+import xz42_bb26.game.controller.GameController;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
@@ -253,6 +255,35 @@ public class ChatroomWithAdapter implements IChatroom {
 				return "User joined: " + host.getData().getUser();
 			}
 		});
+		
+		
+		// handle startGame type cmd as known cmd type 
+		msgAlgo.setCmd(StartGameMessage.class, new ADataPacketAlgoCmd<String, StartGameMessage, IChatUser>() {
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */	
+			private static final long serialVersionUID = 2964027427383796628L;
+
+		
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			@Override
+			public String apply(Class<?> index, DataPacket<StartGameMessage> host,
+					IChatUser... params) {
+				GameController gameController = new GameController();
+				gameController.start();
+				return "Start Game";
+			}
+		});
+		
 		// handle RemoveMe type cmd as known cmd type 
 		msgAlgo.setCmd(RemoveMe.class, new ADataPacketAlgoCmd<String, RemoveMe, IChatUser>() {
 
@@ -524,6 +555,21 @@ public class ChatroomWithAdapter implements IChatroom {
 	@Override
 	public UUID getID() {
 		return id;
+	}
+
+	public void startGame() {
+		StartGameMessage startGame = new StartGameMessage();
+		for (IChatUser user : users) {
+			try {
+				// send startgame message to users in the chatroom other than myself
+				user.receive(me, startGame);
+			} catch (RemoteException e) {
+				System.out.println(
+						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }

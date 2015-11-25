@@ -53,6 +53,7 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	private JButton btnSend;
 	private JButton btnLeave;
 	private JButton btnInvite;
+	private JButton btnStartGame;
 
 	/**
 	 * Constructor that takes an instance of IChatWindow2Model
@@ -165,6 +166,18 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbc_btnSpeakTo.gridx = 0;
 		gbc_btnSpeakTo.gridy = 5;
 		panel_4.add(btnSpeakTo, gbc_btnSpeakTo);
+		
+		btnStartGame = new JButton("Start Game");
+		btnStartGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mv2mmAdapt.startGame();
+			}
+		});
+		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
+		gbc_btnStartGame.insets = new Insets(0, 0, 5, 0);
+		gbc_btnStartGame.gridx = 0;
+		gbc_btnStartGame.gridy = 6;
+		panel_4.add(btnStartGame, gbc_btnStartGame);
 
 		btnLeave = new JButton("Leave");
 		btnLeave.setToolTipText("Leave the current chatroom.");
