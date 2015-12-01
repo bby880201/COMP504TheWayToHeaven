@@ -1,6 +1,6 @@
 package xz42_bb26.client.model.chatroom;
 
-import java.awt.Container;
+import java.awt.Component;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -112,19 +112,6 @@ public class ChatroomWithAdapter implements IChatroom {
 		_cmd2ModelAdpt = new ICmd2ModelAdapter() {
 
 			@Override
-			public void provideScrollableContainer(
-					Supplier<Container> containerSupplier) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void provideUpdatableContainer(
-					Supplier<Container> containerSupplier) {
-				chatWindowAdapter.display(containerSupplier);
-			}
-
-			@Override
 			public <T> T getMixedDataDictEntry(MixedDataKey<T> key) {
 				// TODO Auto-generated method stub
 				return null;
@@ -134,6 +121,29 @@ public class ChatroomWithAdapter implements IChatroom {
 			public <T> void setMixedDataDictEntry(MixedDataKey<T> key, T value) {
 				// TODO Auto-generated method stub
 				
+			}
+
+			@Override
+			public void updateOldGUI(Supplier<Component> componentFac) {
+				chatWindowAdapter.display(componentFac);
+			}
+
+			@Override
+			public void createNewGUI(Supplier<Component> componentFac) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void sendMessageToGlobalChatroom(IChatMessage message) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public String getUserName() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 
 		};
@@ -155,7 +165,7 @@ public class ChatroomWithAdapter implements IChatroom {
 				// class type of the unknown command
 				Class<?> newCmdType = host.getData().getClass();
 				
-				CommandRequest reqForAlgo = new CommandRequest(newCmdType, UUID.randomUUID());
+				CommandRequest reqForAlgo = new CommandRequest(newCmdType);
 				
 				//TODO handle unknown data type
 				// request the AlgoCmd from the remote user
@@ -188,7 +198,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			
 		});
 		// handle String type cmd as unknown cmd type 
-		msgAlgo.setCmd(String.class, new ADataPacketAlgoCmd<String, String, IChatUser>() {
+		msgAlgo.setCmd(StringMessage.class, new ADataPacketAlgoCmd<String, StringMessage, IChatUser>() {
 			/**
 			 * declare a static final serialVersionUID of type long to fix the warning
 			 */
@@ -204,17 +214,17 @@ public class ChatroomWithAdapter implements IChatroom {
 			}
 
 			@Override
-			public String apply(Class<?> index, DataPacket<String> host,
+			public String apply(Class<?> index, DataPacket<StringMessage> host,
 					IChatUser... params) {
 
 				IChatUser remote = params[0];
 
-				JLabel content = new JLabel(remote.toString() + " says:\n" + host.getData() + "\n");
+				JLabel content = new JLabel(remote.toString() + " says:\n" + host.getData().getMsg() + "\n");
 				
-				_cmd2ModelAdpt.provideUpdatableContainer(new Supplier<Container>(){
+				_cmd2ModelAdpt.updateOldGUI(new Supplier<Component>(){
 
 					@Override
-					public Container get() {
+					public Component get() {
 						return content;
 					}
 					
@@ -230,6 +240,7 @@ public class ChatroomWithAdapter implements IChatroom {
 				//				return "String received from " + remote;
 			}
 		});
+		
 		// handle addMe type cmd as known cmd type 
 		msgAlgo.setCmd(AddMe.class, new ADataPacketAlgoCmd<String, AddMe, IChatUser>() {
 
@@ -304,9 +315,9 @@ public class ChatroomWithAdapter implements IChatroom {
 			@Override
 			public String apply(Class<?> index, DataPacket<RemoveMe> host,
 					IChatUser... params) {
-				chatWindowAdapter.append("User left: " + host.getData().getChatConnect());
-				removeUser(host.getData().getChatConnect());
-				return "User left: " + host.getData().getChatConnect();
+				chatWindowAdapter.append("User left: " + host.getData().getUser());
+				removeUser(host.getData().getUser());
+				return "User left: " + host.getData().getUser();
 			}
 		});
 	}
@@ -363,7 +374,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param friend the remote user to be invited to this chatroom
 	 */
 	public void invite(IInitUser friend) {
-		Invitation2Chatroom invite = new Invitation2Chatroom(thisRoom);
+		Invitation2Chatroom invite = new Invitation2Chatroom(thisRoom,false);
 
 		(new Thread() {
 			@Override
