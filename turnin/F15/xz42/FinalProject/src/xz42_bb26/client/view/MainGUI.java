@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
@@ -29,6 +30,9 @@ import xz42_bb26.client.view.chatwindow.ChattingWindow;
 import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
 
 import javax.swing.JComboBox;
+import javax.swing.border.TitledBorder;
+
+import java.awt.Color;
 
 /**
  * The main GUI frame of the ChatApp program.
@@ -50,7 +54,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 	private JButton btnQuit;
 	private JButton btnJoinChatroom;
 	private JComboBox<Room> cbRooms;
-	private JLabel lbRoomList;
+	private JPanel panel_1;
 
 	/**
 	 * Create the application.
@@ -83,65 +87,65 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		frame.getContentPane().add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 134, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 28, 0, 0, 0, 0, 0, 0, 540, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-
-		JLabel lblConnectTo = new JLabel("Connect To:");
-		GridBagConstraints gbc_lblConnectTo = new GridBagConstraints();
-		gbc_lblConnectTo.fill = GridBagConstraints.BOTH;
-		gbc_lblConnectTo.insets = new Insets(0, 0, 5, 0);
-		gbc_lblConnectTo.gridx = 0;
-		gbc_lblConnectTo.gridy = 0;
-		panel.add(lblConnectTo, gbc_lblConnectTo);
+		panel.setMinimumSize(new Dimension(150,200));
+		panel.setMaximumSize(new Dimension(150,2000));
+		
+		panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Connect To", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.gridheight = 3;
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
+		gbc_panel_1.gridx = 0;
+		gbc_panel_1.gridy = 0;
+		panel.add(panel_1, gbc_panel_1);
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{134, 0};
+		gbl_panel_1.rowHeights = new int[]{28, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
 
 		tfIPInput = new JTextField();
-		tfIPInput.setToolTipText("Enter the IP address of the remote user you want to connect to.");
 		GridBagConstraints gbc_tfIPInput = new GridBagConstraints();
-		gbc_tfIPInput.fill = GridBagConstraints.BOTH;
 		gbc_tfIPInput.insets = new Insets(0, 0, 5, 0);
+		gbc_tfIPInput.fill = GridBagConstraints.BOTH;
 		gbc_tfIPInput.gridx = 0;
-		gbc_tfIPInput.gridy = 1;
-		panel.add(tfIPInput, gbc_tfIPInput);
+		gbc_tfIPInput.gridy = 0;
+		panel_1.add(tfIPInput, gbc_tfIPInput);
+		tfIPInput.setToolTipText("Enter the IP address of the remote user you want to connect to.");
 		tfIPInput.setColumns(10);
 
 		btnChatWith = new JButton("Chat With");
-		btnChatWith.setToolTipText("Build connection with the remove user specified by the IP address.");
-
 		GridBagConstraints gbc_btnChatWith = new GridBagConstraints();
-		gbc_btnChatWith.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnChatWith.insets = new Insets(0, 0, 5, 0);
+		gbc_btnChatWith.fill = GridBagConstraints.BOTH;
 		gbc_btnChatWith.gridx = 0;
-		gbc_btnChatWith.gridy = 2;
-		panel.add(btnChatWith, gbc_btnChatWith);
-
-		btnGetChatrooms = new JButton("Get Chatrooms");
-		btnGetChatrooms
-				.setToolTipText("Get the list of chatrooms from the remote user as specified by the IP address.");
-		GridBagConstraints gbc_btnGetChatrooms = new GridBagConstraints();
-		gbc_btnGetChatrooms.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnGetChatrooms.insets = new Insets(0, 0, 5, 0);
-		gbc_btnGetChatrooms.gridx = 0;
-		gbc_btnGetChatrooms.gridy = 3;
-		panel.add(btnGetChatrooms, gbc_btnGetChatrooms);
-
-		lbRoomList = new JLabel("Chat Room List:");
-		GridBagConstraints gbc_lbRoomList = new GridBagConstraints();
-		gbc_lbRoomList.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lbRoomList.insets = new Insets(0, 0, 5, 0);
-		gbc_lbRoomList.gridx = 0;
-		gbc_lbRoomList.gridy = 5;
-		panel.add(lbRoomList, gbc_lbRoomList);
-
-		cbRooms = new JComboBox<Room>();
-		cbRooms.setToolTipText("Choose a chatroom from the list of chatrooms the remote user is currently in.");
-		GridBagConstraints gbc_cbRooms = new GridBagConstraints();
-		gbc_cbRooms.fill = GridBagConstraints.HORIZONTAL;
-		gbc_cbRooms.insets = new Insets(0, 0, 5, 0);
-		gbc_cbRooms.gridx = 0;
-		gbc_cbRooms.gridy = 6;
-		panel.add(cbRooms, gbc_cbRooms);
+		gbc_btnChatWith.gridy = 1;
+		panel_1.add(btnChatWith, gbc_btnChatWith);
+		btnChatWith.setToolTipText("Build connection with the remove user specified by the IP address.");
+		
+				btnGetChatrooms = new JButton("Get Chatrooms");
+				btnGetChatrooms
+						.setToolTipText("Get the list of chatrooms from the remote user as specified by the IP address.");
+				GridBagConstraints gbc_btnGetChatrooms = new GridBagConstraints();
+				gbc_btnGetChatrooms.fill = GridBagConstraints.HORIZONTAL;
+				gbc_btnGetChatrooms.insets = new Insets(0, 0, 5, 0);
+				gbc_btnGetChatrooms.gridx = 0;
+				gbc_btnGetChatrooms.gridy = 4;
+				panel.add(btnGetChatrooms, gbc_btnGetChatrooms);
+		
+				cbRooms = new JComboBox<Room>();
+				cbRooms.setToolTipText("Choose a chatroom from the list of chatrooms the remote user is currently in.");
+				GridBagConstraints gbc_cbRooms = new GridBagConstraints();
+				gbc_cbRooms.fill = GridBagConstraints.BOTH;
+				gbc_cbRooms.insets = new Insets(0, 0, 5, 0);
+				gbc_cbRooms.gridx = 0;
+				gbc_cbRooms.gridy = 5;
+				panel.add(cbRooms, gbc_cbRooms);
 
 		btnJoinChatroom = new JButton("Join Chatroom");
 		btnJoinChatroom.setToolTipText("Join the chosen chatroom.");
@@ -150,7 +154,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_btnJoinChatroom.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnJoinChatroom.insets = new Insets(0, 0, 5, 0);
 		gbc_btnJoinChatroom.gridx = 0;
-		gbc_btnJoinChatroom.gridy = 7;
+		gbc_btnJoinChatroom.gridy = 8;
 		panel.add(btnJoinChatroom, gbc_btnJoinChatroom);
 
 		btnQuit = new JButton("Quit");
@@ -159,7 +163,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		GridBagConstraints gbc_btnQuit = new GridBagConstraints();
 		gbc_btnQuit.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnQuit.gridx = 0;
-		gbc_btnQuit.gridy = 10;
+		gbc_btnQuit.gridy = 9;
 		panel.add(btnQuit, gbc_btnQuit);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);

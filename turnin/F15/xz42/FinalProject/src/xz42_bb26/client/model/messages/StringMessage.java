@@ -2,7 +2,6 @@ package xz42_bb26.client.model.messages;
 
 import java.util.UUID;
 
-import provided.datapacket.ADataPacket;
 import provided.datapacket.DataPacket;
 import common.message.IChatMessage;
 
@@ -61,7 +60,7 @@ public class StringMessage implements IChatMessage {
 	}
 
 	@Override
-	public ADataPacket getDataPacket() {
-		return new DataPacket<String>(String.class, this.msg);
+	public DataPacket<? extends IChatMessage> getDataPacket() {
+		return new DataPacket<StringMessage>(StringMessage.class, this);
 	}
 }

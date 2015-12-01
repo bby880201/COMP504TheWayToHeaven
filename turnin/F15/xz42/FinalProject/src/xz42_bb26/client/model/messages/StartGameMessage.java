@@ -3,7 +3,6 @@ package xz42_bb26.client.model.messages;
 import java.util.UUID;
 
 import common.message.IChatMessage;
-import provided.datapacket.ADataPacket;
 import provided.datapacket.DataPacket;
 
 public class StartGameMessage implements IChatMessage{
@@ -31,7 +30,7 @@ public class StartGameMessage implements IChatMessage{
 		return msgID;
 	}
 
-	public ADataPacket getDataPacket() {
+	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<StartGameMessage>(StartGameMessage.class, this);
 	}
 

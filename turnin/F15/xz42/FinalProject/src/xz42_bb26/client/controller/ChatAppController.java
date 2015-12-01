@@ -1,9 +1,9 @@
 package xz42_bb26.client.controller;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -225,7 +225,7 @@ public class ChatAppController {
 					 * @param containerSupplier a supplier contains a container
 					 */
 					@Override
-					public void display(Supplier<Container> containerSupplier) {
+					public void display(Supplier<Component> containerSupplier) {
 						cw.display(containerSupplier);
 					}
 				};

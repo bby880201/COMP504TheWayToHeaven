@@ -1,5 +1,6 @@
 package xz42_bb26.client.model.chatroom;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.util.Set;
 import java.util.UUID;
@@ -83,5 +84,5 @@ public interface IChatRoom2WorldAdapter<T> {
 		}
 	};
 
-	public void display(Supplier<Container> containerSupplier);
+	public void display(Supplier<Component> containerSupplier);
 }

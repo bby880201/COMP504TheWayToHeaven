@@ -263,7 +263,7 @@ public class ChatAppMainModel {
 						ChatroomWithAdapter chatRoom = new ChatroomWithAdapter(userName,me);
 						chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
 						// invite the remote user to join the chatroom
-						Invitation2Chatroom invite = new Invitation2Chatroom((IChatroom) chatRoom);
+						Invitation2Chatroom invite = new Invitation2Chatroom((IChatroom) chatRoom, false);
 						friend.receive(me, invite);
 
 						rooms.put(chatRoom.getID(), (IChatroom) chatRoom);
