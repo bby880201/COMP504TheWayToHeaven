@@ -5,6 +5,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import provided.datapacket.DataPacket;
 import common.IInitUser;
 import common.message.IInitMessage;
 
@@ -34,12 +35,6 @@ public class InitUser implements IInitUser {
 		this.IP = IP;
 		this.time = System.currentTimeMillis();
 	}
-
-	@Override
-	public void receive(IInitUser sender, IInitMessage message)
-			throws RemoteException {
-		toModelAdap.receive(this, message);
-	}
 	
 	@Override
 	/**
@@ -63,6 +58,12 @@ public class InitUser implements IInitUser {
 		Date date = new Date(time);
 		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
 		return name + " " + format.format(date) + "@" + IP;
+	}
+
+	@Override
+	public void receive(IInitUser sender, DataPacket<? extends IInitMessage> dp)
+			throws RemoteException {
+		toModelAdap.receive(this, dp);		
 	}
 
 }

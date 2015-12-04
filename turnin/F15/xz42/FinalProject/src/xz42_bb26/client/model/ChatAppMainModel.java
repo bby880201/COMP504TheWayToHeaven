@@ -164,17 +164,18 @@ public class ChatAppMainModel {
 			InitUser preStub = new InitUser(userName,rmiUtils.getLocalAddress(), new IInitUser2ModelAdapter(){
 
 				@Override
-				public <T> void receive(IInitUser remote, IInitMessage message) {
-					String str = message.getDataPacket().execute(msgAlgo, remote);
-					System.out.println(str);
+				public <T> void receive(IInitUser remote,
+						DataPacket<? extends IInitMessage> dp) {
+					String str = dp.execute(msgAlgo, remote);
+					System.out.println(str);					
 				}
 			});
-			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(preStub, IInitUser.BOUND_PORT);
+			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(preStub, IInitUser.BOUND_PORT_CLIENT);
 			me = stub;
 
 			registry = rmiUtils.getLocalRegistry();
 			// put the user's stub onto the registry
-			registry.rebind(IInitUser.BOUND_NAME, stub);
+			registry.rebind(IInitUser.BOUND_NAME_CLIENT, stub);
 
 			System.out.println("Waiting..." + "\n");
 		} catch (Exception e) {
@@ -196,7 +197,7 @@ public class ChatAppMainModel {
 		try {
 			Registry registry = rmiUtils.getRemoteRegistry(ip);
 			System.out.println("Found registry: " + registry + "\n");
-			friend = (IInitUser) registry.lookup(IInitUser.BOUND_NAME);
+			friend = (IInitUser) registry.lookup(IInitUser.BOUND_NAME_CLIENT);
 			System.out.println("Found remote IInitUser object: " + friend + " from " + ip + "\n");
 		} catch (Exception e) {
 			System.out.println("Establish connect failed!\n Exception connecting to " + ip + ": " + e + "\n");
@@ -213,13 +214,13 @@ public class ChatAppMainModel {
 			for (IChatroom rm : rooms.values()) {
 				((ChatroomWithAdapter) rm).removeMe();
 			}
-			registry.unbind(IInitUser.BOUND_NAME);
-			System.out.println("Chat App Model Registry: " + IInitUser.BOUND_NAME + " has been unbound.");
+			registry.unbind(IInitUser.BOUND_NAME_CLIENT);
+			System.out.println("Chat App Model Registry: " + IInitUser.BOUND_NAME_CLIENT + " has been unbound.");
 
 			rmiUtils.stopRMI();
 			System.exit(0);
 		} catch (Exception e) {
-			System.err.println("Chat App Model Registry: Error unbinding " + IInitUser.BOUND_NAME + ":\n" + e);
+			System.err.println("Chat App Model Registry: Error unbinding " + IInitUser.BOUND_NAME_CLIENT + ":\n" + e);
 			System.exit(-1);
 		}
 	}
@@ -264,7 +265,7 @@ public class ChatAppMainModel {
 						chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
 						// invite the remote user to join the chatroom
 						Invitation2Chatroom invite = new Invitation2Chatroom((IChatroom) chatRoom, false);
-						friend.receive(me, invite);
+						friend.receive(me, invite.getDataPacket());
 
 						rooms.put(chatRoom.getID(), (IChatroom) chatRoom);
 
@@ -321,7 +322,7 @@ public class ChatAppMainModel {
 		ChatroomListRequest rmList = new ChatroomListRequest();
 		try {
 			if (null != friend)
-				friend.receive(me, rmList);
+				friend.receive(me, rmList.getDataPacket());
 			//TODO block and unblock request
 		} catch (RemoteException e) {
 			e.printStackTrace();

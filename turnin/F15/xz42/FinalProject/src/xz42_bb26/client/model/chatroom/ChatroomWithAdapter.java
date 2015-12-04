@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import xz42_bb26.client.model.messages.StartGameMessage;
@@ -87,16 +88,17 @@ public class ChatroomWithAdapter implements IChatroom {
 
 		initAlgo();
 		me = new ChatUser(name, new IChatUser2ModelAdapter(){
-
+			
 			@Override
-			public <T> void receive(IChatUser remote, IChatMessage message) {
-				String str = message.getDataPacket().execute(msgAlgo, remote);
-				System.out.println(str);
+			public <T> void receive(IChatUser remote,
+					DataPacket<? extends IChatMessage> dp) {
+				String str = dp.execute(msgAlgo, remote);
+				System.out.println(str);				
 			}
 			
 		});
 		
-		IChatUser stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT + 1);
+		IChatUser stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_CLIENT);
 		
 		id = UUID.randomUUID();
 		users.add(stub);
@@ -124,26 +126,32 @@ public class ChatroomWithAdapter implements IChatroom {
 			}
 
 			@Override
-			public void updateOldGUI(Supplier<Component> componentFac) {
-				chatWindowAdapter.display(componentFac);
-			}
-
-			@Override
-			public void createNewGUI(Supplier<Component> componentFac) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void sendMessageToGlobalChatroom(IChatMessage message) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
 			public String getUserName() {
 				// TODO Auto-generated method stub
 				return null;
+			}
+
+			@Override
+			public void sendToChatroom(IChatMessage message) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void addToScrollable(Supplier<Component> componentFac) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void updateUpdatable(Supplier<Component> componentFac) {
+				chatWindowAdapter.display(componentFac);				
+			}
+
+			@Override
+			public void createNewWindow(Supplier<JFrame> frameFac) {
+				// TODO Auto-generated method stub
+				
 			}
 
 		};
@@ -172,7 +180,7 @@ public class ChatroomWithAdapter implements IChatroom {
 				ADataPacketAlgoCmd<String, ?, IChatUser> cmd = null;
 				
 				try {
-					remote.receive(me, reqForAlgo);
+					remote.receive(me, reqForAlgo.getDataPacket());
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -221,7 +229,7 @@ public class ChatroomWithAdapter implements IChatroom {
 
 				JLabel content = new JLabel(remote.toString() + " says:\n" + host.getData().getMsg() + "\n");
 				
-				_cmd2ModelAdpt.updateOldGUI(new Supplier<Component>(){
+				_cmd2ModelAdpt.updateUpdatable(new Supplier<Component>(){
 
 					@Override
 					public Component get() {
@@ -381,7 +389,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			public void run() {
 				try {
 					// send friend an InviteToChatroom message
-					friend.receive(initMe, invite);
+					friend.receive(initMe, invite.getDataPacket());
 				} catch (RemoteException e) {
 					System.out.println("Invite " + friend + " to room failed: " + e + "\n");
 					e.printStackTrace();
@@ -473,7 +481,7 @@ public class ChatroomWithAdapter implements IChatroom {
 					try {
 						// send addMe message to users in the chatroom other than myself
 						if (!user.equals(me)) {
-							user.receive(me, addMe);
+							user.receive(me, addMe.getDataPacket());
 						}
 					} catch (RemoteException e) {
 						System.out.println("Broadcast to add user failed!\nRemote exception invite " + ": "
@@ -496,7 +504,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			try {
 				// send removeMe message to users in the chatroom other than myself
 				if (!user.equals(me)) {
-					user.receive(me, rmMe);
+					user.receive(me, rmMe.getDataPacket());
 				}
 			} catch (RemoteException e) {
 				System.out.println(
@@ -552,7 +560,7 @@ public class ChatroomWithAdapter implements IChatroom {
 					// send message to users other than myself
 					if (!user.equals(me)) {
 						try {
-							user.receive(me, message);
+							user.receive(me, message.getDataPacket());
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}
@@ -573,7 +581,7 @@ public class ChatroomWithAdapter implements IChatroom {
 		for (IChatUser user : users) {
 			try {
 				// send startgame message to users in the chatroom other than myself
-				user.receive(me, startGame);
+				user.receive(me, startGame.getDataPacket());
 			} catch (RemoteException e) {
 				System.out.println(
 						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
