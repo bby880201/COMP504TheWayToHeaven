@@ -8,6 +8,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import provided.datapacket.DataPacket;
 import common.IChatUser;
 import common.message.IChatMessage;
 
@@ -32,15 +33,6 @@ public class ChatUser implements IChatUser {
 		this.time = System.currentTimeMillis();
 	}
 
-	/* (non-Javadoc)
-	 * @see common.IChatUser#receive(common.IChatUser, common.message.IChatMessage)
-	 */
-	@Override
-	public void receive(IChatUser sender, IChatMessage message)
-			throws RemoteException {
-		toModelAdap.receive(sender,message);
-	}
-	
 	@Override
 	/**
 	 * Override hashCode() method to create a hashcode from all the accessible values in IUser.
@@ -63,5 +55,11 @@ public class ChatUser implements IChatUser {
 		Date date = new Date(time);
 		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
 		return name + " " + format.format(date);	
+	}
+
+	@Override
+	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp)
+			throws RemoteException {
+		toModelAdap.receive(sender,dp);		
 	}
 }
