@@ -40,7 +40,6 @@ public class GameController {
 			
 		});
 	}
-	
 	public void start() {	
 		view.start();
 		model.start();

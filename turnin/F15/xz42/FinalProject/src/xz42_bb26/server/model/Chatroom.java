@@ -34,7 +34,7 @@ import common.message.init.Invitation2Chatroom;
  * This class implements the IChatroom interface. 
  * @author bb26, xc7
  */
-public class ChatroomWithAdapter implements IChatroom {
+public class Chatroom implements IChatroom {
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
@@ -72,7 +72,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter(String name, IInitUser init) throws UnknownHostException, RemoteException {
+	public Chatroom(String name, IInitUser init) throws UnknownHostException, RemoteException {
 
 		initAlgo();
 		me = new ChatUser(name, new IChatUser2ModelAdapter(){
@@ -91,7 +91,7 @@ public class ChatroomWithAdapter implements IChatroom {
 		initMe = init;
 	}
 
-	public ChatroomWithAdapter(String userName, IInitUser me2, UUID id2) throws UnknownHostException, RemoteException {
+	public Chatroom(String userName, IInitUser me2, UUID id2) throws UnknownHostException, RemoteException {
 		this(userName, me2);
 		id = id2;
 	}
