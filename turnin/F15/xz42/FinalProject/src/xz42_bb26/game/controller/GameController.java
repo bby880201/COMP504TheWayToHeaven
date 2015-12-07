@@ -1,9 +1,8 @@
 package xz42_bb26.game.controller;
 
-import java.awt.EventQueue;
+import java.rmi.RemoteException;
 
 import common.IChatroom;
-import xz42_bb26.client.controller.ChatAppController;
 import xz42_bb26.game.model.GameModel;
 import xz42_bb26.game.view.GameView;
 import xz42_bb26.game.view.IModelAdapter;
@@ -22,7 +21,7 @@ public class GameController {
 	 * Constructor of the controller.
 	 * @param team The team.
 	 */
-	public GameController() {
+	public GameController(IChatroom globalGameRoom, String teamName, Boolean isNavigator) {
 		model = new GameModel(new IViewAdapter() {
 
 			@Override
@@ -30,7 +29,7 @@ public class GameController {
 				view.update();
 			}
 			
-		});
+		},globalGameRoom,teamName,isNavigator);
 		view = new GameView(new IModelAdapter() {
 
 			@Override
@@ -40,7 +39,7 @@ public class GameController {
 			
 		});
 	}
-	public void start() {	
+	public void start() throws RemoteException {	
 		view.start();
 		model.start();
 	}
