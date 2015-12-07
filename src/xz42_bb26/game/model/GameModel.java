@@ -2,12 +2,15 @@ package xz42_bb26.game.model;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import javax.swing.Timer;
 
 import common.IChatUser;
 import common.IChatroom;
 import common.IInitUser;
+import common.message.IChatMessage;
+import common.message.chat.AAddMe;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -15,6 +18,7 @@ import gov.nasa.worldwind.geom.Angle;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.render.Box;
+import provided.datapacket.DataPacket;
 import xz42_bb26.game.controller.IViewAdapter;
 
 public class GameModel {
@@ -34,27 +38,19 @@ public class GameModel {
 	/**
 	 * The global chatroom to send message to
 	 */
-	private IChatroom globalChatroom;
+	private Chatroom globalChatroom;
 	
 	/**
 	 * The global chatroom infomation get from server
 	 */
 	private IChatroom remoteChatroom;
 	
-	/**
-	 * Current Position of teams
-	 */
-	private HashMap<IChatUser,Position> teams;
-	
+
 	/**
 	 * My team
 	 */
 	private Team team;
 	
-	/**
-	 * InitUser to make chatrooms
-	 */
-	private IInitUser me;
 	
 	/**
 	 * Current username like teamA_Navigator
@@ -70,10 +66,9 @@ public class GameModel {
 	 * Constructor of the game model.
 	 * @param view A model to view adapter.
 	 */
-	public GameModel(IViewAdapter iViewAdapter,IChatroom _remoteChatroom, IInitUser _initUser, String _teamName, boolean _isNavigator) {
+	public GameModel(IViewAdapter iViewAdapter,IChatroom _remoteChatroom, String _teamName, boolean _isNavigator) {
 		view = iViewAdapter;
-		remoteChatroom = remoteChatroom;
-		me = _initUser;
+		this.remoteChatroom = _remoteChatroom;
 		isNavigator = _isNavigator;
 		if(isNavigator){
 			userName = _teamName + "_Navigator";
@@ -92,8 +87,29 @@ public class GameModel {
 		
 	}
 
-	public void start() {
-		globalChatroom = new Chatroom(userName,me);
+	public void start() throws RemoteException {
+		try {
+			globalChatroom = new Chatroom(userName);
+			for (IChatUser user : remoteChatroom.getUsers()) {
+				globalChatroom.addUser(user);
+			}
+			AAddMe addMe = new AAddMe() {
+				
+				@Override
+				public DataPacket<? extends IChatMessage> getDataPacket() {
+					return null;
+				}
+				
+				@Override
+				public IChatUser getUser() {
+					return globalChatroom.getMe();
+				}
+			};
+			globalChatroom.send(globalChatroom.getMe(),addMe);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 
