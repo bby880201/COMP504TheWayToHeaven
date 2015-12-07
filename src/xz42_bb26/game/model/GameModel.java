@@ -6,6 +6,8 @@ import java.util.HashMap;
 import javax.swing.Timer;
 
 import common.IChatUser;
+import common.IChatroom;
+import common.IInitUser;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -24,21 +26,61 @@ public class GameModel {
 	 */
 	private Model worldModel = (Model)WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 	
+	/**
+	 * View
+	 */
 	private IViewAdapter view;
 	
-	private Chatroom globalChatroom;
+	/**
+	 * The global chatroom to send message to
+	 */
+	private IChatroom globalChatroom;
 	
+	/**
+	 * The global chatroom infomation get from server
+	 */
+	private IChatroom remoteChatroom;
+	
+	/**
+	 * Current Position of teams
+	 */
 	private HashMap<IChatUser,Position> teams;
 	
+	/**
+	 * My team
+	 */
 	private Team team;
 	
+	/**
+	 * InitUser to make chatrooms
+	 */
+	private IInitUser me;
+	
+	/**
+	 * Current username like teamA_Navigator
+	 */
+	private String userName;
+	
+	/**
+	 * Mark if this user is a Navigator or ResourceManager
+	 */
+	private boolean isNavigator; 
 	
 	/**
 	 * Constructor of the game model.
 	 * @param view A model to view adapter.
 	 */
-	public GameModel(IViewAdapter iViewAdapter) {
+	public GameModel(IViewAdapter iViewAdapter,IChatroom _remoteChatroom, IInitUser _initUser, String _teamName, boolean _isNavigator) {
 		view = iViewAdapter;
+		remoteChatroom = remoteChatroom;
+		me = _initUser;
+		isNavigator = _isNavigator;
+		if(isNavigator){
+			userName = _teamName + "_Navigator";
+		}
+		else{
+			userName = _teamName + "_ResourceMaster";
+		}
 	}
 	
 	public void updateStatus(){
@@ -51,6 +93,7 @@ public class GameModel {
 	}
 
 	public void start() {
+		globalChatroom = new Chatroom(userName,me);
 		
 	}
 
