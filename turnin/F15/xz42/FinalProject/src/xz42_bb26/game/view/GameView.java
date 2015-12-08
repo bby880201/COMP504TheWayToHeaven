@@ -13,9 +13,12 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Box;
 import map.MapPanel;
+import xz42_bb26.game.model.Depot;
 import map.IRightClickAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -133,6 +136,15 @@ public class GameView extends JFrame {
 
 	public RenderableLayer getBoxLayer() {
 		return sLayer;
+	}
+	
+	public void checkDepots(Depot depot){
+		String ObjButtons[] = {"Yes","No"};
+        int PromptResult = JOptionPane.showOptionDialog(null,"Are you sure you want to exit?","Online Examination System",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
+        if(PromptResult==JOptionPane.YES_OPTION)
+        {
+            model.buySupply(depot);
+        }
 	}
 
 }

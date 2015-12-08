@@ -273,6 +273,11 @@ public class GameModel {
 		globalChatroom.send(globalChatroom.getMe(), aTeamOutMessage);
 		this.inGame = false;
 	}
+
+	public void buySupply(Depot depot) {
+		team.buySupply(depot);
+		
+	}
 	
 
 

@@ -32,8 +32,11 @@ public class Team {
 
 	private GameModel model;
 	
-	public void buySupply(){
-		
+	public void buySupply(Depot depot){
+		cash -= depot.price;
+		if(cash < 0){
+			model.sendGameOver();
+		}
 	}
 	
 	public Team(GameModel _model) {
