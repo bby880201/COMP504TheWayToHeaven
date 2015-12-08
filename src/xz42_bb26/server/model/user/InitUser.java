@@ -1,4 +1,4 @@
-package xz42_bb26.client.model.user;
+package xz42_bb26.server.model.user;
 
 import java.rmi.RemoteException;
 import java.text.Format;

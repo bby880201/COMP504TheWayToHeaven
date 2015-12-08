@@ -1,4 +1,4 @@
-package xz42_bb26.client.model.chatroom;
+package xz42_bb26.server.model.chatroom;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -16,12 +16,12 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import xz42_bb26.client.model.messages.StartGameMessage;
-import xz42_bb26.client.model.messages.StringMessage;
-import xz42_bb26.client.model.messages.UnknownTypeData;
-import xz42_bb26.client.model.user.ChatUser;
-import xz42_bb26.client.model.user.ChatUserEntity;
-import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
+import xz42_bb26.server.model.messages.StartGameMessage;
+import xz42_bb26.server.model.messages.StringMessage;
+import xz42_bb26.server.model.messages.UnknownTypeData;
+import xz42_bb26.server.model.user.ChatUser;
+import xz42_bb26.server.model.user.ChatUserEntity;
+import xz42_bb26.server.model.user.IChatUser2ModelAdapter;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
@@ -56,14 +56,14 @@ import common.message.init.AInvitation2Chatroom;
  * This class implements the IChatroom interface. 
  * @author bb26, xc7
  */
-public class ChatroomWithAdapter implements IChatroom {
+public class ServerRoom implements IChatroom {
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -1842717037685994672L;
 
 	@SuppressWarnings("unchecked")
-	private transient IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter = IChatRoom2WorldAdapter.NULL_OBJECT;
+	private transient IServerRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter = IServerRoom2WorldAdapter.NULL_OBJECT;
 	
 	// default command to model adapter that provides unknown command limited 
 	// access to local system
@@ -105,7 +105,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter(UUID uuid) throws UnknownHostException, RemoteException {
+	public ServerRoom(UUID uuid) throws UnknownHostException, RemoteException {
 
 		initAlgo();
 		me = new ChatUser("", new IChatUser2ModelAdapter(){
@@ -119,7 +119,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			
 		});
 		
-		stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_CLIENT);
+		stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_SERVER);
 
 		users.put(stub,null);
 		initMe = null;
@@ -133,12 +133,12 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter() throws UnknownHostException, RemoteException {
+	public ServerRoom() throws UnknownHostException, RemoteException {
 		this(UUID.randomUUID());
 	}
 
 	private IInitUser getInitUser() {
-		if (chatWindowAdapter != IChatRoom2WorldAdapter.NULL_OBJECT) {
+		if (chatWindowAdapter != IServerRoom2WorldAdapter.NULL_OBJECT) {
 			initMe = chatWindowAdapter.getInitUser();
 		}
 		return initMe;
@@ -579,7 +579,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Get the IChatRoom2WorldAdapter associated with this chatroom
 	 * @return An instance of IChatRoom2WorldAdapter
 	 */
-	public IChatRoom2WorldAdapter<ChatUserEntity> getChatWindowAdapter() {
+	public IServerRoom2WorldAdapter<ChatUserEntity> getChatWindowAdapter() {
 		return chatWindowAdapter;
 	}
 
@@ -589,7 +589,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param chatWindowAdapter An instance of IChatRoom2WorldAdapter
 	 * @return return boolean value for synchronize purpose
 	 */
-	public boolean setChatWindowAdapter(IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter) {
+	public boolean setChatWindowAdapter(IServerRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter) {
 		this.chatWindowAdapter = chatWindowAdapter;
 		
 		ChatUserEntity meInfo = new ChatUserEntity(stub, chatWindowAdapter.getName(), chatWindowAdapter.getIp());
