@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.swing.JFrame;
+
 import common.IInitUser;
 
 /**
@@ -82,38 +84,40 @@ public interface IChatRoom2WorldAdapter<T> {
 
 		@Override
 		public void display(Supplier containerSupplier) {
-			// TODO Auto-generated method stub
-			
+			// this method will be override in the controller			
 		}
 
 		@Override
 		public IInitUser getInitUser() {
-			// TODO Auto-generated method stub
+			// this method will be override in the controller
 			return null;
 		}
 
 		@Override
 		public String getName() {
-			// TODO Auto-generated method stub
+			// this method will be override in the controller
 			return null;
 		}
 
 		@Override
 		public String getIp() {
-			// TODO Auto-generated method stub
+			// this method will be override in the controller
 			return null;
 		}
 
 		@Override
 		public void refreshList(Collection collection) {
-			// TODO Auto-generated method stub
-			
+			// this method will be override in the controller			
 		}
 
 		@Override
 		public void speakTo(String ip) {
+			// this method will be override in the controller			
+		}
+
+		@Override
+		public void popUp(Supplier frameFac) {
 			// TODO Auto-generated method stub
-			
 		}
 
 	};
@@ -125,5 +129,7 @@ public interface IChatRoom2WorldAdapter<T> {
 	public String getIp();
 
 	public void speakTo(String ip);
+
+	public void popUp(Supplier<JFrame> frameFac);
 
 }

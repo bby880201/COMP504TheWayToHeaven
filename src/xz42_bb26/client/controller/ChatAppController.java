@@ -8,6 +8,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.swing.JFrame;
+
 import common.IChatUser;
 import common.IChatroom;
 import common.IInitUser;
@@ -246,6 +248,22 @@ public class ChatAppController {
 					@Override
 					public void speakTo(String ip) {
 						model.chatWith(ip);
+					}
+
+					@Override
+					public void popUp(Supplier<JFrame> frameFac) {
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									JFrame frame = frameFac.get();
+									frame.setVisible(true);
+									frame.revalidate();
+									frame.repaint();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 					}
 
 				};

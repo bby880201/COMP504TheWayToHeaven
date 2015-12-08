@@ -186,7 +186,7 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void createNewWindow(Supplier<JFrame> frameFac) {
-				// TODO Auto-generated method stub
+				chatWindowAdapter.popUp(frameFac);
 				
 			}
 
@@ -268,7 +268,7 @@ public class ChatroomWithAdapter implements IChatroom {
 
 				JLabel content = new JLabel(users.get(remote).getName() + " says:\n" + host.getData().getText() + "\n");
 				
-				_cmd2ModelAdpt.updateUpdatable(new Supplier<Component>(){
+				_cmd2ModelAdpt.addToScrollable(new Supplier<Component>(){
 
 					@Override
 					public Component get() {
