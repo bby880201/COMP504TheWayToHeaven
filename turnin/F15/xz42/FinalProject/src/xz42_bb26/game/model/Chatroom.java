@@ -19,18 +19,14 @@ import common.IInitUser;
 import common.demo.message.chat.CommandRequest;
 import common.message.IChatMessage;
 import common.message.chat.AAddMe;
-import gov.nasa.worldwind.formats.tiff.GeotiffMetaData;
-import gov.nasa.worldwind.geom.Position;
-import jogamp.common.util.locks.RecursiveThreadGroupLockImpl01Unfairish;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
 import provided.mixedData.MixedDataKey;
-import xz42_bb26.client.model.messages.StartGameMessage;
 import xz42_bb26.client.model.messages.StringMessage;
 import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
-import xz42_bb26.game.controller.GameController;
 import xz42_bb26.game.model.messages.AUpdateGameInfoMessage;
+import xz42_bb26.game.model.messages.TeamOut;
 
 public class Chatroom implements IChatroom {
 	/**
@@ -68,6 +64,7 @@ public class Chatroom implements IChatroom {
 	
 	
 	
+	
 	/**
 	 * Constructor
 	 * 
@@ -78,7 +75,7 @@ public class Chatroom implements IChatroom {
 	public Chatroom(String userName) throws RemoteException {
 
 		initAlgo();
-		me = new ChatUser(userName, new IChatUser2ModelAdapter() {
+		me = new GameUser(userName, new IChatUser2ModelAdapter() {
 
 			@Override
 			public <T> void receive(IChatUser remote, DataPacket<? extends IChatMessage> dp) {
@@ -369,5 +366,6 @@ public class Chatroom implements IChatroom {
 		});
 
 	}
+
 
 }

@@ -58,7 +58,7 @@ public class GameView extends JFrame {
 	
 	private void initGUI(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -68,14 +68,14 @@ public class GameView extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		
 		mapPanel = new MapPanel();
-		mapPanel.setPreferredSize(new java.awt.Dimension(600, 400));
+		mapPanel.setPreferredSize(new java.awt.Dimension(800, 600));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
 		mapPanel.addRightClickAction(new IRightClickAction(){
 
 			@Override
 			public void apply(Position p) {
-				System.out.println(p);
+				model.moveTo(p);
 			}});
 		
 		
@@ -89,31 +89,36 @@ public class GameView extends JFrame {
 		gbl_infoPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		infoPanel.setLayout(gbl_infoPanel);
-		JButton btnBeTheNavigator = new JButton("Be the navigator");
-		GridBagConstraints gbc_btnBeTheNavigator = new GridBagConstraints();
-		gbc_btnBeTheNavigator.anchor = GridBagConstraints.NORTHWEST;
-		gbc_btnBeTheNavigator.insets = new Insets(0, 0, 5, 0);
-		gbc_btnBeTheNavigator.gridx = 0;
-		gbc_btnBeTheNavigator.gridy = 0;
-		infoPanel.add(btnBeTheNavigator, gbc_btnBeTheNavigator);
-//		if(model.isNavigator()){
-//			
-//		}
-//		else{
-//			JLabel cashLabel = new JLabel("Current Cash: $100");
-//			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
-//			gbc_cashLabel.insets = new Insets(0, 0, 5, 0);
-//			gbc_cashLabel.anchor = GridBagConstraints.WEST;
-//			gbc_cashLabel.gridx = 0;
-//			gbc_cashLabel.gridy = 1;
-//			infoPanel.add(cashLabel, gbc_cashLabel);
-//			
-//			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
-//			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
-//			gbc_supplyLabel.gridx = 0;
-//			gbc_supplyLabel.gridy = 2;
-//			infoPanel.add(supplyLabel, gbc_supplyLabel);
-//		}
+		JLabel dutyLabel = new JLabel();
+		GridBagConstraints gbc_dutyLabel = new GridBagConstraints();
+		gbc_dutyLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_dutyLabel.anchor = GridBagConstraints.WEST;
+		gbc_dutyLabel.gridx = 0;
+		gbc_dutyLabel.gridy = 1;
+		infoPanel.add(dutyLabel, gbc_dutyLabel);
+		if(model.isNavigator()){
+			dutyLabel.setText("You are the navigator");
+			JLabel destLabel = new JLabel("Your destination is (23.332910112240146°, -131.43584349888866°) ");
+			GridBagConstraints gbc_destLabel = new GridBagConstraints();
+			gbc_destLabel.gridx = 0;
+			gbc_destLabel.gridy = 2;
+			infoPanel.add(destLabel, gbc_destLabel);
+		}
+		else{
+			dutyLabel.setText("You are the resource manager");
+			JLabel cashLabel = new JLabel("Current Cash: $100");
+			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
+
+			gbc_cashLabel.gridx = 0;
+			gbc_cashLabel.gridy = 2;
+			infoPanel.add(cashLabel, gbc_cashLabel);
+			
+			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
+			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
+			gbc_supplyLabel.gridx = 0;
+			gbc_supplyLabel.gridy = 3;
+			infoPanel.add(supplyLabel, gbc_supplyLabel);
+		}
 		
 		/**
 		 * Update the layer.
@@ -124,6 +129,10 @@ public class GameView extends JFrame {
 	}
 	public void update(){
 		sLayer.firePropertyChange(AVKey.LAYER, null, null);
+	}
+
+	public RenderableLayer getBoxLayer() {
+		return sLayer;
 	}
 
 }
