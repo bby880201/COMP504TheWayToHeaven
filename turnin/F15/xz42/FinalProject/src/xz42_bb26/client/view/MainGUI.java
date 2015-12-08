@@ -125,24 +125,24 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		panel_1.add(btnChatWith, gbc_btnChatWith);
 		btnChatWith.setToolTipText("Build connection with the remove user specified by the IP address.");
 		
-				btnGetChatrooms = new JButton("Get Chatrooms");
-				btnGetChatrooms
-						.setToolTipText("Get the list of chatrooms from the remote user as specified by the IP address.");
-				GridBagConstraints gbc_btnGetChatrooms = new GridBagConstraints();
-				gbc_btnGetChatrooms.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnGetChatrooms.insets = new Insets(0, 0, 5, 0);
-				gbc_btnGetChatrooms.gridx = 0;
-				gbc_btnGetChatrooms.gridy = 4;
-				panel.add(btnGetChatrooms, gbc_btnGetChatrooms);
-		
-				cbRooms = new JComboBox<Room>();
-				cbRooms.setToolTipText("Choose a chatroom from the list of chatrooms the remote user is currently in.");
-				GridBagConstraints gbc_cbRooms = new GridBagConstraints();
-				gbc_cbRooms.fill = GridBagConstraints.BOTH;
-				gbc_cbRooms.insets = new Insets(0, 0, 5, 0);
-				gbc_cbRooms.gridx = 0;
-				gbc_cbRooms.gridy = 5;
-				panel.add(cbRooms, gbc_cbRooms);
+		btnGetChatrooms = new JButton("Get Chatrooms");
+		btnGetChatrooms
+				.setToolTipText("Get the list of chatrooms from the remote user as specified by the IP address.");
+		GridBagConstraints gbc_btnGetChatrooms = new GridBagConstraints();
+		gbc_btnGetChatrooms.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnGetChatrooms.insets = new Insets(0, 0, 5, 0);
+		gbc_btnGetChatrooms.gridx = 0;
+		gbc_btnGetChatrooms.gridy = 4;
+		panel.add(btnGetChatrooms, gbc_btnGetChatrooms);
+
+		cbRooms = new JComboBox<Room>();
+		cbRooms.setToolTipText("Choose a chatroom from the list of chatrooms the remote user is currently in.");
+		GridBagConstraints gbc_cbRooms = new GridBagConstraints();
+		gbc_cbRooms.fill = GridBagConstraints.BOTH;
+		gbc_cbRooms.insets = new Insets(0, 0, 5, 0);
+		gbc_cbRooms.gridx = 0;
+		gbc_cbRooms.gridy = 5;
+		panel.add(cbRooms, gbc_cbRooms);
 
 		btnJoinChatroom = new JButton("Join Chatroom");
 		btnJoinChatroom.setToolTipText("Join the chosen chatroom.");
