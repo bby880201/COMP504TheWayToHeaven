@@ -1,4 +1,4 @@
-package xz42_bb26.client.model;
+package xz42_bb26.server.model;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -8,10 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
-import xz42_bb26.client.model.user.ChatUserEntity;
-import xz42_bb26.client.model.user.IInitUser2ModelAdapter;
-import xz42_bb26.client.model.user.InitUser;
 import common.IChatUser;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
@@ -33,6 +29,10 @@ import provided.rmiUtils.IRMIUtils;
 import provided.rmiUtils.IRMI_Defs;
 import provided.rmiUtils.RMIUtils;
 import provided.util.IVoidLambda;
+import xz42_bb26.server.model.chatroom.ServerRoom;
+import xz42_bb26.server.model.user.ChatUserEntity;
+import xz42_bb26.server.model.user.IInitUser2ModelAdapter;
+import xz42_bb26.server.model.user.InitUser;
 
 /**
  * The model class, which stores a list of rooms the local user currently joined, 
@@ -40,7 +40,7 @@ import provided.util.IVoidLambda;
  * 
  * @author bb26, xc7
  */
-public class ChatAppMainModel {
+public class ServerModel {
 
 	/**
 	 * The RMI Registry
@@ -60,7 +60,7 @@ public class ChatAppMainModel {
 
 	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
-	private String userName = "xz42_bb26";
+	private String userName = "xz42_bb26_server";
 	
 	private String ip;
 
@@ -68,7 +68,7 @@ public class ChatAppMainModel {
 	 * Constructor that takes an instance of IModel2ViewAdapter
 	 * @param toViewAdapter An instance of IModel2ViewAdapter
 	 */
-	public ChatAppMainModel(IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity> toViewAdapter) {
+	public ServerModel(IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity> toViewAdapter) {
 
 		toView = toViewAdapter;
 		// initialize an empty set of rooms
@@ -130,7 +130,7 @@ public class ChatAppMainModel {
 					}
 					
 					// creates a new local copy of the chatroom 
-					ChatroomWithAdapter room = new ChatroomWithAdapter(remoteRoom.getID());
+					ServerRoom room = new ServerRoom(remoteRoom.getID());
 					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
 
 					// add user to chatroom after adapter is installed
@@ -183,8 +183,7 @@ public class ChatAppMainModel {
 			}
 			
 		});
-		
-		
+			
 		msgAlgo.setCmd(AChatroomListResponse.class, new ADataPacketAlgoCmd<String, AChatroomListResponse, IInitUser>() {
 
 			/**
@@ -262,7 +261,6 @@ public class ChatAppMainModel {
 		});
 	}
 
-
 	/**
 	 * Start the model
 	 */
@@ -289,7 +287,7 @@ public class ChatAppMainModel {
 					System.out.println(str);					
 				}
 			});
-			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(preStub, IInitUser.BOUND_PORT_CLIENT);
+			IInitUser stub = (IInitUser) UnicastRemoteObject.exportObject(preStub, IInitUser.BOUND_PORT_SERVER);
 			me = stub;
 
 			registry = rmiUtils.getLocalRegistry();
@@ -298,6 +296,7 @@ public class ChatAppMainModel {
 			
 			ip = rmiUtils.getLocalAddress();
 
+			
 			System.out.println("Waiting..." + "\n");
 		} catch (Exception e) {
 			System.err.println("Connect exception:" + "\n");
@@ -333,7 +332,7 @@ public class ChatAppMainModel {
 		try {
 			// quit from all current chatrooms
 			for (IChatroom rm : rooms.values()) {
-				((ChatroomWithAdapter) rm).removeMe();
+				((ServerRoom) rm).removeMe();
 			}
 			registry.unbind(IInitUser.BOUND_NAME);
 			System.out.println("Chat App Model Registry: " + IInitUser.BOUND_NAME + " has been unbound.");
@@ -382,7 +381,7 @@ public class ChatAppMainModel {
 				if (null != friend) {
 					try {
 						// create a local chatroom which contains the local user's stub
-						ChatroomWithAdapter chatRoom = new ChatroomWithAdapter();
+						ServerRoom chatRoom = new ServerRoom();
 						chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
 						// invite the remote user to join the chatroom
 						AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) chatRoom, false);
@@ -412,12 +411,12 @@ public class ChatAppMainModel {
 		try {
 			// check whether my stub already exists in the chatroom to join
 			if (rooms.containsKey(rm.getID())) {
-				ChatroomWithAdapter chatroom = (ChatroomWithAdapter) rooms.get(rm.getID());
+				ServerRoom chatroom = (ServerRoom) rooms.get(rm.getID());
 				chatroom.display("You are already in this chatroom!");
 				throw new IllegalArgumentException("User joining a chatroom in which the user already exists.");
 			}
 			// create a local chatroom with same ID as the remove chatroom
-			ChatroomWithAdapter chatRoom = new ChatroomWithAdapter(rm.getID());
+			ServerRoom chatRoom = new ServerRoom(rm.getID());
 
 			chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
 			// add members in the remote chatroom to the created local chatroom
