@@ -10,6 +10,7 @@ import common.demo.Chatroom;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import xz42_bb26.client.controller.ChatAppController;
+import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.GameModel;
 import xz42_bb26.game.model.GameUser;
 import xz42_bb26.game.view.GameView;
@@ -39,7 +40,6 @@ public class GameController {
 
 			@Override
 			public RenderableLayer getBoxLayer() {
-				// TODO Auto-generated method stub
 				return view.getBoxLayer();
 			}
 			
@@ -54,6 +54,11 @@ public class GameController {
 			@Override
 			public void moveTo(Position p) {
 				model.moveTo(p);
+			}
+
+			@Override
+			public void buySupply(Depot depot) {
+				model.buySupply(depot);
 			}
 			
 		});

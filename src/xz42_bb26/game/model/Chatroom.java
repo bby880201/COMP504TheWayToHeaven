@@ -271,51 +271,7 @@ public class Chatroom implements IChatroom {
 			}
 
 		});
-		// handle String type cmd as unknown cmd type
-		msgAlgo.setCmd(StringMessage.class, new ADataPacketAlgoCmd<String, StringMessage, IChatUser>() {
-			/**
-			 * declare a static final serialVersionUID of type long to fix the
-			 * warning
-			 */
-			private static final long serialVersionUID = 2210559989023917346L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * 
-			 * @param cmd2ModelAdpt
-			 *            An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
-
-			@Override
-			public String apply(Class<?> index, DataPacket<StringMessage> host, IChatUser... params) {
-
-				IChatUser remote = params[0];
-
-				JLabel content = new JLabel(remote.toString() + " says:\n" + host.getData().getMsg() + "\n");
-
-				_cmd2ModelAdpt.updateUpdatable(new Supplier<Component>() {
-
-					@Override
-					public Component get() {
-						return content;
-					}
-
-				});
-
-				// return status information
-				return "String Message received from: " + remote;
-
-				// IUser remote = (IUser) params[0];
-				// chatWindowAdapter.append(remote.getName() + " says:");
-				// chatWindowAdapter.append(host.getData());
-				// // return status information
-				// return "String received from " + remote;
-			}
-		});
 
 		// handle addMe type cmd as known cmd type
 		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
