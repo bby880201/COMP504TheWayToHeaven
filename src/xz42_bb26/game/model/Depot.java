@@ -1,8 +1,10 @@
 package xz42_bb26.game.model;
 
+import java.util.UUID;
+
 import gov.nasa.worldwind.geom.Position;
 
 public class Depot {
-	Integer price;
-	Position location;
+	public Integer price;
+	public Position location;
 }

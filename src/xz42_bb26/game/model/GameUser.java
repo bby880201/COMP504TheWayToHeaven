@@ -15,7 +15,7 @@ import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
  * @author xz42
  *
  */
-public class ChatUser implements IChatUser {
+public class GameUser implements IChatUser {
 	
 	private IChatUser2ModelAdapter toModelAdapter;
 	
@@ -23,7 +23,7 @@ public class ChatUser implements IChatUser {
 	
 	private long time;
 	
-	public ChatUser(String name, IChatUser2ModelAdapter toModel){
+	public GameUser(String name, IChatUser2ModelAdapter toModel){
 		this.toModelAdapter = toModel;
 		this.name = name;
 		this.time = System.currentTimeMillis();
