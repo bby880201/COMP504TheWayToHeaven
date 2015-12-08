@@ -84,11 +84,10 @@ public class ChatAppMainModel {
 			/**
 			 * default cmd
 			 */
-			//TODO revise default command handling
 			@Override
 			public String apply(Class<?> index, DataPacket<Object> host,
 					IInitUser... params) {
-				return "Stub on registry: Unknow data type asking for command!";
+				return "Stub on registry: Unknow data type!";
 			}
 			
 			@Override
