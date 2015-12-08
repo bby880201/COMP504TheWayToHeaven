@@ -3,7 +3,7 @@ package xz42_bb26.client.controller;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -15,6 +15,7 @@ import xz42_bb26.client.model.ChatAppMainModel;
 import xz42_bb26.client.model.IModel2ViewAdapter;
 import xz42_bb26.client.model.chatroom.ChatroomWithAdapter;
 import xz42_bb26.client.model.chatroom.IChatRoom2WorldAdapter;
+import xz42_bb26.client.model.user.ChatUserEntity;
 import xz42_bb26.client.view.IView2ModelAdapter;
 import xz42_bb26.client.view.MainGUI;
 import xz42_bb26.client.view.chatwindow.ChattingWindow;
@@ -26,7 +27,7 @@ import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
  */
 public class ChatAppController {
 	// field representing the view of the system
-	private MainGUI<IChatroom, IInitUser, IChatUser> view;
+	private MainGUI<IChatroom, IInitUser, ChatUserEntity> view;
 	// field representing the model of the system
 	private ChatAppMainModel model;
 
@@ -35,7 +36,7 @@ public class ChatAppController {
 	 */
 	public ChatAppController() {
 		// set the view field
-		view = new MainGUI<IChatroom, IInitUser,IChatUser>(new IView2ModelAdapter<IChatroom, IInitUser, IChatUser>() {
+		view = new MainGUI<IChatroom, IInitUser,ChatUserEntity>(new IView2ModelAdapter<IChatroom, IInitUser, ChatUserEntity>() {
 			/**
 			 * Quits the current connection and closes the application.   
 			 * Causes the model to stop and thus end the application. 
@@ -59,8 +60,8 @@ public class ChatAppController {
 			}
 
 			@Override
-			public HashSet<IChatroom> getListRooms(String ip) {
-				return model.getFriendChatrooms(ip);
+			public void getListRooms(String ip) {
+				model.getFriendChatrooms(ip);
 			}
 
 			@Override
@@ -79,7 +80,7 @@ public class ChatAppController {
 		});
 
 		// set the model field
-		model = new ChatAppMainModel(new IModel2ViewAdapter<IInitUser,IChatUser>() {
+		model = new ChatAppMainModel(new IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity>() {
 
 			@Override
 			/**
@@ -88,12 +89,12 @@ public class ChatAppController {
 			 * @param chatRoom the mini-model given as a parameter
 			 * @return the mini-model2view adapter, which will be installed into the mini-model
 			 */
-			public IChatRoom2WorldAdapter<IChatUser> makeChatRoom(ChatroomWithAdapter chatRoom) {
+			public IChatRoom2WorldAdapter<ChatUserEntity> makeChatRoom(ChatroomWithAdapter chatRoom) {
 				/**
 				 * Factory method makes a new mini-view and installs the 
 				 * mini-View2Model adapter in it.
 				 */
-				ChattingWindow<IChatUser> cw = view.makeChatRoom(new IChatWindow2Model<IChatUser>() {
+				ChattingWindow<ChatUserEntity> cw = view.makeChatRoom(new IChatWindow2Model<ChatUserEntity>() {
 
 					@Override
 					/**
@@ -150,19 +151,17 @@ public class ChatAppController {
 						view.deleteChatWindow(cw);
 					}
 
-					@Override
 					/**
 					 * Speak to the given user in this chatroom. This is done by 
 					 * calling the chatWith method with the user's IP address.
 					 * 
 					 * @param user the specific user to speak to in this chatroom
 					 */
-					public void speakTo(IChatUser user) {
-						if (user != null) {
-							model.speakTo(user);
-						}
+					@Override
+					public void speakTo(ChatUserEntity user) {
+						chatRoom.speakTo(user);
 					}
-
+					
 					@Override
 					public void startGame() {
 						chatRoom.startGame();
@@ -172,7 +171,7 @@ public class ChatAppController {
 				});
 
 				// return the mini-model2world adapter
-				return new IChatRoom2WorldAdapter<IChatUser>() {
+				return new IChatRoom2WorldAdapter<ChatUserEntity>() {
 
 					@Override
 					/**
@@ -188,7 +187,7 @@ public class ChatAppController {
 					 * Refresh the member list on the chatroom 
 					 * @param users the list of users to show on chatroom member list panel
 					 */
-					public void refreshList(Set<IChatUser> users) {
+					public void refreshList(Collection<ChatUserEntity> users) {
 						cw.refreshList(users);
 					}
 
@@ -228,7 +227,36 @@ public class ChatAppController {
 					public void display(Supplier<Component> containerSupplier) {
 						cw.display(containerSupplier);
 					}
+
+					@Override
+					public IInitUser getInitUser() {
+						return model.getInitUser();
+					}
+
+					@Override
+					public String getName() {
+						return model.getName();
+					}
+
+					@Override
+					public String getIp() {
+						return model.getIp();
+					}
+
+					@Override
+					public void speakTo(String ip) {
+						model.chatWith(ip);
+					}
+
 				};
+			}
+			
+			/**
+			 * display chat rooms
+			 */
+			@Override
+			public void refreshRoomList(Set<IChatroom> rooms) {
+				view.refreshRoomList(rooms);
 			}
 		});
 	}

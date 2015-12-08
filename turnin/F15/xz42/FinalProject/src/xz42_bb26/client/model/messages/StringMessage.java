@@ -4,12 +4,13 @@ import java.util.UUID;
 
 import provided.datapacket.DataPacket;
 import common.message.IChatMessage;
+import common.message.chat.ATextMessage;
 
 /**
  * This class wraps around a String. Served as testing Unknown Data Type purpose
  * @author bb26, xc7
  */
-public class StringMessage implements IChatMessage {
+public class StringMessage extends ATextMessage {
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
@@ -50,7 +51,8 @@ public class StringMessage implements IChatMessage {
 	 * Returns the string message
 	 * @return the string message
 	 */
-	public String getMsg() {
+	@Override
+	public String getText() {
 		return msg;
 	}
 
@@ -61,6 +63,7 @@ public class StringMessage implements IChatMessage {
 
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
-		return new DataPacket<StringMessage>(StringMessage.class, this);
+		return new DataPacket<ATextMessage>(ATextMessage.class, this);
 	}
+
 }

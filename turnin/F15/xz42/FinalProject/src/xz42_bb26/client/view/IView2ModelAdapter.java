@@ -1,7 +1,5 @@
 package xz42_bb26.client.view;
 
-import java.util.HashSet;
-
 /**
  * Adapter that the view uses to communicate to the model.
  * @author bb26, xc7
@@ -38,7 +36,7 @@ public interface IView2ModelAdapter<Room, User, ChatUser> {
 	 * @param ip The remote user's IP address
 	 * @return A set of Room
 	 */
-	public HashSet<Room> getListRooms(String ip);
+	public void getListRooms(String ip);
 
 	@SuppressWarnings("rawtypes")
 	public static final IView2ModelAdapter NULL_OBJECT = new IView2ModelAdapter() {
@@ -53,9 +51,8 @@ public interface IView2ModelAdapter<Room, User, ChatUser> {
 		}
 
 		@Override
-		public HashSet getListRooms(String ip) {
+		public void getListRooms(String ip) {
 			// this method will be override in the controller
-			return null;
 		}
 
 		@Override

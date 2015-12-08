@@ -18,11 +18,11 @@ import common.message.IChatMessage;
  *
  */
 public class ChatUser implements IChatUser {
-	
+		
 	private IChatUser2ModelAdapter toModelAdap;
 	
 	private String name;
-	
+		
 	private long time;
 	
 	
@@ -31,6 +31,21 @@ public class ChatUser implements IChatUser {
 		this.toModelAdap = toModel;
 		this.name = name;
 		this.time = System.currentTimeMillis();
+
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
