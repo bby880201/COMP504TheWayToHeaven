@@ -27,7 +27,7 @@ import xz42_bb26.server.view.chatwindow.IChatWindow2Model;
  * MVC Controller for the system, which oversees the model and view of the system
  * @author bb26, xc7
  */
-public class ChatAppController {
+public class ServerController {
 	// field representing the view of the system
 	private ServerGUI<IChatroom, IInitUser, ChatUserEntity> view;
 	// field representing the model of the system
@@ -36,7 +36,7 @@ public class ChatAppController {
 	/**
 	 * Controller constructor builds the system
 	 */
-	public ChatAppController() {
+	public ServerController() {
 		// set the view field
 		view = new ServerGUI<IChatroom, IInitUser,ChatUserEntity>(new IView2ModelAdapter<IChatroom, IInitUser, ChatUserEntity>() {
 			/**
@@ -295,7 +295,7 @@ public class ChatAppController {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChatAppController ctl = new ChatAppController();
+					ServerController ctl = new ServerController();
 					ctl.start();
 				} catch (Exception e) {
 					e.printStackTrace();
