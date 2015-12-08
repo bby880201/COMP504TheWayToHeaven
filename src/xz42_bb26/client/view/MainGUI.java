@@ -12,15 +12,12 @@ import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-
-import javax.swing.JLabel;
-
 import java.awt.Insets;
 
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
-import java.util.HashSet;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTabbedPane;
@@ -182,11 +179,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		 */
 		btnGetChatrooms.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HashSet<Room> rooms = toModelAdapter.getListRooms(tfIPInput.getText());
-
-				for (Room rm : rooms) {
-					cbRooms.addItem(rm);
-				}
+				toModelAdapter.getListRooms(tfIPInput.getText());
 			}
 		});
 		/**
@@ -233,7 +226,16 @@ public class MainGUI<Room, Usr, ChatUsr> {
 
 		ChattingWindow<ChatUsr> cw = new ChattingWindow<ChatUsr>(mv2mmAdapt);
 		tabbedPane.addTab(mv2mmAdapt.getName(), null, cw, null);
-
 		return cw;
+	}
+	
+	/**
+	 * refresh the room list of remote user
+	 * @param rooms available chat rooms
+	 */
+	public void refreshRoomList(Set<Room> rooms) {
+		for (Room rm: rooms) {
+			cbRooms.addItem(rm);
+		}
 	}
 }

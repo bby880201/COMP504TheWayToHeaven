@@ -8,7 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 import javax.swing.JButton;
@@ -81,7 +81,6 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		panel_2.setLayout(gbl_panel_2);
 
 		scDisplay = new JScrollPane();
-		scDisplay.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scDisplay = new GridBagConstraints();
 		gbc_scDisplay.insets = new Insets(0, 0, 0, 5);
 		gbc_scDisplay.fill = GridBagConstraints.BOTH;
@@ -126,16 +125,16 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
-		
-				tfInvite = new JTextField();
-				GridBagConstraints gbc_tfInvite = new GridBagConstraints();
-				gbc_tfInvite.insets = new Insets(0, 0, 5, 0);
-				gbc_tfInvite.fill = GridBagConstraints.BOTH;
-				gbc_tfInvite.gridx = 0;
-				gbc_tfInvite.gridy = 0;
-				panel.add(tfInvite, gbc_tfInvite);
-				tfInvite.setToolTipText("Enter the IP address of the remote user you want to invite to the current chatroom.");
-				tfInvite.setColumns(10);
+
+		tfInvite = new JTextField();
+		GridBagConstraints gbc_tfInvite = new GridBagConstraints();
+		gbc_tfInvite.insets = new Insets(0, 0, 5, 0);
+		gbc_tfInvite.fill = GridBagConstraints.BOTH;
+		gbc_tfInvite.gridx = 0;
+		gbc_tfInvite.gridy = 0;
+		panel.add(tfInvite, gbc_tfInvite);
+		tfInvite.setToolTipText("Enter the IP address of the remote user you want to invite to the current chatroom.");
+		tfInvite.setColumns(10);
 
 		btnInvite = new JButton("Invite");
 		GridBagConstraints gbc_btnInvite = new GridBagConstraints();
@@ -298,7 +297,7 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	 * Refresh the member list on the chatroom 
 	 * @param users the list of users to show on chatroom member list panel
 	 */
-	public void refreshList(Set<Usr> users) {
+	public void refreshList(Collection<Usr> users) {
 		lsMember.setListData((Usr[]) users.toArray());
 	}
 
@@ -318,6 +317,10 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		plDisplay.add(containerSupplier.get());
 		plDisplay.revalidate();
 		plDisplay.repaint();
+	}
+
+	public void refreshRoomName(String displayName) {
+		
 	}
 	
 	
