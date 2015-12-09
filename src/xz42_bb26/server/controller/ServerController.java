@@ -3,7 +3,6 @@ package xz42_bb26.server.controller;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;

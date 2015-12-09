@@ -2,9 +2,7 @@ package xz42_bb26.game.model.messages;
 
 import common.IChatUser;
 import common.message.ARequest;
-import common.message.AResponse;
 import common.message.IChatMessage;
-import common.message.IMessage;
 import provided.datapacket.DataPacket;
 
 public class ProvideGameUser extends ARequest implements IChatMessage {
@@ -22,8 +20,11 @@ public class ProvideGameUser extends ARequest implements IChatMessage {
 
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
-		// TODO Auto-generated method stub
 		return new DataPacket<ProvideGameUser>(ProvideGameUser.class, this);
+	}
+
+	public IChatUser getStub() {
+		return gameUser;
 	}
 
 }

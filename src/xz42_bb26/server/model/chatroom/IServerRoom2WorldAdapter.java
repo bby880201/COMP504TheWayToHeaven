@@ -2,10 +2,7 @@ package xz42_bb26.server.model.chatroom;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
