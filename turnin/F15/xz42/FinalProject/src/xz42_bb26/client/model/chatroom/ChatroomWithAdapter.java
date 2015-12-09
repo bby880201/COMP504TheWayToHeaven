@@ -188,6 +188,12 @@ public class ChatroomWithAdapter implements IChatroom {
 				chatWindowAdapter.popUp(frameFac);
 			}
 
+			@Override
+			public void sendMsgTo(IChatMessage msg, IChatUser chatUser) {
+				// TODO Auto-generated method stub
+				
+			}
+
 		};
 		// install ADataPacketAlgoCmd into DataPacketAlgo
 		msgAlgo = new DataPacketAlgo<String, IChatUser>(new ADataPacketAlgoCmd<String, Object, IChatUser>() {
