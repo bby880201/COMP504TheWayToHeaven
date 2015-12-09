@@ -22,8 +22,6 @@ public class Team {
 	
 	public Position myPosition;
 	
-	public HashMap<Position,Depot> depots;
-	
 	public boolean isNavigator= true;
 	
 	public Position destination;

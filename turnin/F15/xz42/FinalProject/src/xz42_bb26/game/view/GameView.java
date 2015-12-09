@@ -10,10 +10,12 @@ import javax.swing.border.EmptyBorder;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Box;
 import map.MapPanel;
 import xz42_bb26.game.model.Depot;
+import xz42_bb26.game.model.Team;
 import map.IRightClickAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,7 +34,7 @@ public class GameView extends JFrame {
 	private JPanel contentPane;
 	
 	private RenderableLayer sLayer = new RenderableLayer();
-
+	private IconLayer iconLayer = new IconLayer();
 	MapPanel mapPanel;
 	IModelAdapter model;
 	/**
@@ -108,6 +110,7 @@ public class GameView extends JFrame {
 			infoPanel.add(destLabel, gbc_destLabel);
 		}
 		else{
+			mapPanel.addLayer(iconLayer);
 			dutyLabel.setText("You are the resource manager");
 			JLabel cashLabel = new JLabel("Current Cash: $100");
 			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
@@ -138,6 +141,10 @@ public class GameView extends JFrame {
 		return sLayer;
 	}
 	
+	public IconLayer getIconLayer(){
+		return iconLayer;
+	}
+	
 	public void checkDepots(Depot depot){
 		String ObjButtons[] = {"Yes","No"};
         int PromptResult = JOptionPane.showOptionDialog(null,"Are you sure you want to exit?","Online Examination System",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
@@ -145,6 +152,14 @@ public class GameView extends JFrame {
         {
             model.buySupply(depot);
         }
+	}
+
+	public void gameBegin() {
+		JOptionPane.showMessageDialog(this, "Game Start!!!");
+	}
+
+	public void aTeamWins(Team team) {
+		JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
 	}
 
 }

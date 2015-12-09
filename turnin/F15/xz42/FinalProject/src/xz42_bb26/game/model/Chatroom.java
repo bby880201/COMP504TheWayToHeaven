@@ -1,5 +1,6 @@
 package xz42_bb26.game.model;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import javax.swing.JFrame;
@@ -16,17 +18,35 @@ import common.IChatUser;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
 import common.IInitUser;
+import common.demo.message.chat.ChatUserInfoResponse;
 import common.demo.message.chat.CommandRequest;
+import common.demo.message.chat.CommandResponse;
+import common.demo.message.chat.InitUserResponse;
 import common.message.IChatMessage;
 import common.message.chat.AAddMe;
+import common.message.chat.AChatUserInfoRequest;
+import common.message.chat.AChatUserInfoResponse;
+import common.message.chat.ACommandRequest;
+import common.message.chat.ACommandResponse;
+import common.message.chat.AInitUserRequest;
+import common.message.chat.AInitUserResponse;
+import common.message.chat.ARemoveMe;
+import common.message.chat.ATextMessage;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
 import provided.mixedData.MixedDataKey;
+import xz42_bb26.client.model.messages.StartGameMessage;
 import xz42_bb26.client.model.messages.StringMessage;
+import xz42_bb26.client.model.messages.UnknownTypeData;
+import xz42_bb26.client.model.user.ChatUserEntity;
 import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
 import xz42_bb26.game.model.messages.AUpdateGameInfoMessage;
+import xz42_bb26.game.model.messages.Begin;
+import xz42_bb26.game.model.messages.Ready;
+import xz42_bb26.game.model.messages.TeamInfoUpdate;
 import xz42_bb26.game.model.messages.TeamOut;
+import xz42_bb26.game.model.messages.TeamWins;
 
 public class Chatroom implements IChatroom {
 	/**
@@ -62,8 +82,11 @@ public class Chatroom implements IChatroom {
 	 */
 	private HashMap<IChatUser,Team> teams;
 	
+	private IChatroom2ModelAdapter model;
 	
-	
+	public void setChatroom2ModelAdapter(IChatroom2ModelAdapter model){
+		this.model = model;
+	}
 	
 	/**
 	 * Constructor
@@ -174,49 +197,39 @@ public class Chatroom implements IChatroom {
 	}
 
 	private void initAlgo() {
-		// initialize the cmd2model adapter, which grant the unknown command
-		// access
-		// to limited local GUI
+		// initialize the cmd2model adapter, which grant the unknown command access
+		// to limited local GUI 
 		_cmd2ModelAdpt = new ICmd2ModelAdapter() {
 
 			@Override
 			public <T> T getMixedDataDictEntry(MixedDataKey<T> key) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public <T> void setMixedDataDictEntry(MixedDataKey<T> key, T value) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public String getUserName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void sendToChatroom(IChatMessage message) {
-				// TODO Auto-generated method stub
-
+				// TODO Auto-generated method stub	
 			}
 
 			@Override
 			public void addToScrollable(Supplier<Component> componentFac) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
-			public void updateUpdatable(Supplier<Component> componentFac) {
+			public void updateUpdatable(Supplier<Component> componentFac) {				
 			}
 
 			@Override
 			public void createNewWindow(Supplier<JFrame> frameFac) {
-				// TODO Auto-generated method stub
-
 			}
 
 		};
@@ -224,103 +237,131 @@ public class Chatroom implements IChatroom {
 		msgAlgo = new DataPacketAlgo<String, IChatUser>(new ADataPacketAlgoCmd<String, Object, IChatUser>() {
 
 			/**
-			 * declare a static final serialVersionUID of type long to fix the
-			 * warning
+			 * 
 			 */
-			private static final long serialVersionUID = -1139989943264094599L;
+			private static final long serialVersionUID = -6547790461171634944L;
+
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
 
 			@Override
 			/**
 			 * install default command to handle unknown command type
 			 */
-			public String apply(Class<?> index, DataPacket<Object> host, IChatUser... params) {
-				IChatUser remote = params[0];
-				// class type of the unknown command
-				Class<?> newCmdType = host.getData().getClass();
-
-				CommandRequest reqForAlgo = new CommandRequest(newCmdType);
-
-				// TODO handle unknown data type
-				// request the AlgoCmd from the remote user
-				ADataPacketAlgoCmd<String, ?, IChatUser> cmd = null;
-
-				try {
-					remote.receive(me, reqForAlgo.getDataPacket());
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
-				// set local cmd2ModelAdpt into the acquired remote cmd
-				cmd.setCmd2ModelAdpt(_cmd2ModelAdpt);
-				// install the unknown cmd into local system
-				msgAlgo.setCmd(newCmdType, cmd);
-				// execute the acquired remote cmd
-				cmd.apply(index, host, params);
-				// return status information
-				return "Unknow data type: \"" + newCmdType + "\", asking for command!";
-			}
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * 
-			 * @param cmd2ModelAdpt
-			 *            An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
-
-		});
-
-
-		// handle addMe type cmd as known cmd type
-		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
-
-			/**
-			 * declare a static final serialVersionUID of type long to fix the
-			 * warning
-			 */
-			private static final long serialVersionUID = -189336880905492572L;
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * 
-			 * @param cmd2ModelAdpt
-			 *            An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
-
-			@Override
-			public String apply(Class<?> index, DataPacket<AAddMe> host, IChatUser... params) {
-				addUser(host.getData().getUser());
-				return "User joined: " + host.getData().getUser();
-			}
-		});
-		
-		msgAlgo.setCmd(AUpdateGameInfoMessage.class, new ADataPacketAlgoCmd<String, AUpdateGameInfoMessage, IChatUser>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String apply(Class<?> index, DataPacket<AUpdateGameInfoMessage> host, IChatUser... params) {
-//				teams.put(params[0], host.getData());
+			public String apply(Class<?> index, DataPacket<Object> host,
+					IChatUser... params) {
+				
 				return null;
 			}
 
 			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			
+		});
+		
+		// Update Team Info when get info from other teams
+		msgAlgo.setCmd(TeamInfoUpdate.class, new ADataPacketAlgoCmd<String, TeamInfoUpdate, IChatUser>() {
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+			private static final long serialVersionUID = 2210559989023917346L;
+
+
+			@Override
+			public String apply(Class<?> index, DataPacket<TeamInfoUpdate> host, IChatUser... params) {
+				model.updateTeamInfo(host.getData().getTeam());
+				return "update team info";
+			}
+
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 				
 			}
-		
 		});
+		
+		// Update chat users when ready
+		msgAlgo.setCmd(Ready.class, new ADataPacketAlgoCmd<String, Ready, IChatUser>() {
 
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+			private static final long serialVersionUID = -189336880905492572L;				
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+			}
+
+			@Override
+			public String apply(Class<?> index, DataPacket<Ready> host,
+					IChatUser... params) {
+				
+				users = host.getData().getUsers();
+				model.setDepots(host.getData().getDepots());
+				return "Users list updated";
+			}
+		});
+		
+		// command for chat user info request
+		msgAlgo.setCmd(TeamOut.class, new ADataPacketAlgoCmd<String, TeamOut, IChatUser>() {
+
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+			private static final long serialVersionUID = 2964027427383796628L;
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<TeamOut> host, IChatUser... params) {
+				model.aTeamOut(host.getData().getID());
+				return "a Team is out";
+			}
+		});
+		
+		// command for chat user info response
+		msgAlgo.setCmd(TeamWins.class, new ADataPacketAlgoCmd<String, TeamWins, IChatUser>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5105304030772119307L;
+
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<TeamWins> host, IChatUser... params) {
+				model.aTeamWins(host.getData().getID());
+				
+				return "A team wins";
+			}
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+			
+		});
+		
 	}
 
 
