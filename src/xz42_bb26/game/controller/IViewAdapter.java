@@ -1,7 +1,5 @@
 package xz42_bb26.game.controller;
 
-import org.junit.validator.PublicClassValidator;
-
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import xz42_bb26.game.model.Team;

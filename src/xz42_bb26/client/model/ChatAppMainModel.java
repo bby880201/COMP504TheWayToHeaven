@@ -278,7 +278,7 @@ public class ChatAppMainModel {
 			}
 		});
 
-		rmiUtils.startRMI(IRMI_Defs.CLASS_SERVER_PORT_SERVER);
+		rmiUtils.startRMI(IRMI_Defs.CLASS_SERVER_PORT_CLIENT);
 		try {
 			IInitUser preStub = new InitUser(userName,rmiUtils.getLocalAddress(), new IInitUser2ModelAdapter(){
 
