@@ -5,7 +5,7 @@ import java.util.UUID;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
 
-public class StartGameMessage implements IChatMessage{
+public class InstallGameMessage implements IChatMessage{
 
 	/**
 	 * Auto-generated UID. 
@@ -21,7 +21,7 @@ public class StartGameMessage implements IChatMessage{
 	 * UUID for the message is auto-generated.
 	 * @param user - user to be removed
 	 */
-	public StartGameMessage() {
+	public InstallGameMessage() {
 		this.msgID = UUID.randomUUID();
 	}
 
@@ -31,7 +31,7 @@ public class StartGameMessage implements IChatMessage{
 	}
 
 	public DataPacket<? extends IChatMessage> getDataPacket() {
-		return new DataPacket<StartGameMessage>(StartGameMessage.class, this);
+		return new DataPacket<InstallGameMessage>(InstallGameMessage.class, this);
 	}
 
 }

@@ -3,7 +3,9 @@ package xz42_bb26.server.controller;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.EventQueue;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -13,6 +15,7 @@ import javax.swing.JFrame;
 import common.IChatUser;
 import common.IChatroom;
 import common.IInitUser;
+import xz42_bb26.server.model.chatroom.TeamRoom;
 import xz42_bb26.server.model.ServerModel;
 import xz42_bb26.server.model.IModel2ViewAdapter;
 import xz42_bb26.server.model.chatroom.ServerRoom;
@@ -20,8 +23,9 @@ import xz42_bb26.server.model.chatroom.IServerRoom2WorldAdapter;
 import xz42_bb26.server.model.user.ChatUserEntity;
 import xz42_bb26.server.view.IView2ModelAdapter;
 import xz42_bb26.server.view.ServerGUI;
-import xz42_bb26.server.view.chatwindow.ChattingWindow;
-import xz42_bb26.server.view.chatwindow.IChatWindow2Model;
+import xz42_bb26.server.view.chatwindow.ServerWindow;
+import xz42_bb26.server.view.chatwindow.IServerWindow2World;
+
 
 /**
  * MVC Controller for the system, which oversees the model and view of the system
@@ -29,7 +33,7 @@ import xz42_bb26.server.view.chatwindow.IChatWindow2Model;
  */
 public class ServerController {
 	// field representing the view of the system
-	private ServerGUI<IChatroom, IInitUser, ChatUserEntity> view;
+	private ServerGUI<IChatroom, IInitUser, ChatUserEntity,TeamRoom> view;
 	// field representing the model of the system
 	private ServerModel model;
 
@@ -38,7 +42,7 @@ public class ServerController {
 	 */
 	public ServerController() {
 		// set the view field
-		view = new ServerGUI<IChatroom, IInitUser,ChatUserEntity>(new IView2ModelAdapter<IChatroom, IInitUser, ChatUserEntity>() {
+		view = new ServerGUI<IChatroom, IInitUser,ChatUserEntity, TeamRoom>(new IView2ModelAdapter<IChatroom, IInitUser, ChatUserEntity>() {
 			/**
 			 * Quits the current connection and closes the application.   
 			 * Causes the model to stop and thus end the application. 
@@ -82,7 +86,7 @@ public class ServerController {
 		});
 
 		// set the model field
-		model = new ServerModel(new IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity>() {
+		model = new ServerModel(new IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity,TeamRoom>() {
 
 			@Override
 			/**
@@ -91,12 +95,12 @@ public class ServerController {
 			 * @param chatRoom the mini-model given as a parameter
 			 * @return the mini-model2view adapter, which will be installed into the mini-model
 			 */
-			public IServerRoom2WorldAdapter<ChatUserEntity> makeChatRoom(ServerRoom chatRoom) {
+			public IServerRoom2WorldAdapter<ChatUserEntity, TeamRoom> makeChatRoom(ServerRoom serverRoom) {
 				/**
 				 * Factory method makes a new mini-view and installs the 
 				 * mini-View2Model adapter in it.
 				 */
-				ChattingWindow<ChatUserEntity> cw = view.makeChatRoom(new IChatWindow2Model<ChatUserEntity>() {
+				ServerWindow<ChatUserEntity,TeamRoom> cw = view.makeChatRoom(new IServerWindow2World<ChatUserEntity>() {
 
 					@Override
 					/**
@@ -104,7 +108,7 @@ public class ServerController {
 					 * @return a string which is the name of this chatroom
 					 */
 					public String getName() {
-						return chatRoom.getName();
+						return serverRoom.getName();
 					}
 
 					@Override
@@ -114,7 +118,7 @@ public class ServerController {
 					 * Then delete the local chatroom in my model. 
 					 */
 					public void quit() {
-						chatRoom.quit();
+						serverRoom.quit();
 					}
 
 					@Override
@@ -123,7 +127,7 @@ public class ServerController {
 					 * @param text the message to send over
 					 */
 					public void sendMsg(String text) {
-						chatRoom.sendMsg(text);
+						serverRoom.sendMsg(text);
 					}
 
 					@Override
@@ -138,10 +142,10 @@ public class ServerController {
 					public void invite(String ip) {
 						IInitUser friend = model.connectTo(ip);
 						if (null != friend)
-							chatRoom.invite(friend);
+							serverRoom.invite(friend);
 					}
 
-					@SuppressWarnings({ "rawtypes", "unchecked" })
+					@SuppressWarnings({ "rawtypes" })
 					@Override
 					/**
 					 * Delete the mini-view (the chat window of this chatroom) 
@@ -149,7 +153,7 @@ public class ServerController {
 					 * 
 					 * @param cw the view of the chatroom
 					 */
-					public void deleteWindow(ChattingWindow cw) {
+					public void deleteWindow(ServerWindow cw) {
 						view.deleteChatWindow(cw);
 					}
 
@@ -161,19 +165,26 @@ public class ServerController {
 					 */
 					@Override
 					public void speakTo(ChatUserEntity user) {
-						chatRoom.speakTo(user);
+						serverRoom.speakTo(user);
 					}
 					
 					@Override
-					public void startGame() {
-						chatRoom.startGame();
-						
+					public void installGame() {
+						model.rejectConnection();
+						serverRoom.installGame();
 					}
 
+					@Override
+					public void createTeam(List<ChatUserEntity> members) {
+						for (ChatUserEntity user: members) {
+							serverRoom.removeUser(user.getChatUser());
+						}
+						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),members));
+					}
 				});
 
 				// return the mini-model2world adapter
-				return new IServerRoom2WorldAdapter<ChatUserEntity>() {
+				return new IServerRoom2WorldAdapter<ChatUserEntity,TeamRoom>() {
 
 					@Override
 					/**
@@ -198,7 +209,7 @@ public class ServerController {
 					 * Delete the certain chat window from the main GUI panel
 					 */
 					public void deleteWindow() {
-						model.deleteChatroom(chatRoom.getID());
+						model.deleteChatroom(serverRoom.getID());
 						cw.deleteWindow();
 					}
 
@@ -264,6 +275,11 @@ public class ServerController {
 								}
 							}
 						});
+					}
+
+					@Override
+					public void refreshTeam(ArrayList<TeamRoom> teamList) {
+						cw.refreshTeam(teamList);
 					}
 
 				};

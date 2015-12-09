@@ -5,6 +5,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ import provided.rmiUtils.IRMI_Defs;
 import provided.rmiUtils.RMIUtils;
 import provided.util.IVoidLambda;
 import xz42_bb26.server.model.chatroom.ServerRoom;
+import xz42_bb26.server.model.chatroom.TeamRoom;
 import xz42_bb26.server.model.user.ChatUserEntity;
 import xz42_bb26.server.model.user.IInitUser2ModelAdapter;
 import xz42_bb26.server.model.user.InitUser;
@@ -56,7 +58,7 @@ public class ServerModel {
 	// field stores a list of room 
 	private HashMap<UUID, IChatroom> rooms;
 	// instance of model2view adapter
-	private IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity> toView;
+	private IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity,TeamRoom> toView;
 
 	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
@@ -68,7 +70,7 @@ public class ServerModel {
 	 * Constructor that takes an instance of IModel2ViewAdapter
 	 * @param toViewAdapter An instance of IModel2ViewAdapter
 	 */
-	public ServerModel(IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity> toViewAdapter) {
+	public ServerModel(IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity,TeamRoom> toViewAdapter) {
 
 		toView = toViewAdapter;
 		// initialize an empty set of rooms
@@ -295,8 +297,9 @@ public class ServerModel {
 			registry.rebind(IInitUser.BOUND_NAME, stub);
 			
 			ip = rmiUtils.getLocalAddress();
-
 			
+			createNewRoom(null);
+
 			System.out.println("Waiting..." + "\n");
 		} catch (Exception e) {
 			System.err.println("Connect exception:" + "\n");
@@ -378,22 +381,20 @@ public class ServerModel {
 		(new Thread() {
 			@Override
 			public void run() {
-				if (null != friend) {
-					try {
-						// create a local chatroom which contains the local user's stub
-						ServerRoom chatRoom = new ServerRoom();
-						chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
+				try {
+					// create a local chatroom which contains the local user's stub
+					ServerRoom chatRoom = new ServerRoom();
+					chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
+					rooms.put(chatRoom.getID(), (IChatroom) chatRoom);
+
+					if (null != friend) {
 						// invite the remote user to join the chatroom
 						AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) chatRoom, false);
-						
 						friend.receive(me, invite.getDataPacket());
-
-						rooms.put(chatRoom.getID(), (IChatroom) chatRoom);
-
-					} catch (Exception e) {
-						System.out.println("Create room failed: " + e + "\n");
-						e.printStackTrace();
 					}
+				} catch (Exception e) {
+					System.out.println("Create room failed: " + e + "\n");
+					e.printStackTrace();
 				}
 			}
 		}).start();
@@ -466,5 +467,34 @@ public class ServerModel {
 
 	public String getIp() {
 		return ip;
+	}
+
+	public TeamRoom creatTeam(IChatUser srv, List<ChatUserEntity> mbs) {
+		ChatUserEntity memb1 = mbs.get(0);
+		ChatUserEntity memb2 = mbs.get(1);
+		TeamRoom team = new TeamRoom("team_" + memb1 + "&" + memb2, srv,memb1,memb2);
+		
+		IInitUser init1 = connectTo(memb1.getIp());
+		IInitUser init2 = connectTo(memb2.getIp());
+		AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) team, false);
+		
+		(new Thread() {
+			@Override
+			public void run() {
+				try {				
+					init1.receive(me, invite.getDataPacket());
+					init2.receive(me, invite.getDataPacket());					
+				} catch (Exception e) {
+					System.out.println("Create room failed: " + e + "\n");
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		return team;
+	}
+
+	public void rejectConnection() {
+		// TODO Auto-generated method stub
+		
 	}
 }

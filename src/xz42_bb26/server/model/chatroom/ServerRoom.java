@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import xz42_bb26.server.model.messages.StartGameMessage;
+import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.messages.StringMessage;
 import xz42_bb26.server.model.messages.UnknownTypeData;
 import xz42_bb26.server.model.user.ChatUser;
@@ -63,7 +64,7 @@ public class ServerRoom implements IChatroom {
 	private static final long serialVersionUID = -1842717037685994672L;
 
 	@SuppressWarnings("unchecked")
-	private transient IServerRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter = IServerRoom2WorldAdapter.NULL_OBJECT;
+	private transient IServerRoom2WorldAdapter<ChatUserEntity, TeamRoom> serverAdapter = IServerRoom2WorldAdapter.NULL_OBJECT;
 	
 	// default command to model adapter that provides unknown command limited 
 	// access to local system
@@ -71,10 +72,8 @@ public class ServerRoom implements IChatroom {
 	// transport process
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
 	
-	// name of the local user
+	// name of the local user	
 	private IChatUser me;
-	
-	private IChatUser stub;
 	
 	private IInitUser initMe;
 
@@ -97,6 +96,8 @@ public class ServerRoom implements IChatroom {
 	private DataPacketAlgo<String, IChatUser> msgAlgo;
 	
 	private IChatroom thisRoom = this;
+	
+	private transient ArrayList<TeamRoom> teamList = new ArrayList<TeamRoom>();
 
 	/**
 	 * Constructor that takes in user name and user id as parameter
@@ -108,7 +109,7 @@ public class ServerRoom implements IChatroom {
 	public ServerRoom(UUID uuid) throws UnknownHostException, RemoteException {
 
 		initAlgo();
-		me = new ChatUser("", new IChatUser2ModelAdapter(){
+		IChatUser prestub = new ChatUser("", new IChatUser2ModelAdapter(){
 			
 			@Override
 			public <T> void receive(IChatUser remote,
@@ -119,9 +120,9 @@ public class ServerRoom implements IChatroom {
 			
 		});
 		
-		stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_SERVER);
+		me = (IChatUser) UnicastRemoteObject.exportObject(prestub, IInitUser.BOUND_PORT_SERVER);
 
-		users.put(stub,null);
+		users.put(me,null);
 		initMe = null;
 		
 		id = uuid;
@@ -138,8 +139,8 @@ public class ServerRoom implements IChatroom {
 	}
 
 	private IInitUser getInitUser() {
-		if (chatWindowAdapter != IServerRoom2WorldAdapter.NULL_OBJECT) {
-			initMe = chatWindowAdapter.getInitUser();
+		if (serverAdapter != IServerRoom2WorldAdapter.NULL_OBJECT) {
+			initMe = serverAdapter.getInitUser();
 		}
 		return initMe;
 	}
@@ -164,7 +165,7 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public String getUserName() {
-				return chatWindowAdapter.getName();
+				return serverAdapter.getName();
 			}
 
 			@Override
@@ -174,18 +175,18 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void addToScrollable(Supplier<Component> componentFac) {
-				chatWindowAdapter.display(componentFac);
+				serverAdapter.display(componentFac);
 			}
 
 			@Override
 			public void updateUpdatable(Supplier<Component> componentFac) {
 				componentFac.get().setForeground(Color.ORANGE);;
-				chatWindowAdapter.display(componentFac);				
+				serverAdapter.display(componentFac);				
 			}
 
 			@Override
 			public void createNewWindow(Supplier<JFrame> frameFac) {
-				chatWindowAdapter.popUp(frameFac);
+				serverAdapter.popUp(frameFac);
 			}
 
 		};
@@ -219,7 +220,7 @@ public class ServerRoom implements IChatroom {
 					@Override
 					public void run() {
 						try {
-							remote.receive(stub, reqForAlgo.getDataPacket());
+							remote.receive(me, reqForAlgo.getDataPacket());
 						} catch (RemoteException e) {
 							System.out.println("Unknown data type command request failed:");
 							e.printStackTrace();
@@ -334,12 +335,12 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public String apply(Class<?> index,
 					DataPacket<AChatUserInfoRequest> host, IChatUser... params) {
-				AChatUserInfoResponse infoResp = new ChatUserInfoResponse(host.getData(),chatWindowAdapter.getName(),chatWindowAdapter.getIp());
+				AChatUserInfoResponse infoResp = new ChatUserInfoResponse(host.getData(),serverAdapter.getName(),serverAdapter.getIp());
 				(new Thread() {
 					@Override
 					public void run() {
 						try {
-							params[0].receive(stub, infoResp.getDataPacket());
+							params[0].receive(me, infoResp.getDataPacket());
 						} catch (RemoteException e) {
 							System.out.println("Chat user info response sending failed:");
 							e.printStackTrace();
@@ -396,7 +397,7 @@ public class ServerRoom implements IChatroom {
 					@Override
 					public void run() {
 						try {
-							params[0].receive(stub, initResp.getDataPacket());
+							params[0].receive(me, initResp.getDataPacket());
 						} catch (RemoteException e) {
 							System.out.println("Init user stub response sending failed:");
 							e.printStackTrace();
@@ -466,7 +467,7 @@ public class ServerRoom implements IChatroom {
 					@Override
 					public void run() {
 						try {
-							params[0].receive(stub, cmdResp.getDataPacket());
+							params[0].receive(me, cmdResp.getDataPacket());
 						} catch (RemoteException e) {
 							System.out.println("Command response failed:");
 							e.printStackTrace();
@@ -519,9 +520,8 @@ public class ServerRoom implements IChatroom {
 			
 		});
 		
-		
 		// handle startGame type cmd as known cmd type 
-		msgAlgo.setCmd(StartGameMessage.class, new ADataPacketAlgoCmd<String, StartGameMessage, IChatUser>() {
+		msgAlgo.setCmd(InstallGameMessage.class, new ADataPacketAlgoCmd<String, InstallGameMessage, IChatUser>() {
 			/**
 			 * declare a static final serialVersionUID of type long to fix the warning
 			 */	
@@ -539,7 +539,7 @@ public class ServerRoom implements IChatroom {
 			}
 
 			@Override
-			public String apply(Class<?> index, DataPacket<StartGameMessage> host,
+			public String apply(Class<?> index, DataPacket<InstallGameMessage> host,
 					IChatUser... params) {
 //				GameController gameController = new GameController();
 //				gameController.start();
@@ -568,7 +568,7 @@ public class ServerRoom implements IChatroom {
 			public String apply(Class<?> index, DataPacket<ARemoveMe> host,
 					IChatUser... params) {
 				ChatUserEntity user = users.get(params[0]);
-				chatWindowAdapter.append("User left: " + user);
+				serverAdapter.append("User left: " + user);
 				removeUser(host.getData().getUser());
 				return "User left: " + user;
 			}
@@ -579,8 +579,8 @@ public class ServerRoom implements IChatroom {
 	 * Get the IChatRoom2WorldAdapter associated with this chatroom
 	 * @return An instance of IChatRoom2WorldAdapter
 	 */
-	public IServerRoom2WorldAdapter<ChatUserEntity> getChatWindowAdapter() {
-		return chatWindowAdapter;
+	public IServerRoom2WorldAdapter<ChatUserEntity,TeamRoom> getChatWindowAdapter() {
+		return serverAdapter;
 	}
 
 	/**
@@ -589,11 +589,11 @@ public class ServerRoom implements IChatroom {
 	 * @param chatWindowAdapter An instance of IChatRoom2WorldAdapter
 	 * @return return boolean value for synchronize purpose
 	 */
-	public boolean setChatWindowAdapter(IServerRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter) {
-		this.chatWindowAdapter = chatWindowAdapter;
+	public boolean setChatWindowAdapter(IServerRoom2WorldAdapter<ChatUserEntity, TeamRoom> chatWindowAdapter) {
+		this.serverAdapter = chatWindowAdapter;
 		
-		ChatUserEntity meInfo = new ChatUserEntity(stub, chatWindowAdapter.getName(), chatWindowAdapter.getIp());
-		users.put(stub, meInfo);
+		ChatUserEntity meInfo = new ChatUserEntity(me, chatWindowAdapter.getName(), chatWindowAdapter.getIp());
+		users.put(me, meInfo);
 		
 		initMe = getInitUser();
 		refreshList();
@@ -608,7 +608,7 @@ public class ServerRoom implements IChatroom {
 		// to remove me from their local chatroom
 		removeMe();
 		// delete the chat window from the GUI
-		chatWindowAdapter.deleteWindow();
+		serverAdapter.deleteWindow();
 	}
 
 	/**
@@ -709,7 +709,7 @@ public class ServerRoom implements IChatroom {
 	 */
 	public void sendMsg(String text) {
 		ATextMessage txtMsg = new StringMessage(text);
-		send(stub, txtMsg);
+		send(me, txtMsg);
 		/**
 		 * The following two lines are for testing purpose
 		 */
@@ -722,15 +722,17 @@ public class ServerRoom implements IChatroom {
 	 * @param data the data to be added to GUI panel
 	 */
 	public void display(String data) {
-		chatWindowAdapter.append(data);
+		serverAdapter.append(data);
 	}
 
 	/**
 	 * Refresh the member list to display in the GUI panel
 	 */
 	private void refreshList() {
-		if (!(null == chatWindowAdapter)) {
-			chatWindowAdapter.refreshList(users.values());
+		if (!(null == serverAdapter)) {
+			HashMap<IChatUser, ChatUserEntity> mbList = users;
+			mbList.remove(me);
+			serverAdapter.refreshList(mbList.values());
 		}
 	}
 
@@ -761,7 +763,7 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public IChatUser getUser() {
-				return stub;
+				return me;
 			}
 			
 		};
@@ -771,8 +773,8 @@ public class ServerRoom implements IChatroom {
 				for (IChatUser user : users.keySet()) {
 					try {
 						// send addMe message to users in the chatroom other than myself
-						if (!user.equals(stub)) {
-							user.receive(stub, addMe.getDataPacket());
+						if (!user.equals(me)) {
+							user.receive(me, addMe.getDataPacket());
 						}
 					} catch (RemoteException e) {
 						System.out.println("Broadcast to add user failed!\nRemote exception invite " + ": "
@@ -790,12 +792,12 @@ public class ServerRoom implements IChatroom {
 	 * one of their specific chatrooms
 	 */
 	public void removeMe() {
-		ARemoveMe rmMe = new RemoveMe(stub);
+		ARemoveMe rmMe = new RemoveMe(me);
 		for (IChatUser user : users.keySet()) {
 			try {
 				// send removeMe message to users in the chatroom other than myself
-				if (!user.equals(stub)) {
-					user.receive(stub, rmMe.getDataPacket());
+				if (!user.equals(me)) {
+					user.receive(me, rmMe.getDataPacket());
 				}
 			} catch (RemoteException e) {
 				System.out.println(
@@ -827,13 +829,13 @@ public class ServerRoom implements IChatroom {
 		users.put(user,newEntity);
 		refreshList();
 		
-		chatWindowAdapter.append("User joined: " + newEntity);
+		serverAdapter.append("User joined: " + newEntity);
 		
 		(new Thread(){
 			@Override
 			public void run(){
 				try {
-					user.receive(stub, infoReq.getDataPacket());
+					user.receive(me, infoReq.getDataPacket());
 				} catch (RemoteException e) {
 					System.out.println("Chat user info request sending failed:");
 					e.printStackTrace();
@@ -853,8 +855,8 @@ public class ServerRoom implements IChatroom {
 		boolean removed = users.remove(user) != null;
 		refreshList();
 		if (users.size() == 0) {
-			chatWindowAdapter.deleteWindow();
-			chatWindowAdapter.deleteModel(id);
+			serverAdapter.deleteWindow();
+			serverAdapter.deleteModel(id);
 		}
 		return removed;
 	}
@@ -871,9 +873,9 @@ public class ServerRoom implements IChatroom {
 			public void run() {
 				for (IChatUser user : users.keySet()) {
 					// send message to users other than myself
-					if (!user.equals(stub)) {
+					if (!user.equals(me)) {
 						try {
-							user.receive(stub, message.getDataPacket());
+							user.receive(me, message.getDataPacket());
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}
@@ -889,17 +891,15 @@ public class ServerRoom implements IChatroom {
 		return id;
 	}
 
-	public void startGame() {
-		StartGameMessage startGame = new StartGameMessage();
-		for (IChatUser user : users.keySet()) {
-			try {
-				// send startgame message to users in the chatroom other than myself
-				user.receive(stub, startGame.getDataPacket());
-			} catch (RemoteException e) {
-				System.out.println(
-						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
-				e.printStackTrace();
-			}
+	public void installGame() {
+		InstallGameMessage instGame = new InstallGameMessage();
+		for (TeamRoom team : teamList) {
+			(new Thread(){
+				@Override
+				public void run(){
+					team.send(me, instGame);
+				}
+			}).start();
 		}
 //		GameController gameController = new GameController();
 //		gameController.start();
@@ -912,7 +912,9 @@ public class ServerRoom implements IChatroom {
 		(new Thread(){
 			@Override
 			public void run(){
-				chatWindowAdapter.speakTo(user.getIp());
+				if (null!=user){
+					serverAdapter.speakTo(user.getIp());
+				}
 			}
 		}).start();
 
@@ -925,7 +927,7 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public void run(){
 				try {
-					user.receive(stub, initUsrReq.getDataPacket());
+					user.receive(me, initUsrReq.getDataPacket());
 					@SuppressWarnings("unused")
 					IInitUser initUser = initUserBq.poll(10, TimeUnit.SECONDS);
 				} catch (Exception e) {
@@ -935,4 +937,14 @@ public class ServerRoom implements IChatroom {
 			}
 		}).start();
 	}
+
+	public void addTeam(TeamRoom team) {
+		teamList.add(team);
+		refreshTeam();		
+	}
+	
+	private void refreshTeam() {
+		serverAdapter.refreshTeam(teamList);
+	}
+
 }
