@@ -5,9 +5,9 @@ import java.awt.Component;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import xz42_bb26.game.controller.GameController;
+import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.messages.StringMessage;
 import xz42_bb26.server.model.messages.UnknownTypeData;
@@ -99,6 +100,10 @@ public class ServerRoom implements IChatroom {
 	private IChatroom thisRoom = this;
 	
 	private transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	
+	private transient Set<IChatUser> players = new HashSet<IChatUser>();
+	
+	private boolean isPlayable = false;
 
 	/**
 	 * Constructor that takes in user name and user id as parameter
@@ -197,7 +202,7 @@ public class ServerRoom implements IChatroom {
 			}
 
 		};
-		// install ADataPacketAlgoCmd into DataPacketAlgo
+		//  ADataPacketAlgoCmd into DataPacketAlgo
 		msgAlgo = new DataPacketAlgo<String, IChatUser>(new ADataPacketAlgoCmd<String, Object, IChatUser>() {
 
 			/**
@@ -211,7 +216,7 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			/**
-			 * install default command to handle unknown command type
+			 *  default command to handle unknown command type
 			 */
 			public String apply(Class<?> index, DataPacket<Object> host,
 					IChatUser... params) {
@@ -512,7 +517,7 @@ public class ServerRoom implements IChatroom {
 					String str = data.getDataPacket().execute(msgAlgo, data.getSender());
 					System.out.println(str);
 					
-					return "Installed unknown data type: " + host.getData().getUnknownType() + " from: "
+					return "ed unknown data type: " + host.getData().getUnknownType() + " from: "
 					+ users.get(data.getSender());
 				}
 				else {
@@ -586,7 +591,36 @@ public class ServerRoom implements IChatroom {
 				return "User left: " + user;
 			}
 		});
+		
+		msgAlgo.setCmd(ProvideGameUser.class, new ADataPacketAlgoCmd<String, ProvideGameUser, IChatUser>() {
+
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+			private static final long serialVersionUID = 2831393211088585807L;
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			@Override
+			public String apply(Class<?> index, DataPacket<ProvideGameUser> host,
+					IChatUser... params) {
+				IChatUser player = host.getData().getStub();
+				players.add(player);
+				if (players.size() == teamList.size()*2){
+					setPlayable(true);
+				}
+				return "";
+			}
+		});
 	}
+	
 	
 	/**
 	 * Get the IChatRoom2WorldAdapter associated with this chatroom
@@ -957,6 +991,20 @@ public class ServerRoom implements IChatroom {
 	
 	private void refreshTeam() {
 		serverAdapter.refreshTeam(teamList.values());
+	}
+
+	/**
+	 * @return the isPlayable
+	 */
+	public boolean isPlayable() {
+		return isPlayable;
+	}
+
+	/**
+	 * @param isPlayable the isPlayable to set
+	 */
+	public void setPlayable(boolean isPlayable) {
+		this.isPlayable = isPlayable;
 	}
 
 }
