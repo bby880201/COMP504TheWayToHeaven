@@ -24,6 +24,10 @@ public class TeamInfoUpdate extends ARequest implements IChatMessage {
 	public TeamInfoUpdate(Team _theTeam) {
 		this.theTeam = _theTeam;
 	}
+	
+	public Team getTeam(){
+		return theTeam;
+	}
 
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {

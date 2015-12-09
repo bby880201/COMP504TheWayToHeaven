@@ -8,11 +8,13 @@ import common.IChatUser;
 import common.IChatroom;
 import common.demo.Chatroom;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import xz42_bb26.client.controller.ChatAppController;
 import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.GameModel;
 import xz42_bb26.game.model.GameUser;
+import xz42_bb26.game.model.Team;
 import xz42_bb26.game.view.GameView;
 import xz42_bb26.game.view.IModelAdapter;
 
@@ -41,6 +43,21 @@ public class GameController {
 			@Override
 			public RenderableLayer getBoxLayer() {
 				return view.getBoxLayer();
+			}
+
+			@Override
+			public void gameBegin() {
+				view.gameBegin();
+			}
+
+			@Override
+			public void aTeamWins(Team team) {
+				view.aTeamWins(team);
+			}
+
+			@Override
+			public IconLayer getIconLayer() {
+				return view.getIconLayer();
 			}
 			
 		},teamID, server,teamName,isNavigator);
