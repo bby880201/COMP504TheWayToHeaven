@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -122,7 +124,7 @@ public interface IServerRoom2WorldAdapter<T, TmRm> {
 		}
 
 		@Override
-		public void refreshTeam(ArrayList teamList) {
+		public void refreshTeam(Collection teamList) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -139,6 +141,6 @@ public interface IServerRoom2WorldAdapter<T, TmRm> {
 
 	public void popUp(Supplier<JFrame> frameFac);
 
-	public void refreshTeam(ArrayList<TmRm> teamList);
+	public void refreshTeam(Collection<TmRm> collection);
 
 }

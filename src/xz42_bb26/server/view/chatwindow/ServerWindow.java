@@ -29,6 +29,8 @@ import java.awt.Container;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 
+import xz42_bb26.server.model.chatroom.TeamRoom;
+
 /**
  * The mini-view GUI panel for the chat window
  * 
@@ -305,7 +307,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void refreshTeam(ArrayList<TmRm> teamList) {
+	public void refreshTeam(Collection<TmRm> teamList) {
 		lsTeam.setListData((TmRm[]) teamList.toArray());
 	}
 	
