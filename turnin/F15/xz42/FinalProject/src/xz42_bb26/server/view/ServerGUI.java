@@ -26,8 +26,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EtchedBorder;
 
-import xz42_bb26.server.view.chatwindow.ChattingWindow;
-import xz42_bb26.server.view.chatwindow.IChatWindow2Model;
+import xz42_bb26.server.view.chatwindow.ServerWindow;
+import xz42_bb26.server.view.chatwindow.IServerWindow2World;
 
 import javax.swing.border.TitledBorder;
 
@@ -44,7 +44,7 @@ import javax.swing.ListSelectionModel;
  * @param <Room> Generic type for chatroom
  * @param <Usr> Generic type for user
  */
-public class ServerGUI<Room, Usr, ChatUsr> {
+public class ServerGUI<Room, Usr, ChatUsr, TmRm> {
 
 	@SuppressWarnings({ "unchecked" })
 	private IView2ModelAdapter<Room, Usr,ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
@@ -244,7 +244,8 @@ public class ServerGUI<Room, Usr, ChatUsr> {
 	 * from the main-view (the window of the chatapp)
 	 * @param cw the view of the chatroom
 	 */
-	public void deleteChatWindow(ChattingWindow<Usr> cw) {
+	@SuppressWarnings("rawtypes")
+	public void deleteChatWindow(ServerWindow cw) {
 		tabbedPane.remove(cw);
 	}
 
@@ -253,9 +254,9 @@ public class ServerGUI<Room, Usr, ChatUsr> {
 	 * @param mv2mmAdapt An instance of IChatWindow2Model
 	 * @return An instance of ChattingWindow
 	 */
-	public ChattingWindow<ChatUsr> makeChatRoom(IChatWindow2Model<ChatUsr> mv2mmAdapt) {
+	public ServerWindow<ChatUsr,TmRm> makeChatRoom(IServerWindow2World<ChatUsr> mv2mmAdapt) {
 
-		ChattingWindow<ChatUsr> cw = new ChattingWindow<ChatUsr>(mv2mmAdapt);
+		ServerWindow<ChatUsr,TmRm> cw = new ServerWindow<ChatUsr,TmRm>(mv2mmAdapt);
 		tabbedPane.addTab(mv2mmAdapt.getName(), null, cw, null);
 		return cw;
 	}

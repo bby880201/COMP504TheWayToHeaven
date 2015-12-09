@@ -2,6 +2,7 @@ package xz42_bb26.server.model.chatroom;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -17,7 +18,7 @@ import common.IInitUser;
  * @author xc7, bb26 
  * @param <T> The type of the data being held.
  */
-public interface IServerRoom2WorldAdapter<T> {
+public interface IServerRoom2WorldAdapter<T, TmRm> {
 	
 	/**
 	 * Return the initUser from model
@@ -120,6 +121,12 @@ public interface IServerRoom2WorldAdapter<T> {
 			// TODO Auto-generated method stub
 		}
 
+		@Override
+		public void refreshTeam(ArrayList teamList) {
+			// TODO Auto-generated method stub
+			
+		}
+
 	};
 
 	public void display(Supplier<Component> containerSupplier);
@@ -131,5 +138,7 @@ public interface IServerRoom2WorldAdapter<T> {
 	public void speakTo(String ip);
 
 	public void popUp(Supplier<JFrame> frameFac);
+
+	public void refreshTeam(ArrayList<TmRm> teamList);
 
 }

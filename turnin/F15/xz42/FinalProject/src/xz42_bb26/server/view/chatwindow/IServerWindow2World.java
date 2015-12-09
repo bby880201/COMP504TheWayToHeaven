@@ -1,12 +1,14 @@
 package xz42_bb26.server.view.chatwindow;
 
+import java.util.List;
+
 /**
  * Mini-View2Model adapter that enables the mini-view (chat window) to communicate 
  * to the model.
  * 
  * @author bb26, xc7
  */
-public interface IChatWindow2Model<T> {
+public interface IServerWindow2World<T> {
 
 	/**
 	 * Get name of this chatroom
@@ -42,7 +44,7 @@ public interface IChatWindow2Model<T> {
 	 * 
 	 * @param cw the view of the chatroom
 	 */
-	public void deleteWindow(ChattingWindow cw);
+	public void deleteWindow(ServerWindow cw);
 
 	/**
 	 * Speak to the given user in this chatroom. This is done by calling the 
@@ -55,7 +57,7 @@ public interface IChatWindow2Model<T> {
 	/**
 	 * No-op "null" adapter
 	 */
-	public static final IChatWindow2Model<?> NULL_OBJECT = new IChatWindow2Model<Object>() {
+	public static final IServerWindow2World<?> NULL_OBJECT = new IServerWindow2World<Object>() {
 
 		@Override
 		public String getName() {
@@ -80,7 +82,7 @@ public interface IChatWindow2Model<T> {
 
 		@SuppressWarnings("rawtypes")
 		@Override
-		public void deleteWindow(ChattingWindow cw) {
+		public void deleteWindow(ServerWindow cw) {
 			// this method will be override in the controller
 		}
 
@@ -90,12 +92,19 @@ public interface IChatWindow2Model<T> {
 		}
 
 		@Override
-		public void startGame() {
+		public void installGame() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void createTeam(List<Object> members) {
 			// TODO Auto-generated method stub
 			
 		}
 	};
 
-	public void startGame();
-
+	public void installGame();
+	
+	public void createTeam(List<T> members);
 }

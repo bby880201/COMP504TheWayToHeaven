@@ -8,7 +8,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.swing.JButton;
@@ -17,11 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -32,37 +32,35 @@ import javax.swing.border.TitledBorder;
 /**
  * The mini-view GUI panel for the chat window
  * 
- * @author bb26, xc7
+ * @author bb26
  *
  * @param <Usr>
  */
-public class ChattingWindow<Usr> extends JSplitPane {
+public class ServerWindow<Usr,TmRm> extends JSplitPane {
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -8432378916828183998L;
 
-	private IChatWindow2Model<Usr> toChatroomAdapt;
+	private IServerWindow2World<Usr> toChatroomAdapt;
 
-	private ChattingWindow<Usr> thisWindow = this;
+	private ServerWindow<Usr,TmRm> thisWindow = this;
 	private JEditorPane edMsg;
 	private JList<Usr> lsMember;
-	private JTextField tfInvite;
 	private JScrollPane scDisplay;
 	private JPanel plDisplay;
-	private JButton btnSpeakTo;
+	private JButton btnCreateTeam;
 	private JButton btnSend;
-	private JButton btnLeave;
-	private JButton btnInvite;
-	private JButton btnStartGame;
-	private JPanel panel;
+	private JButton btnKick;
+	private JButton btnInstallGame;
+	private JList<TmRm> lsTeam;
 
 	/**
 	 * Constructor that takes an instance of IChatWindow2Model
 	 * @param mv2mmAdapt An instance of IChatWindow2Model
 	 */
-	public ChattingWindow(IChatWindow2Model<Usr> mv2mmAdapt) {
+	public ServerWindow(IServerWindow2World<Usr> mv2mmAdapt) {
 
 		super();
 
@@ -103,93 +101,77 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		panel_2.add(panel_4, gbc_panel_4);
 		GridBagLayout gbl_panel_4 = new GridBagLayout();
 		gbl_panel_4.columnWidths = new int[] { 0, 0 };
-		gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_4.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_4.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_4.setLayout(gbl_panel_4);
 		panel_4.setMinimumSize(new Dimension(150, 200));
 		panel_4.setMaximumSize(new Dimension(150, 1000));
-		
-		panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Invite Friend", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridheight = 3;
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.insets = new Insets(0, 0, 5, 0);
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
-		panel_4.add(panel, gbc_panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{134, 0};
-		gbl_panel.rowHeights = new int[]{28, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
-
-		tfInvite = new JTextField();
-		GridBagConstraints gbc_tfInvite = new GridBagConstraints();
-		gbc_tfInvite.insets = new Insets(0, 0, 5, 0);
-		gbc_tfInvite.fill = GridBagConstraints.BOTH;
-		gbc_tfInvite.gridx = 0;
-		gbc_tfInvite.gridy = 0;
-		panel.add(tfInvite, gbc_tfInvite);
-		tfInvite.setToolTipText("Enter the IP address of the remote user you want to invite to the current chatroom.");
-		tfInvite.setColumns(10);
-
-		btnInvite = new JButton("Invite");
-		GridBagConstraints gbc_btnInvite = new GridBagConstraints();
-		gbc_btnInvite.fill = GridBagConstraints.BOTH;
-		gbc_btnInvite.gridx = 0;
-		gbc_btnInvite.gridy = 1;
-		panel.add(btnInvite, gbc_btnInvite);
-		btnInvite.setToolTipText("Invite the remote user as specified by the IP address to the current chatroom.");
 
 		JPanel panel_6 = new JPanel();
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
 		gbc_panel_6.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_6.fill = GridBagConstraints.BOTH;
 		gbc_panel_6.gridx = 0;
-		gbc_panel_6.gridy = 3;
+		gbc_panel_6.gridy = 0;
 		panel_4.add(panel_6, gbc_panel_6);
 		panel_6.setLayout(new BorderLayout(0, 0));
 
 		lsMember = new JList<Usr>();
 		lsMember.setToolTipText("Display the current members in the chatroom.");
 		lsMember.setBorder(new TitledBorder(null, "Member List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		panel_6.add(new JScrollPane(lsMember), BorderLayout.CENTER);
 
-		btnSpeakTo = new JButton("Speak To");
-		btnSpeakTo.setToolTipText("Speak to a chosen member from the member list of this chatroom.");
+		btnCreateTeam = new JButton("Create Team");
+		btnCreateTeam.setToolTipText("Select two members and create a team.");
 
-		GridBagConstraints gbc_btnSpeakTo = new GridBagConstraints();
-		gbc_btnSpeakTo.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnSpeakTo.insets = new Insets(0, 0, 5, 0);
-		gbc_btnSpeakTo.gridx = 0;
-		gbc_btnSpeakTo.gridy = 4;
-		panel_4.add(btnSpeakTo, gbc_btnSpeakTo);
+		GridBagConstraints gbc_btnCreateTeam = new GridBagConstraints();
+		gbc_btnCreateTeam.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnCreateTeam.insets = new Insets(0, 0, 5, 0);
+		gbc_btnCreateTeam.gridx = 0;
+		gbc_btnCreateTeam.gridy = 1;
+		panel_4.add(btnCreateTeam, gbc_btnCreateTeam);
 		
-		btnStartGame = new JButton("Start Game");
-		btnStartGame.addActionListener(new ActionListener() {
+		btnKick = new JButton("Kick Out");
+		btnKick.setToolTipText("Kick selected user");
+				
+		GridBagConstraints gbc_btnKick = new GridBagConstraints();
+		gbc_btnKick.insets = new Insets(0, 0, 5, 0);
+		gbc_btnKick.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnKick.gridx = 0;
+		gbc_btnKick.gridy = 2;
+		panel_4.add(btnKick, gbc_btnKick);
+		
+		JPanel panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 3;
+		panel_4.add(panel, gbc_panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		lsTeam = new JList<TmRm>();		
+		lsTeam.setToolTipText("Display the current teams in the room.");
+		lsTeam.setBorder(new TitledBorder(null, "Team List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.add(new JScrollPane(lsTeam), BorderLayout.CENTER);
+
+		btnInstallGame = new JButton("Install Game");
+		btnInstallGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mv2mmAdapt.startGame();
+				if (lsMember.getModel().getSize() == 0) {
+					mv2mmAdapt.installGame();
+				}
+				else {
+					append("Some players haven't been assigned to a team yet!");
+				}
 			}
 		});
 		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
 		gbc_btnStartGame.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnStartGame.insets = new Insets(0, 0, 5, 0);
 		gbc_btnStartGame.gridx = 0;
 		gbc_btnStartGame.gridy = 5;
-		panel_4.add(btnStartGame, gbc_btnStartGame);
-
-		btnLeave = new JButton("Leave");
-		btnLeave.setToolTipText("Leave the current chatroom.");
-
-		GridBagConstraints gbc_btnLeave = new GridBagConstraints();
-		gbc_btnLeave.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnLeave.gridx = 0;
-		gbc_btnLeave.gridy = 6;
-		panel_4.add(btnLeave, gbc_btnLeave);
+		panel_4.add(btnInstallGame, gbc_btnStartGame);
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -233,9 +215,15 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		/**
 		 * Speak to a chosen member from the member list of this chatroom.
 		 */
-		btnSpeakTo.addActionListener(new ActionListener() {
+		btnCreateTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toChatroomAdapt.speakTo(lsMember.getSelectedValue());
+				List<Usr> teamMems = lsMember.getSelectedValuesList();
+				if (teamMems.size() == 2) {
+					toChatroomAdapt.createTeam(teamMems);
+				}
+				else {
+					append("Please select two members to create a new team!\n");
+				}
 			}
 		});
 		/**
@@ -245,7 +233,7 @@ public class ChattingWindow<Usr> extends JSplitPane {
 			public void actionPerformed(ActionEvent e) {
 				String str = edMsg.getText();
 
-				append("YOU says:\n" + str + "\n");
+				append("Server:\n" + str + "\n");
 
 				toChatroomAdapt.sendMsg(str);
 				edMsg.setText("");
@@ -254,18 +242,11 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		/**
 		 * Leave the current chatroom.
 		 */
-		btnLeave.addActionListener(new ActionListener() {
+		btnKick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				toChatroomAdapt.quit();
 				toChatroomAdapt.deleteWindow(thisWindow);
-			}
-		});
-		/**
-		 * Invite the remote user as specified by the IP address to the current chatroom.
-		 */
-		btnInvite.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toChatroomAdapt.invite(tfInvite.getText());
+				//TODO change function
 			}
 		});
 	}
@@ -275,10 +256,10 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	 * @param data the data to be added to GUI panel
 	 */
 	public void append(String data) {
-		JLabel content = new JLabel(data);
-
+		JLabel content = new JLabel("Server:\n"+data);
+		content.setForeground(Color.RED);
 		plDisplay.add(content);
-
+		
 		plDisplay.revalidate();
 		plDisplay.repaint();
 	}
@@ -320,7 +301,12 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	}
 
 	public void refreshRoomName(String displayName) {
-		
+		//TODO need to be done!
+	}
+
+	@SuppressWarnings("unchecked")
+	public void refreshTeam(ArrayList<TmRm> teamList) {
+		lsTeam.setListData((TmRm[]) teamList.toArray());
 	}
 	
 	
