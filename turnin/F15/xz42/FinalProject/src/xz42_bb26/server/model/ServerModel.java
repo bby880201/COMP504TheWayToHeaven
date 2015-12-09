@@ -101,56 +101,56 @@ public class ServerModel {
 			}			
 		});
 
-		/**
-		 * Handle InviteToChatroom command
-		 */
-		msgAlgo.setCmd(AInvitation2Chatroom.class, new ADataPacketAlgoCmd<String, AInvitation2Chatroom, IInitUser>() {
-
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 6397860207466953790L;
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				// empty method
-			}
-
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<AInvitation2Chatroom> host, IInitUser... params) {
-
-				try {
-					IChatroom remoteRoom = host.getData().getChatroom();
-					if (rooms.containsKey(remoteRoom.getID())) {
-						throw new IllegalArgumentException(
-								"Got invitation to join a chatroom in which user already exists.");
-					}
-					
-					// creates a new local copy of the chatroom 
-					ServerRoom room = new ServerRoom(remoteRoom.getID());
-					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
-
-					// add user to chatroom after adapter is installed
-					if (adptAdded) {
-						for (IChatUser user : remoteRoom.getUsers()) {
-							room.addUser(user);
-						}
-						room.addMe();
-
-						rooms.put(room.getID(), (IChatroom) room);
-					}
-				} catch (Exception e) {
-					System.out.println("create room failed: " + e + "\n");
-					e.printStackTrace();
-				}
-				return "Invitation from: " + (IInitUser) params[0];
-			}
-		});
+//		/**
+//		 * Handle InviteToChatroom command
+//		 */
+//		msgAlgo.setCmd(AInvitation2Chatroom.class, new ADataPacketAlgoCmd<String, AInvitation2Chatroom, IInitUser>() {
+//
+//			/**
+//			 * declare a static final serialVersionUID of type long to fix the warning
+//			 */
+//			private static final long serialVersionUID = 6397860207466953790L;
+//
+//			@Override
+//			/**
+//			 * Set the ICmd2ModelAdapter of this command
+//			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+//			 */
+//			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+//				// empty method
+//			}
+//
+//			@Override
+//			public String apply(Class<?> index,
+//					DataPacket<AInvitation2Chatroom> host, IInitUser... params) {
+//
+//				try {
+//					IChatroom remoteRoom = host.getData().getChatroom();
+//					if (rooms.containsKey(remoteRoom.getID())) {
+//						throw new IllegalArgumentException(
+//								"Got invitation to join a chatroom in which user already exists.");
+//					}
+//					
+//					// creates a new local copy of the chatroom 
+//					ServerRoom room = new ServerRoom(remoteRoom.getID());
+//					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
+//
+//					// add user to chatroom after adapter is installed
+//					if (adptAdded) {
+//						for (IChatUser user : remoteRoom.getUsers()) {
+//							room.addUser(user);
+//						}
+//						room.addMe();
+//
+//						rooms.put(room.getID(), (IChatroom) room);
+//					}
+//				} catch (Exception e) {
+//					System.out.println("create room failed: " + e + "\n");
+//					e.printStackTrace();
+//				}
+//				return "Invitation from: " + (IInitUser) params[0];
+//			}
+//		});
 		
 		msgAlgo.setCmd(AChatroomListRequest.class, new ADataPacketAlgoCmd<String, AChatroomListRequest, IInitUser>() {
 

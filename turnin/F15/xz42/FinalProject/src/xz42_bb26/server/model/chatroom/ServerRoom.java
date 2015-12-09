@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,10 +61,12 @@ import common.message.init.AInvitation2Chatroom;
  * @author bb26, xc7
  */
 public class ServerRoom implements IChatroom {
+	
+
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
-	private static final long serialVersionUID = -1842717037685994672L;
+	private static final long serialVersionUID = -3024875875412221054L;
 
 	@SuppressWarnings("unchecked")
 	private transient IServerRoom2WorldAdapter<ChatUserEntity, TeamRoom> serverAdapter = IServerRoom2WorldAdapter.NULL_OBJECT;
@@ -126,12 +129,12 @@ public class ServerRoom implements IChatroom {
 			
 		});
 		
-		me = (IChatUser) UnicastRemoteObject.exportObject(prestub, IInitUser.BOUND_PORT_SERVER);
+		me = (IChatUser) UnicastRemoteObject.exportObject(prestub, IChatUser.BOUND_PORT_SERVER);
 
+		id = uuid;
 		users.put(me,null);
 		initMe = null;
 		
-		id = uuid;
 	}
 
 	/**
@@ -776,10 +779,10 @@ public class ServerRoom implements IChatroom {
 	 * Refresh the member list to display in the GUI panel
 	 */
 	private void refreshList() {
-		if (!(null == serverAdapter)) {
-			HashMap<IChatUser, ChatUserEntity> mbList = users;
-			mbList.remove(me);
-			serverAdapter.refreshList(mbList.values());
+		if (null != serverAdapter) {
+			Collection<ChatUserEntity> mbList = users.values();
+//			mbList.remove(users.get(me));
+			serverAdapter.refreshList(mbList);
 		}
 	}
 
