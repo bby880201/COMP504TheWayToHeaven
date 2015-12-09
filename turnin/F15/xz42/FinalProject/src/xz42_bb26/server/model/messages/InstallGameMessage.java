@@ -14,24 +14,35 @@ public class InstallGameMessage implements IChatMessage{
 	/**
 	 * ID of this message. 
 	 */
-	private final UUID msgID;
+	private final UUID teamID;
+	
+	private final boolean isNavigator;
 
 	/**
 	 * Constructs a new message containing the specified user to be removed. 
 	 * UUID for the message is auto-generated.
 	 * @param user - user to be removed
 	 */
-	public InstallGameMessage() {
-		this.msgID = UUID.randomUUID();
+	public InstallGameMessage(Boolean isNavigator) {
+		this.teamID = UUID.randomUUID();
+		this.isNavigator = isNavigator;
 	}
 
 
 	public UUID getID() {
-		return msgID;
+		return teamID;
 	}
 
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<InstallGameMessage>(InstallGameMessage.class, this);
+	}
+
+
+	/**
+	 * @return the isNavigator
+	 */
+	public boolean isNavigator() {
+		return isNavigator;
 	}
 
 }

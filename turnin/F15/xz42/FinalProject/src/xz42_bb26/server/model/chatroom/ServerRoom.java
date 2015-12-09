@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import xz42_bb26.game.controller.GameController;
 import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.messages.StringMessage;
 import xz42_bb26.server.model.messages.UnknownTypeData;
@@ -97,7 +98,7 @@ public class ServerRoom implements IChatroom {
 	
 	private IChatroom thisRoom = this;
 	
-	private transient ArrayList<TeamRoom> teamList = new ArrayList<TeamRoom>();
+	private transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
 
 	/**
 	 * Constructor that takes in user name and user id as parameter
@@ -187,6 +188,12 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public void createNewWindow(Supplier<JFrame> frameFac) {
 				serverAdapter.popUp(frameFac);
+			}
+
+			@Override
+			public void sendMsgTo(IChatMessage msg, IChatUser chatUser) {
+				// TODO Auto-generated method stub
+				
 			}
 
 		};
@@ -541,8 +548,14 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public String apply(Class<?> index, DataPacket<InstallGameMessage> host,
 					IChatUser... params) {
-//				GameController gameController = new GameController();
-//				gameController.start();
+				UUID uuid = host.getData().getID();
+				
+				GameController gameController = new GameController(uuid, me, teamList.get(uuid).getName(), host.getData().isNavigator());
+				try {
+					gameController.start();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 				return "Start Game";
 			}
 		});
@@ -892,12 +905,11 @@ public class ServerRoom implements IChatroom {
 	}
 
 	public void installGame() {
-		InstallGameMessage instGame = new InstallGameMessage();
-		for (TeamRoom team : teamList) {
+		for (TeamRoom team : teamList.values()) {
 			(new Thread(){
 				@Override
 				public void run(){
-					team.send(me, instGame);
+					team.installGame();
 				}
 			}).start();
 		}
@@ -939,12 +951,12 @@ public class ServerRoom implements IChatroom {
 	}
 
 	public void addTeam(TeamRoom team) {
-		teamList.add(team);
+		teamList.put(team.getID(),team);
 		refreshTeam();		
 	}
 	
 	private void refreshTeam() {
-		serverAdapter.refreshTeam(teamList);
+		serverAdapter.refreshTeam(teamList.values());
 	}
 
 }

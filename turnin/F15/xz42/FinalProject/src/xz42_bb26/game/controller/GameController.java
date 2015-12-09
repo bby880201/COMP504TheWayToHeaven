@@ -11,6 +11,7 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import xz42_bb26.client.controller.ChatAppController;
+import xz42_bb26.client.model.user.ChatUser;
 import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.GameModel;
 import xz42_bb26.game.model.GameUser;
@@ -89,6 +90,8 @@ public class GameController {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					GameController controller = new GameController(UUID.randomUUID(),null, "a team",true);
+					controller.start();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -278,8 +278,9 @@ public class ServerController {
 					}
 
 					@Override
-					public void refreshTeam(ArrayList<TeamRoom> teamList) {
-						cw.refreshTeam(teamList);
+					public void refreshTeam(Collection<TeamRoom> collection) {
+						// TODO Auto-generated method stub
+						cw.refreshTeam(collection);
 					}
 
 				};

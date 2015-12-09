@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.user.ChatUserEntity;
 import xz42_bb26.server.model.user.GameUser;
 import xz42_bb26.server.model.user.IGameUser;
@@ -128,5 +129,24 @@ public class TeamRoom implements IChatroom {
 	@Override
 	public String toString(){
 		return teamName;
+	}
+
+	public void installGame() {
+		(new Thread() {
+			@Override
+			public void run() {
+				try {
+					InstallGameMessage instGameNavigator = new InstallGameMessage(true);
+					navig.getChatUser().receive(server, instGameNavigator.getDataPacket());
+					InstallGameMessage instGameManager = new InstallGameMessage(false);
+					manag.getChatUser().receive(server, instGameManager.getDataPacket());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
+		// TODO Auto-generated method stub
+		
 	}
 }
