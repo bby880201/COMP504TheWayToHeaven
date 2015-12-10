@@ -188,6 +188,7 @@ public class GameModel {
 						myBox.move(_team.myLatitude, _team.myLongtitude);
 						_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
 						team = _team;
+						team.setModel(GameModel.this);
 					}
 					else{
 						System.out.println("other team is moving"+_team.toString());
@@ -435,18 +436,25 @@ public class GameModel {
 					public void actionPerformed(ActionEvent e) {
 						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
 						view.update(team);
-							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
-								timer.stop();
-								if(this.equals(desIcon)){
-									globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
-								}
-								else{
-									team.buySupply(depots.get(PulsingIcon.this.uuid));
-									globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
-									depots.remove(depots.get(PulsingIcon.this.getPosition()));
-									PulsingIcon.this.setVisible(false);
-								}
-								
+						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
+							System.out.println("getIntoRangeOfAIcon");
+							timer.stop();
+							if(this.equals(desIcon)){
+								System.out.println("getIntoRangeOfDestination");
+								globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
+							}
+							else{
+								team.buySupply(depots.get(PulsingIcon.this.uuid));
+								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
+								depots.remove(depots.get(PulsingIcon.this.getPosition()));
+								PulsingIcon.this.setVisible(false);
+							}
+						}
+						else{
+							if(this.equals(desIcon)){
+								System.out.println("distance to the destination"+Position.greatCircleDistance(myBox.getCenterPosition(), desIcon.getPosition()).degrees);
+							}
+							
 						}
 					}
 				});
