@@ -453,10 +453,10 @@ public class GameModel {
 				timer = new Timer(frequency, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 //						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
-						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
+						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.3){
 							System.out.println("getIntoRangeOfAIcon");
 							timer.stop();
-							if(PulsingIcon.this.equals(desIcon)){
+							if(PulsingIcon.this.uuid.equals(desIcon.uuid)){
 								System.out.println("getIntoRangeOfDestination");
 								globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
 							}
@@ -521,6 +521,10 @@ public class GameModel {
 	public void buySupply(Depot depot) {
 		team.buySupply(depot);
 		
+	}
+
+	public Team getTeam() {
+		return team;
 	}
 	
 
