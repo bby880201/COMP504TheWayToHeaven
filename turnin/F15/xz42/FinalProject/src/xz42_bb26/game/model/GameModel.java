@@ -114,9 +114,11 @@ public class GameModel {
 	}
 	
 	public void moveTo(Position pos){
-		team.moveTo(pos);
-		globalChatroom.IMove(team);
-		myBox.move(pos.getLatitude().getDegrees(), pos.getLongitude().getDegrees());
+		if(inGame){
+			team.moveTo(pos);
+			globalChatroom.IMove(team);
+			myBox.move(pos.getLatitude().getDegrees(), pos.getLongitude().getDegrees());
+		}	
 	}
 	/**
 	 * Move teams' boxes according to given params.
@@ -210,6 +212,7 @@ public class GameModel {
 						boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
 					}
 					else{
+						inGame = false;
 						view.gameOver();
 					}
 					
