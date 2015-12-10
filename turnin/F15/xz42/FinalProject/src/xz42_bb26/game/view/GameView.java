@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.GridLayout;
 
 public class GameView extends JFrame {
 
@@ -62,7 +63,6 @@ public class GameView extends JFrame {
 	 */
 	public GameView(IModelAdapter iModelAdapter) {
 		this.model = iModelAdapter;
-
 	}
 	
 	private void initGUI(){
@@ -79,7 +79,7 @@ public class GameView extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		
 		mapPanel = new MapPanel(Earth.class);
-		mapPanel.setPreferredSize(new java.awt.Dimension(800, 600));
+		mapPanel.setPreferredSize(new java.awt.Dimension(panel.getBounds().width, panel.getBounds().height));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
 		mapPanel.addRightClickAction(new IRightClickAction(){
@@ -92,44 +92,26 @@ public class GameView extends JFrame {
 		
 		
 		JPanel infoPanel = new JPanel();
+		infoPanel.setLayout(new GridLayout(5,1 , 0, 0));
 		contentPane.add(infoPanel, BorderLayout.EAST);
-		
-		GridBagLayout gbl_infoPanel = new GridBagLayout();
-		gbl_infoPanel.columnWidths = new int[]{145, 0};
-		gbl_infoPanel.rowHeights = new int[]{29, 0, 0, 0};
-		gbl_infoPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_infoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		infoPanel.setLayout(gbl_infoPanel);
+
 		JLabel dutyLabel = new JLabel();
 		GridBagConstraints gbc_dutyLabel = new GridBagConstraints();
-		gbc_dutyLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_dutyLabel.anchor = GridBagConstraints.WEST;
-		gbc_dutyLabel.gridx = 0;
-		gbc_dutyLabel.gridy = 1;
-		infoPanel.add(dutyLabel, gbc_dutyLabel);
+
+		infoPanel.add(dutyLabel);
 		if(model.isNavigator()){
 			dutyLabel.setText("You are the navigator");
-			JLabel destLabel = new JLabel("Your destination is (23.332910112240146°, -131.43584349888866°) ");
+			JLabel destLabel = new JLabel("Your destination is Rice ");
 			GridBagConstraints gbc_destLabel = new GridBagConstraints();
-			gbc_destLabel.gridx = 0;
-			gbc_destLabel.gridy = 2;
 			infoPanel.add(destLabel, gbc_destLabel);
 		}
 		else{
 
 			dutyLabel.setText("You are the resource manager");
 			JLabel cashLabel = new JLabel("Current Cash: $100");
-			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
-
-			gbc_cashLabel.gridx = 0;
-			gbc_cashLabel.gridy = 2;
-			infoPanel.add(cashLabel, gbc_cashLabel);
-			
+			infoPanel.add(cashLabel);
 			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
-			GridBagConstraints gbc_supplyLabel = new GridBagConstraints();
-			gbc_supplyLabel.gridx = 0;
-			gbc_supplyLabel.gridy = 3;
-			infoPanel.add(supplyLabel, gbc_supplyLabel);
+			infoPanel.add(supplyLabel);
 		}
 		
 		/**
