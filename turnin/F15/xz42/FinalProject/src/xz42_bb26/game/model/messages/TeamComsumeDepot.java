@@ -21,12 +21,26 @@ public class TeamComsumeDepot extends ARequest implements IChatMessage {
 	private Position aDepot;
 
 	public TeamComsumeDepot(Position aPos) {
-		this.aDepot = aPos;
+		this.setaDepot(aPos);
 	}
 
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<TeamComsumeDepot>(TeamComsumeDepot.class, this);
+	}
+
+	/**
+	 * @return the aDepot
+	 */
+	public Position getaDepot() {
+		return aDepot;
+	}
+
+	/**
+	 * @param aDepot the aDepot to set
+	 */
+	public void setaDepot(Position aDepot) {
+		this.aDepot = aDepot;
 	}
 
 
