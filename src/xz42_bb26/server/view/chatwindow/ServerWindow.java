@@ -158,12 +158,13 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		btnInstallGame = new JButton("Install Game");
 		btnInstallGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (lsMember.getModel().getSize() == 0) {
-					mv2mmAdapt.installGame();
-				}
-				else {
-					append("Some players haven't been assigned to a team yet!");
-				}
+//				if (lsMember.getModel().getSize() == 0) {
+//					mv2mmAdapt.installGame();
+//				}
+//				else {
+//					append("Some players haven't been assigned to a team yet!");
+//				}
+				mv2mmAdapt.installGame();
 			}
 		});
 		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
