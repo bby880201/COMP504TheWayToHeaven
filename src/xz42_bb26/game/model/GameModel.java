@@ -183,11 +183,14 @@ public class GameModel {
 				@Override
 				public void updateTeamInfo(Team _team) {
 					if(_team.uuid.equals(team.uuid) ){
-						System.out.println("your team is moving"+_team.toString());
-						myBox.move(_team.myLatitude, _team.myLongtitude);
-						_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
-						team = _team;
-						team.setModel(GameModel.this);
+						if(!isNavigator()){
+							System.out.println("your team is moving"+_team.toString());
+							myBox.move(_team.myLatitude, _team.myLongtitude);
+							_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
+							team = _team;
+							team.setModel(GameModel.this);
+						}
+						
 					}
 					else{
 						System.out.println("other team is moving"+_team.toString());
