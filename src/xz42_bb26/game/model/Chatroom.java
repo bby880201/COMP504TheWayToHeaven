@@ -262,7 +262,9 @@ public class Chatroom implements IChatroom {
 
 			@Override
 			public String apply(Class<?> index, DataPacket<TeamInfoUpdate> host, IChatUser... params) {
-				model.updateTeamInfo(host.getData().getTeam());
+				if(params[0]!= me){
+					model.updateTeamInfo(host.getData().getTeam());
+				}
 				return "update team info";
 			}
 
@@ -408,6 +410,11 @@ public class Chatroom implements IChatroom {
 				return "a Team is out";
 			}
 		});
+	}
+
+	public void IMove(Team team) {
+		TeamInfoUpdate aMessage = new TeamInfoUpdate(team);
+		send(me, aMessage);
 	}
 
 
