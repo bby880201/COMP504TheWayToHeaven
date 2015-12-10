@@ -296,6 +296,7 @@ public class Chatroom implements IChatroom {
 					IChatUser... params) {
 				
 				users = host.getData().getUsers();
+				model.setDepots(host.getData().getDepots());
 				for (IChatUser user : users) {
 					if(user!=me){
 						TeamInfoUpdate aInfoUpdateMessage = new TeamInfoUpdate(model.getTeam());
@@ -306,7 +307,6 @@ public class Chatroom implements IChatroom {
 						}
 					}
 				}
-				model.setDepots(host.getData().getDepots());
 				return "Users list updated";
 			}
 		});
