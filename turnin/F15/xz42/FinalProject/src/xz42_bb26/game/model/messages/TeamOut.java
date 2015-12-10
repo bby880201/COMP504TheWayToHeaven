@@ -20,12 +20,26 @@ public class TeamOut extends ARequest implements IChatMessage {
 	private UUID teamID;
 
 	public TeamOut(UUID teamID) {
-		this.teamID = teamID;
+		this.setTeamID(teamID);
 	}
 
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<TeamOut>(TeamOut.class, this);
+	}
+
+	/**
+	 * @return the teamID
+	 */
+	public UUID getTeamID() {
+		return teamID;
+	}
+
+	/**
+	 * @param teamID the teamID to set
+	 */
+	public void setTeamID(UUID teamID) {
+		this.teamID = teamID;
 	}
 
 

@@ -265,7 +265,7 @@ public class Chatroom implements IChatroom {
 				if(params[0]!= me){
 					model.updateTeamInfo(host.getData().getTeam());
 				}
-				return "update team info";
+				return host.getData().getTeam().toString();
 			}
 
 
