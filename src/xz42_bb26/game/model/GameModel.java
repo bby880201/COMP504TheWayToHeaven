@@ -75,7 +75,7 @@ public class GameModel {
 	 */
 	private String userName;
 	
-	public HashMap<Position,Depot> depots;
+	public HashMap<Position,Depot> depots= new HashMap<>();
 	
 	private boolean inGame;
 	
