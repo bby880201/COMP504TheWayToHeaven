@@ -33,8 +33,8 @@ public class GameView extends JFrame {
 	private static final long serialVersionUID = -2733797230967669361L;
 	private JPanel contentPane;
 	
-	private RenderableLayer sLayer = new RenderableLayer();
-	private IconLayer iconLayer = new IconLayer();
+	private RenderableLayer sLayer;
+	private IconLayer iconLayer;
 	MapPanel mapPanel;
 	IModelAdapter model;
 	/**
@@ -62,6 +62,8 @@ public class GameView extends JFrame {
 	}
 	
 	private void initGUI(){
+		iconLayer = new IconLayer();
+		sLayer = new RenderableLayer();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
