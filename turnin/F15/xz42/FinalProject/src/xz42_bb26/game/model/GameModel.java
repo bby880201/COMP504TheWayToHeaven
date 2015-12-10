@@ -94,6 +94,8 @@ public class GameModel {
 		team.setModel(this);
 		team.uuid = teamUUID;
 		team.supply = 20000;
+		team.myLatitude = 63;
+		team.myLongtitude = -151;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
 		team.cash = 10000;
