@@ -187,8 +187,10 @@ public class GameModel {
 							System.out.println("your team is moving"+_team.toString());
 							myBox.move(_team.myLatitude, _team.myLongtitude);
 							_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
-							team = _team;
-							team.setModel(GameModel.this);
+							team.myLatitude = _team.myLatitude;
+							team.myLongtitude = _team.myLongtitude;
+							team.cash = _team.cash;
+							team.supply = _team.supply;
 						}
 						
 					}
