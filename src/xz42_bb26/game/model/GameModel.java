@@ -93,10 +93,10 @@ public class GameModel {
 		team = new Team();
 		team.setModel(this);
 		team.uuid = teamUUID;
-		team.supply = 2000000000;
+		team.supply = 20000;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
-		team.cash = 10000000;
+		team.cash = 10000;
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
@@ -178,10 +178,8 @@ public class GameModel {
 				@Override
 				public void updateTeamInfo(Team _team) {
 					if(_team.uuid == team.uuid){
-						if(team.myLatitude != this.getTeam().myLatitude || team.myLongtitude!= this.getTeam().myLongtitude){
-							myBox.move(_team.myLatitude, _team.myLongtitude);
-							team.moveTo(Position.fromDegrees(_team.myLatitude, _team.myLongtitude));
-						}
+						myBox.move(_team.myLatitude, _team.myLongtitude);
+						team = _team;
 					}
 					else{
 						TeamBox aBox = boxList.get(_team.uuid);
@@ -254,7 +252,7 @@ public class GameModel {
 	private void renderDepots() {
 		depotsIcons = new HashMap<>();
 		for (Depot depot : depots.values()) {
-			PulsingIcon icon = new PulsingIcon(circleYellow,depot.uuid, depot.position, 100);
+			PulsingIcon icon = new PulsingIcon(circleYellow,depot.uuid, depot.position, 500);
 			icon.setSize(new Dimension(20, 20));
 			icon.setToolTipText(depot.price.toString());
 			icon.setVisible(true);
@@ -263,7 +261,7 @@ public class GameModel {
 		}
 
 		BufferedImage circleRed = createBitmap(PatternFactory.PATTERN_CIRCLE, Color.RED);
-		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 100);
+		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 500);
 		desIcon.setVisible(true);
 		desIcon.setSize(new Dimension(20,20));
 		desIcon.setAlwaysOnTop(true);
@@ -428,7 +426,6 @@ public class GameModel {
 								team.buySupply(depots.get(PulsingIcon.this.uuid));
 								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
 								depots.remove(depots.get(PulsingIcon.this.getPosition()));
-								//TO DO send message to tell everyone the depot is comsumed
 								PulsingIcon.this.setVisible(false);
 						}
 					}
