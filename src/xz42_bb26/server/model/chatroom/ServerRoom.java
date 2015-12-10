@@ -1,7 +1,5 @@
 package xz42_bb26.server.model.chatroom;
 
-import gov.nasa.worldwind.Model;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.net.UnknownHostException;
@@ -145,8 +143,7 @@ public class ServerRoom implements IChatroom {
 		users.put(me,null);
 		invisiblePlayer.add(me);
 		initMe = null;
-		displayName = "The Way To Rice Game Server";
-		
+		displayName = "The Way To Rice Game Server";	
 	}
 
 	/**
@@ -191,7 +188,7 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void sendToChatroom(IChatMessage message) {
-				// TODO Auto-generated method stub	
+				thisRoom.send(me, message);
 			}
 
 			@Override
@@ -212,8 +209,11 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void sendMsgTo(IChatMessage msg, IChatUser chatUser) {
-				// TODO Auto-generated method stub
-				
+				try {
+					chatUser.receive(me, msg.getDataPacket());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 			}
 
 		};
@@ -979,9 +979,6 @@ public class ServerRoom implements IChatroom {
 				}
 			}).start();
 		}
-//		GameController gameController = new GameController();
-//		gameController.start();
-		
 	}
 
 
@@ -1045,21 +1042,18 @@ public class ServerRoom implements IChatroom {
 		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
 
 			/**
-			 * 
+			 * no-op command, reject all connections after game begin
 			 */
 			private static final long serialVersionUID = 4437548779304355227L;
 
 			@Override
 			public String apply(Class<?> index, DataPacket<AAddMe> host,
 					IChatUser... params) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 	}
@@ -1104,6 +1098,7 @@ public class ServerRoom implements IChatroom {
 				try {
 					usr.getChatUser().receive(me, new RemoveMe(me).getDataPacket());
 					users.remove(usr.getChatUser());
+					refreshList();
 				} catch (RemoteException e) {
 					System.out.println("Kick player failed in ServerRoom: ");
 					e.printStackTrace();

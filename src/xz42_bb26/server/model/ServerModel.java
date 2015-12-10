@@ -5,7 +5,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,7 +61,7 @@ public class ServerModel {
 
 	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
-	private String userName = "xz42_bb26_server";
+	private String userName = "Game Server";
 	
 	private String ip;
 

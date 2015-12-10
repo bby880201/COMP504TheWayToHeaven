@@ -3,28 +3,15 @@
  */
 package xz42_bb26.server.model.chatroom;
 
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.omg.PortableInterceptor.USER_EXCEPTION;
-
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import xz42_bb26.server.model.messages.InstallGameMessage;
-import xz42_bb26.server.model.user.ChatUser;
 import xz42_bb26.server.model.user.ChatUserEntity;
 import xz42_bb26.server.model.user.GameUser;
-import xz42_bb26.server.model.user.IChatUser2ModelAdapter;
 import xz42_bb26.server.model.user.IGameUser;
 import common.IChatUser;
-import common.IChatroom;
 import common.ICmd2ModelAdapter;
-import common.message.IChatMessage;
-import common.message.chat.AAddMe;
 import common.message.chat.AChatUserInfoResponse;
 
 /**
