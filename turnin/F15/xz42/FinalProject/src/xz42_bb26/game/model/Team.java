@@ -53,7 +53,7 @@ public class Team implements Serializable {
 		positions.add(aPos);
 		LengthMeasurer measurer = new LengthMeasurer(positions);
 		Model worldModel = (Model)WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
-		measurer.setFollowTerrain(true);
+		measurer.setFollowTerrain(false);
 		consume(measurer.getLength(worldModel.getGlobe()));
 		if(supply > 0){
 			myLocation = aPos;
@@ -64,7 +64,7 @@ public class Team implements Serializable {
 	}
 	
 	private void consume(double length){
-		this.supply -= length;
+		this.supply -= 0.001*length;
 	}
 	
 	public void checkWin(){
