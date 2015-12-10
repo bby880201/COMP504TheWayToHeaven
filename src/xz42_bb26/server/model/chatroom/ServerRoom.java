@@ -1049,7 +1049,7 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public String apply(Class<?> index, DataPacket<AAddMe> host,
 					IChatUser... params) {
-				return null;
+				return "Connection from " + params[0] + " rejected!";
 			}
 
 			@Override

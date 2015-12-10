@@ -121,6 +121,7 @@ public class ChatroomWithAdapter implements IChatroom {
 		
 		stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_CLIENT);
 
+		displayName = "Boyang & Xiaolei's room";
 		users.put(stub,null);
 		initMe = null;
 		
@@ -682,11 +683,6 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @return display of this chatroom
 	 */
 	public String getName() {
-		if (users.size() > 0) {
-			displayName = "Chat with " + Integer.toString(users.size()) + "members";
-		} else {
-			displayName = "Empty room";
-		}
 		return displayName;
 	}
 
