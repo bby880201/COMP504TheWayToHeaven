@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
+import gov.nasa.worldwind.globes.Earth;
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.render.Box;
@@ -47,6 +48,9 @@ public class GameView extends JFrame {
 			public void run() {
 				initGUI();
 				mapPanel.start();
+				if(!model.isNavigator()){
+					mapPanel.addLayer(iconLayer);
+				}
 				mapPanel.addLayer(sLayer);
 			    setVisible(true);
 			}
@@ -74,7 +78,7 @@ public class GameView extends JFrame {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		
-		mapPanel = new MapPanel();
+		mapPanel = new MapPanel(Earth.class);
 		mapPanel.setPreferredSize(new java.awt.Dimension(800, 600));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
@@ -112,7 +116,7 @@ public class GameView extends JFrame {
 			infoPanel.add(destLabel, gbc_destLabel);
 		}
 		else{
-			mapPanel.addLayer(iconLayer);
+
 			dutyLabel.setText("You are the resource manager");
 			JLabel cashLabel = new JLabel("Current Cash: $100");
 			GridBagConstraints gbc_cashLabel = new GridBagConstraints();
