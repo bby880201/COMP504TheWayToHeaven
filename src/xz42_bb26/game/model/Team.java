@@ -56,6 +56,8 @@ public class Team implements Serializable {
 		consume(measurer.getLength(worldModel.getGlobe()));
 		if(supply > 0){
 			myLocation = aPos;
+			myLatitude = aPos.getLatitude().getDegrees();
+			myLongtitude = aPos.getLongitude().getDegrees();
 		}
 		else{
 			model.sendGameOver();
