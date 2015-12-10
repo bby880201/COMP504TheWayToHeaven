@@ -558,8 +558,9 @@ public class ServerRoom implements IChatroom {
 			public String apply(Class<?> index, DataPacket<InstallGameMessage> host,
 					IChatUser... params) {
 				UUID uuid = host.getData().getID();
+				String teamName = host.getData().getTeamName();
 				
-				GameController gameController = new GameController(uuid, me, teamList.get(uuid).getName(), host.getData().isNavigator());
+				GameController gameController = new GameController(uuid, me, teamName, host.getData().isNavigator());
 				try {
 					gameController.start();
 				} catch (RemoteException e) {
