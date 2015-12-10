@@ -474,7 +474,7 @@ public class ServerModel {
 	public TeamRoom creatTeam(IChatUser srv, ChatUserEntity mb) {
 		if (tempTeam == null) {
 			try {
-				tempTeam = new TeamRoom(mb + "'s team", srv, mb);
+				tempTeam = new TeamRoom(mb + "'s team", srv);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -497,7 +497,6 @@ public class ServerModel {
 
 		}
 		else{
-			tempTeam.setManager(mb);
 			IInitUser init = connectTo(mb.getIp());
 			AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) tempTeam, false);
 			

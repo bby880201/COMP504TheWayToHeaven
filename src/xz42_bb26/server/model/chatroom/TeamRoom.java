@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.omg.PortableInterceptor.USER_EXCEPTION;
+
+import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.user.ChatUser;
@@ -19,7 +22,10 @@ import xz42_bb26.server.model.user.IChatUser2ModelAdapter;
 import xz42_bb26.server.model.user.IGameUser;
 import common.IChatUser;
 import common.IChatroom;
+import common.ICmd2ModelAdapter;
 import common.message.IChatMessage;
+import common.message.chat.AAddMe;
+import common.message.chat.AChatUserInfoResponse;
 
 /**
  * @author bb26
@@ -37,102 +43,50 @@ public class TeamRoom extends ServerRoom {
 	private IGameUser navig;
 	
 	private IGameUser manag;
-		
-	private final HashSet<IChatUser> stubList;
-		
+				
 	private String teamName;
 	
-	private IChatUser prestub;
-	
-	private IChatUser serverInRm;
-	
-	public TeamRoom(String name, IChatUser srv, ChatUserEntity memb1) throws Exception {
+	public TeamRoom(String name, IChatUser srv) throws Exception {
 		super();
-		server = srv;
-		navig = new GameUser(memb1, true);
-		teamName = name;
-		stubList = new HashSet<IChatUser>();
+		this.setName(name);
 		
-		try {
-			prestub = new ChatUser("serverInRoom", new IChatUser2ModelAdapter(){
-				
-				@Override
-				public <T> void receive(IChatUser remote,
-						DataPacket<? extends IChatMessage> dp) {
-					System.out.println(dp);				
-				}
-			});
-			
-			serverInRm = (IChatUser) UnicastRemoteObject.exportObject(prestub, IChatUser.BOUND_PORT_SERVER);
-			stubList.add(serverInRm);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
+		server = srv;
+		navig = null;
+		manag = null;
+		
+		msgAlgo.setCmd(AChatUserInfoResponse.class, new ADataPacketAlgoCmd<String, AChatUserInfoResponse, IChatUser>() {
 
-	public void setManager(ChatUserEntity man) {
-		manag = new GameUser(man, false);
-	}
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5105304030772119307L;
 
-	/* (non-Javadoc)
-	 * @see common.IChatroom#getName()
-	 */
-	@Override
-	public String getName() {
-		return teamName;
-	}
-
-	/* (non-Javadoc)
-	 * @see common.IChatroom#setName(java.lang.String)
-	 */
-	@Override
-	public void setName(String name) {
-		teamName = name;
-	}
-
-	/* (non-Javadoc)
-	 * @see common.IChatroom#getUsers()
-	 */
-	@Override
-	public HashSet<IChatUser> getUsers() {
-		return stubList;
-	}
-
-	/* (non-Javadoc)
-	 * @see common.IChatroom#addUser(common.IChatUser)
-	 */
-	@Override
-	public boolean addUser(IChatUser user) {
-		return stubList.add(user);
-	}
-
-	/* (non-Javadoc)
-	 * @see common.IChatroom#removeUser(common.IChatUser)
-	 */
-	@Override
-	public boolean removeUser(IChatUser user) {
-		return stubList.remove(user);
-	}
-
-	/* (non-Javadoc)
-	 * @see common.IChatroom#send(common.IChatUser, common.message.IChatMessage)
-	 */
-	@Override
-	public void send(IChatUser sender, IChatMessage message) {
-		(new Thread() {
 			@Override
-			public void run() {
-				try {
-					for (IChatUser stub:stubList){
-						if (!(sender.equals(stub))){
-							stub.receive(sender, message.getDataPacket());
-						}
-					}
-				} catch (RemoteException e) {
-					e.printStackTrace();
+			public String apply(Class<?> index,
+					DataPacket<AChatUserInfoResponse> host, IChatUser... params) {
+				
+				ChatUserEntity info = userInfo.get(host.getData().getID());
+				info.setIp(host.getData().getIP());
+				info.setName(host.getData().getName());
+				
+				users.put(params[0], info);
+				userInfo.remove(host.getData().getID());
+				
+				if (null==navig){
+					navig = new GameUser(info, true);
+					return "Player: " + info + "act as navigator";
 				}
+				else {
+					manag = new GameUser(info, false);
+					return "Player: " + info + "act as manager";
+				}
+				
 			}
-		}).start();
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {				
+			}
+		});
 	}
 	
 	@Override
