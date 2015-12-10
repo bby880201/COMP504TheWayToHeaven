@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.swing.Timer;
 
+import com.sun.prism.Presentable;
 
 import common.IChatUser;
 import gov.nasa.worldwind.Model;
@@ -75,7 +76,7 @@ public class GameModel {
 	 */
 	private String userName;
 	
-	public HashMap<Position,Depot> depots= new HashMap<>();
+	public HashMap<UUID,Depot> depots= new HashMap<UUID, Depot>();
 	
 	private boolean inGame;
 	
@@ -85,7 +86,7 @@ public class GameModel {
 	
 	PulsingIcon desIcon;
 	
-	private HashMap<Position, PulsingIcon> depotsIcons;
+	private HashMap<UUID, PulsingIcon> depotsIcons;
 	/**
 	 * Constructor of the game model.
 	 * @param view A model to view adapter.
@@ -216,7 +217,7 @@ public class GameModel {
 				public void setDepots(Set<Depot> _depots) {
 					for (Depot depot : _depots) {
 						depot.position = Position.fromDegrees(depot.latitude, depot.longitude);
-						depots.put(depot.position, depot);
+						depots.put(depot.uuid, depot);
 					}
 					initBoxes();
 					renderDepots();
@@ -228,10 +229,10 @@ public class GameModel {
 				}
 
 				@Override
-				public void teamConsume(Position getaDepot) {
-					depots.remove(getaDepot);
-					depotsIcons.get(getaDepot).stop();
-					depotsIcons.get(getaDepot).setVisible(false);
+				public void teamConsume(UUID id) {
+					depots.remove(id);
+					depotsIcons.get(id).stop();
+					depotsIcons.get(id).setVisible(false);
 					
 				}
 
@@ -248,16 +249,16 @@ public class GameModel {
 	private void renderDepots() {
 		depotsIcons = new HashMap<>();
 		for (Depot depot : depots.values()) {
-			PulsingIcon icon = new PulsingIcon(circleYellow, depot.position, 100);
+			PulsingIcon icon = new PulsingIcon(circleYellow,depot.uuid, depot.position, 100);
 			icon.setSize(new Dimension(20, 20));
 			icon.setToolTipText(depot.price.toString());
 			icon.setVisible(true);
-			depotsIcons.put(icon.getPosition(), icon);
+			depotsIcons.put(depot.uuid, icon);
 			view.getIconLayer().addIcon(icon);
 		}
 
 		BufferedImage circleRed = createBitmap(PatternFactory.PATTERN_CIRCLE, Color.RED);
-		desIcon = new PulsingIcon(circleRed, Position.fromDegrees(29, -95), 20);
+		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 20);
 		desIcon.setVisible(false);
 		desIcon.setSize(new Dimension(10,10));
 		desIcon.setAlwaysOnTop(true);
@@ -398,6 +399,8 @@ public class GameModel {
 		 * Timer for pulsing.
 		 */
 		protected Timer timer;
+		
+		private UUID uuid;
 
 		/**
 		 * Constructor of PulsingIcon.
@@ -406,10 +409,11 @@ public class GameModel {
 		 * @param frequency Pulsing frequency.
 		 * @param uuid UUID of the icon.
 		 */
-		private PulsingIcon(Object imageSource, Position pos, int frequency){
+		private PulsingIcon(Object imageSource,UUID id, Position pos, int frequency){
 
 			super(imageSource, pos);
 			this.bgIconPath = imageSource;
+			this.uuid = id;
 	
 			if (timer == null) {
 				timer = new Timer(frequency, new ActionListener() {
@@ -418,8 +422,8 @@ public class GameModel {
 						view.update();
 							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.01){
 								timer.stop();
-								team.buySupply(depots.get(PulsingIcon.this.getPosition()));
-								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(PulsingIcon.this.getPosition()));
+								team.buySupply(depots.get(PulsingIcon.this.uuid));
+								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
 								depots.remove(depots.get(PulsingIcon.this.getPosition()));
 								//TO DO send message to tell everyone the depot is comsumed
 								PulsingIcon.this.setVisible(false);
