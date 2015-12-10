@@ -183,10 +183,13 @@ public class GameModel {
 				@Override
 				public void updateTeamInfo(Team _team) {
 					if(_team.uuid == team.uuid){
+						System.out.println("your team is moving"+_team.toString());
 						myBox.move(_team.myLatitude, _team.myLongtitude);
+						_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
 						team = _team;
 					}
 					else{
+						System.out.println("other team is moving"+_team.toString());
 						TeamBox aBox = boxList.get(_team.uuid);
 						if(aBox==null){
 							aBox= makeTeamBox(_team.uuid,Angle.fromDegrees(63), 
