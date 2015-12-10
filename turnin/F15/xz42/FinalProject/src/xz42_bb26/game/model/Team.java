@@ -1,5 +1,6 @@
 package xz42_bb26.game.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,18 +14,20 @@ import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
 
-public class Team {
+public class Team implements Serializable {
 	public UUID uuid;
 	
 	public double supply;
 	
 	public double cash;
 	
-	public Position myPosition;
+	public transient Position myLocation;
+	
+	public double myLatitude;
+	
+	public double myLongtitude;
 	
 	public boolean isNavigator= true;
-	
-	public Position destination;
 
 	public String name;
 
@@ -43,14 +46,15 @@ public class Team {
 	
 	public void moveTo(Position aPos){
 		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(myPosition);
+		myLocation = Position.fromDegrees(myLatitude, myLongtitude);
+		positions.add(myLocation);
 		positions.add(aPos);
 		LengthMeasurer measurer = new LengthMeasurer(positions);
 		Model worldModel = (Model)WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
 		measurer.setFollowTerrain(true);
 		consume(measurer.getLength(worldModel.getGlobe()));
 		if(supply > 0){
-			myPosition = aPos;
+			myLocation = aPos;
 		}
 		else{
 			model.sendGameOver();

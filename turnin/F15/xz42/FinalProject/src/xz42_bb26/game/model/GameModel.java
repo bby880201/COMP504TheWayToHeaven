@@ -184,7 +184,8 @@ public class GameModel {
 								Material.BLUE, team.name);
 						boxList.put(team.uuid, aBox);
 					}
-					aBox.move(team.myPosition.getLatitude().getDegrees(), team.myPosition.getLongitude().getDegrees());
+					team.myLocation = Position.fromDegrees(team.myLatitude, team.myLongtitude);
+					aBox.move(team.myLocation.getLatitude().getDegrees(), team.myLocation.getLongitude().getDegrees());
 					teams.put(team.uuid, team);
 				}
 
