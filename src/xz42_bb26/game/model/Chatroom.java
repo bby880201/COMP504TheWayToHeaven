@@ -380,30 +380,56 @@ public class Chatroom implements IChatroom {
 		});
 		
 		// command for chat user info request
-				msgAlgo.setCmd(TeamComsumeDepot.class, new ADataPacketAlgoCmd<String, TeamComsumeDepot, IChatUser>() {
+		msgAlgo.setCmd(TeamComsumeDepot.class, new ADataPacketAlgoCmd<String, TeamComsumeDepot, IChatUser>() {
 
-					/**
-					 * declare a static final serialVersionUID of type long to fix the warning
-					 */
-					private static final long serialVersionUID = 2964027427383796628L;
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+			private static final long serialVersionUID = 2964027427383796628L;
 
-					@Override
-					/**
-					 * Set the ICmd2ModelAdapter of this command
-					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-					 */
-					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-						_cmd2ModelAdpt = cmd2ModelAdpt;
-					}
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
 
-					@Override
-					public String apply(Class<?> index,
-							DataPacket<TeamComsumeDepot> host, IChatUser... params) {
-						model.teamConsume(host.getData().getaDepot());
-						return "a Team is out";
-					}
-				});
-		
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<TeamComsumeDepot> host, IChatUser... params) {
+				model.teamConsume(host.getData().getaDepot());
+				return "a Team is out";
+			}
+		});
+		msgAlgo.setCmd(Begin.class, new ADataPacketAlgoCmd<String, Begin, IChatUser>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6681106016892170401L;
+
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<Begin> host, IChatUser... params) {
+				model.gameBigin();
+				return "a Team is out";
+			}
+		});
 	}
 
 

@@ -150,9 +150,9 @@ public class GameView extends JFrame {
 	}
 
 	public void gameBegin() {
-		mapPanel.setPosition(Position.fromDegrees(63, -151,3000000), true);
 		statusLabel.setText("In game.");
 		JOptionPane.showMessageDialog(this, "Game Start!!!");
+		mapPanel.setPosition(Position.fromDegrees(63, -151,3000000), true);
 	}
 
 	public void aTeamWins(Team team) {
