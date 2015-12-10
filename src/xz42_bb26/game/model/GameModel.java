@@ -99,7 +99,7 @@ public class GameModel {
 		team.myLongtitude = -151;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
-		team.cash = 10000;
+		team.cash = 200;
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
@@ -232,7 +232,13 @@ public class GameModel {
 				@Override
 				public void aTeamWins(UUID id) {
 					inGame = false;
-					view.aTeamWins(teams.get(id));
+					if(id.equals(team.uuid)){
+						view.aTeamWins(team);
+					}
+					else{
+						view.aTeamWins(teams.get(id));
+					}
+					
 				}
 
 				@Override
