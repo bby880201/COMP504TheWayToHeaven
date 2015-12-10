@@ -131,6 +131,7 @@ public class ChatAppMainModel {
 					
 					// creates a new local copy of the chatroom 
 					ChatroomWithAdapter room = new ChatroomWithAdapter(remoteRoom.getID());
+					room.setName(remoteRoom.getName());
 					boolean adptAdded = room.setChatWindowAdapter(toView.makeChatRoom(room));
 
 					// add user to chatroom after adapter is installed
