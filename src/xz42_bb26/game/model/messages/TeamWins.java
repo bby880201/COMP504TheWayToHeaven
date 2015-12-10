@@ -25,4 +25,18 @@ public class TeamWins extends ARequest implements IChatMessage {
 		return new DataPacket<TeamWins>(TeamWins.class, this);
 	}
 
+	/**
+	 * @return the teamID
+	 */
+	public UUID getTeamID() {
+		return teamID;
+	}
+
+	/**
+	 * @param teamID the teamID to set
+	 */
+	public void setTeamID(UUID teamID) {
+		this.teamID = teamID;
+	}
+
 }

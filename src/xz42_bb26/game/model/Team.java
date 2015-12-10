@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.annotation.Resource;
+
+import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
+
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -62,7 +66,10 @@ public class Team implements Serializable {
 		this.supply -= 0.001*length;
 	}
 	
-	public void checkWin(){
-		
+	public void checkWin(){	
+	}
+	
+	public String toString(){
+		return uuid+"team: "+name+"is now on "+myLatitude+","+myLongtitude+"with cash "+cash+"and supply "+supply; 
 	}
 }
