@@ -113,6 +113,7 @@ public class GameModel {
 	
 	public void moveTo(Position pos){
 		team.moveTo(pos);
+		globalChatroom.IMove(team);
 		myBox.move(pos.getLatitude().getDegrees(), pos.getLongitude().getDegrees());
 	}
 	/**
@@ -175,17 +176,26 @@ public class GameModel {
 			globalChatroom.setChatroom2ModelAdapter(new IChatroom2ModelAdapter() {
 
 				@Override
-				public void updateTeamInfo(Team team) {
-					TeamBox aBox = boxList.get(team.uuid);
-					if(aBox==null){
-						aBox= makeTeamBox(team.uuid,Angle.fromDegrees(63), 
-								Angle.fromDegrees(-151), 
-								Material.BLUE, team.name);
-						boxList.put(team.uuid, aBox);
+				public void updateTeamInfo(Team _team) {
+					if(_team.uuid == team.uuid){
+						if(team.myLatitude != this.getTeam().myLatitude || team.myLongtitude!= this.getTeam().myLongtitude){
+							myBox.move(_team.myLatitude, _team.myLongtitude);
+							team.moveTo(Position.fromDegrees(_team.myLatitude, _team.myLongtitude));
+						}
 					}
-					team.myLocation = Position.fromDegrees(team.myLatitude, team.myLongtitude);
-					aBox.move(team.myLocation.getLatitude().getDegrees(), team.myLocation.getLongitude().getDegrees());
-					teams.put(team.uuid, team);
+					else{
+						TeamBox aBox = boxList.get(_team.uuid);
+						if(aBox==null){
+							aBox= makeTeamBox(_team.uuid,Angle.fromDegrees(63), 
+									Angle.fromDegrees(-151), 
+									Material.BLUE, _team.name);
+							boxList.put(_team.uuid, aBox);
+						}
+						_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
+						aBox.move(_team.myLatitude, _team.myLongtitude);
+						teams.put(_team.uuid, _team);
+					}
+					
 				}
 
 				@Override
@@ -332,7 +342,6 @@ public class GameModel {
 						if (worldModel.getGlobe().getElevationModel().getElevation(curPos.getLatitude(), curPos.getLongitude())>5) {
 							TeamBox.this.moveTo(curPos);
 							oriPos = curPos;
-							team.moveTo(curPos);
 
 						} else {
 							n=2;
