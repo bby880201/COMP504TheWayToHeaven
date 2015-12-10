@@ -992,8 +992,10 @@ public class ServerRoom implements IChatroom {
 	}
 
 	public void addTeam(TeamRoom team) {
-		teamList.put(team.getID(),team);
-		refreshTeam();		
+		if (null!=team){
+			teamList.put(team.getID(),team);
+			refreshTeam();	
+		}	
 	}
 	
 	private void refreshTeam() {

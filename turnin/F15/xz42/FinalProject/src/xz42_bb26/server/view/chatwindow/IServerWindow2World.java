@@ -98,7 +98,7 @@ public interface IServerWindow2World<T> {
 		}
 
 		@Override
-		public void createTeam(List<Object> members) {
+		public void createTeam(Object member) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -112,7 +112,7 @@ public interface IServerWindow2World<T> {
 
 	public void installGame();
 	
-	public void createTeam(List<T> members);
+	public void createTeam(T member);
 
 	public void rejectConnection();
 }

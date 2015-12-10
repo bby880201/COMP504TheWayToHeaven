@@ -66,6 +66,8 @@ public class ServerModel {
 	
 	private String ip;
 
+	private TeamRoom tempTeam;
+
 	/**
 	 * Constructor that takes an instance of IModel2ViewAdapter
 	 * @param toViewAdapter An instance of IModel2ViewAdapter
@@ -469,27 +471,49 @@ public class ServerModel {
 		return ip;
 	}
 
-	public TeamRoom creatTeam(IChatUser srv, List<ChatUserEntity> mbs) {
-		ChatUserEntity memb1 = mbs.get(0);
-		ChatUserEntity memb2 = mbs.get(1);
-		TeamRoom team = new TeamRoom("team_" + memb1 + "&" + memb2, srv,memb1,memb2);
-		
-		IInitUser init1 = connectTo(memb1.getIp());
-		IInitUser init2 = connectTo(memb2.getIp());
-		AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) team, false);
-		
-		(new Thread() {
-			@Override
-			public void run() {
-				try {				
-					init1.receive(me, invite.getDataPacket());
-					init2.receive(me, invite.getDataPacket());					
-				} catch (Exception e) {
-					System.out.println("Create room failed: " + e + "\n");
-					e.printStackTrace();
-				}
+	public TeamRoom creatTeam(IChatUser srv, ChatUserEntity mb) {
+		if (tempTeam == null) {
+			try {
+				tempTeam = new TeamRoom(mb + "'s team", srv, mb);
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-		}).start();
-		return team;
+			
+			IInitUser init = connectTo(mb.getIp());
+			AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) tempTeam, false);
+
+			(new Thread() {
+				@Override
+				public void run() {
+					try {				
+						init.receive(me, invite.getDataPacket());
+					} catch (Exception e) {
+						System.out.println("Create room failed: " + e + "\n");
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			return tempTeam;
+
+		}
+		else{
+			tempTeam.setManager(mb);
+			IInitUser init = connectTo(mb.getIp());
+			AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) tempTeam, false);
+			
+			(new Thread() {
+				@Override
+				public void run() {
+					try {				
+						init.receive(me, invite.getDataPacket());
+					} catch (Exception e) {
+						System.out.println("Create room failed: " + e + "\n");
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			
+			return null;
+		}		
 	}
 }

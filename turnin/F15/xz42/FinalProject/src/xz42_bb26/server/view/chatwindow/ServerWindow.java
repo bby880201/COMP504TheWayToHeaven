@@ -225,14 +225,11 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		 */
 		btnCreateTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Usr> teamMems = lsMember.getSelectedValuesList();
-				if (teamMems.size() == 2) {
-					toChatroomAdapt.rejectConnection();
-					toChatroomAdapt.createTeam(teamMems);
-				}
-				else {
-					append("Please select two members to create a new team!\n");
-				}
+				toChatroomAdapt.rejectConnection();
+				Usr selected = lsMember.getSelectedValue();
+				if (null != selected) {
+					toChatroomAdapt.createTeam(selected);
+				}				
 			}
 		});
 		/**
