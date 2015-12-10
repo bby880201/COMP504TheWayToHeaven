@@ -343,7 +343,7 @@ public class GameModel {
 //				this.limit = limit;
 
 			if (timer==null) {
-				timer = new Timer(200, new ActionListener() {
+				timer = new Timer(500, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {		
 						//calculate speed: 1.0/5 Nautical mile/200 msec
 						
@@ -357,7 +357,9 @@ public class GameModel {
 						if (worldModel.getGlobe().getElevationModel().getElevation(curPos.getLatitude(), curPos.getLongitude())>5) {
 							TeamBox.this.moveTo(curPos);
 							team.moveTo(curPos);
-							globalChatroom.IMove(team);
+							if(isNavigator()){
+								globalChatroom.IMove(team);
+							}
 							oriPos = curPos;
 
 						} else {
