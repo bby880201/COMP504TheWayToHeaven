@@ -1,6 +1,7 @@
 package xz42_bb26.game.model;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import gov.nasa.worldwind.geom.Position;
@@ -15,7 +16,7 @@ public interface IChatroom2ModelAdapter {
 
 	void aTeamWins(UUID id);
 
-	void setDepots(HashMap<Position, Depot> depots);
+	void setDepots(Set<Depot> depots);
 
 	Team getTeam();
 

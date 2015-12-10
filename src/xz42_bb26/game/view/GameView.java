@@ -50,12 +50,15 @@ public class GameView extends JFrame {
 			public void run() {
 				initGUI();
 				mapPanel.start();
-				mapPanel.setPosition(Position.fromDegrees(63, -151, 50000), true);
+
 				if(!model.isNavigator()){
 					mapPanel.addLayer(iconLayer);
 				}
 				mapPanel.addLayer(sLayer);
+				setLocationRelativeTo(null);
 			    setVisible(true);
+			   
+//				
 			}
 		});
 	}
@@ -147,7 +150,7 @@ public class GameView extends JFrame {
 	}
 
 	public void gameBegin() {
-		mapPanel.setPosition(Position.fromDegrees(63, -151, 50000), true);
+		mapPanel.setPosition(Position.fromDegrees(63, -151,3000000), true);
 		statusLabel.setText("In game.");
 		JOptionPane.showMessageDialog(this, "Game Start!!!");
 	}

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.swing.Timer;
@@ -25,6 +26,7 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.UserFacingIcon;
+import gov.nasa.worldwindx.applications.sar.actions.DeletePositionsAction;
 import javafx.geometry.Pos;
 import provided.datapacket.DataPacket;
 import xz42_bb26.game.controller.IViewAdapter;
@@ -204,8 +206,10 @@ public class GameModel {
 				}
 
 				@Override
-				public void setDepots(HashMap<Position, Depot> _depots) {
-					depots = _depots;
+				public void setDepots(Set<Depot> _depots) {
+					for (Depot depot : _depots) {
+						depots.put(depot.location, depot);
+					}
 					initBoxes();
 					renderDepots();
 				}
