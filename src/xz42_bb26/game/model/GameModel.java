@@ -277,14 +277,22 @@ public class GameModel {
 			if(!isNavigator()){
 				icon.setVisible(true);
 			}
+			else{
+				icon.setVisible(false);
+			}
 			depotsIcons.put(depot.uuid, icon);
 			view.getIconLayer().addIcon(icon);
 		}
 
 		BufferedImage circleRed = createBitmap(PatternFactory.PATTERN_CIRCLE, Color.RED);
-		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 500);
-		desIcon.setVisible(true);
+		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29.71724, -95.40150), 500);
 		desIcon.setSize(new Dimension(20,20));
+		if(!isNavigator()){
+			desIcon.setVisible(true);
+		}
+		else{
+			desIcon.setVisible(false);
+		}
 		desIcon.setAlwaysOnTop(true);
 		view.getIconLayer().addIcon(desIcon);
 		
@@ -448,7 +456,7 @@ public class GameModel {
 						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
 							System.out.println("getIntoRangeOfAIcon");
 							timer.stop();
-							if(this.equals(desIcon)){
+							if(PulsingIcon.this.equals(desIcon)){
 								System.out.println("getIntoRangeOfDestination");
 								globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
 							}
