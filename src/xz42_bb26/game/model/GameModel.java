@@ -25,9 +25,11 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.UserFacingIcon;
+import javafx.geometry.Pos;
 import provided.datapacket.DataPacket;
 import xz42_bb26.game.controller.IViewAdapter;
 import xz42_bb26.game.model.messages.ProvideGameUser;
+import xz42_bb26.game.model.messages.TeamComsumeDepot;
 import xz42_bb26.game.model.messages.TeamOut;
 
 public class GameModel {
@@ -80,6 +82,8 @@ public class GameModel {
 	private TeamBox myBox;
 	
 	PulsingIcon desIcon;
+	
+	private HashMap<Position, PulsingIcon> depotsIcons;
 	/**
 	 * Constructor of the game model.
 	 * @param view A model to view adapter.
@@ -211,6 +215,14 @@ public class GameModel {
 					return team;
 				}
 
+				@Override
+				public void teamConsume(Position getaDepot) {
+					depots.remove(getaDepot);
+					depotsIcons.get(getaDepot).stop();
+					depotsIcons.get(getaDepot).setVisible(false);
+					
+				}
+
 
 			});
 			ProvideGameUser provideGameUser = new ProvideGameUser(globalChatroom.getMe());
@@ -222,10 +234,12 @@ public class GameModel {
 	}
 
 	private void renderDepots() {
+		depotsIcons = new HashMap<>();
 		for (Depot depot : depots.values()) {
 			PulsingIcon icon = new PulsingIcon(circleYellow, depot.location, 100);
 			icon.setSize(new Dimension(20, 20));
 			icon.setVisible(true);
+			depotsIcons.put(icon.getPosition(), icon);
 			view.getIconLayer().addIcon(icon);
 		}
 
@@ -341,7 +355,7 @@ public class GameModel {
 		/**
 		 * Stop the timer.
 		 */
-		protected void stop(){
+		public void stop(){
 			timer.stop();
 		}
 		
@@ -392,6 +406,8 @@ public class GameModel {
 							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.01){
 								timer.stop();
 								team.buySupply(depots.get(PulsingIcon.this.getPosition()));
+								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(PulsingIcon.this.getPosition()));
+								depots.remove(depots.get(PulsingIcon.this.getPosition()));
 								//TO DO send message to tell everyone the depot is comsumed
 								PulsingIcon.this.setVisible(false);
 						}
@@ -409,6 +425,9 @@ public class GameModel {
 		 */
 		private void starTimer(){
 			timer.start();
+		}
+		public void stop(){
+			timer.stop();
 		}
 	}
 	
