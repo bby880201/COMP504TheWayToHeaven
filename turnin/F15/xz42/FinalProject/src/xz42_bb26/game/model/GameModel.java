@@ -96,8 +96,10 @@ public class GameModel {
 		this.inGame = false;
 		team = new Team(this);
 		team.uuid = teamUUID;
+		team.supply = 20000;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
+		team.cash = 1000;
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
