@@ -63,6 +63,12 @@ public class GameController {
 			public IconLayer getIconLayer() {
 				return view.getIconLayer();
 			}
+
+			@Override
+			public void gameOver() {
+				view.gameOver();
+				
+			}
 			
 		},teamID, server,teamName,isNavigator);
 		view = new GameView(new IModelAdapter() {

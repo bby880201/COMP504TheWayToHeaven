@@ -160,4 +160,9 @@ public class GameView extends JFrame {
 		JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
 	}
 
+	public void gameOver() {
+		statusLabel.setText("You ran out of recources or money");
+		JOptionPane.showMessageDialog(this, "Game Over! You lose for out of resources.");
+	}
+
 }

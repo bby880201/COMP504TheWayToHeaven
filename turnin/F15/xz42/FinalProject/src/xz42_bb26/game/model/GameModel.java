@@ -97,10 +97,10 @@ public class GameModel {
 		team = new Team();
 		team.setModel(this);
 		team.uuid = teamUUID;
-		team.supply = 20000;
+		team.supply = 2000000000;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
-		team.cash = 1000;
+		team.cash = 10000000;
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
@@ -200,7 +200,10 @@ public class GameModel {
 
 				@Override
 				public void aTeamOut(UUID id) {
-					boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
+					if(id!=team.uuid){
+						boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
+					}
+					
 				}
 
 				@Override
@@ -462,6 +465,7 @@ public class GameModel {
 		TeamOut aTeamOutMessage = new TeamOut(team.uuid);
 		globalChatroom.send(globalChatroom.getMe(), aTeamOutMessage);
 		this.inGame = false;
+		view.gameOver();
 	}
 
 	public void buySupply(Depot depot) {
