@@ -18,8 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import xz42_bb26.game.controller.GameController;
+import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.Ready;
+import xz42_bb26.server.model.GameUtils;
 import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.messages.StringMessage;
 import xz42_bb26.server.model.messages.UnknownTypeData;
@@ -109,6 +111,7 @@ public class ServerRoom implements IChatroom {
 	private transient Set<IChatUser> players = new HashSet<IChatUser>();
 	
 	private boolean isPlayable = false;
+	
 
 	/**
 	 * Constructor that takes in user name and user id as parameter
@@ -622,7 +625,22 @@ public class ServerRoom implements IChatroom {
 				players.add(player);
 				if (players.size() == teamList.size()*2){
 					setPlayable(true);
-					Ready gameReady = new Ready(players, null);
+					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(100, 47,58 ,-93, -102, 1, 10);
+					Ready gameReady = new Ready(players,depots);
+					
+					(new Thread(){
+						@Override
+						public void run(){
+							for (IChatUser usr: players) {
+								try {
+									usr.receive(me, gameReady.getDataPacket());
+								} catch (RemoteException e) {
+									System.out.println("Sending Ready message failed in ServerRoom:");
+									e.printStackTrace();
+								}
+							}
+						}
+					}).start();
 					
 				}
 				return "Receive " + players.size() + " players' response";

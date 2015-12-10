@@ -8,11 +8,15 @@ import gov.nasa.worldwind.geom.Position;
 import xz42_bb26.game.model.Depot;
 
 public class GameUtils {
+	static public GameUtils singleton = new GameUtils();
+	
+	private GameUtils(){};
+	
 	public Set<Depot> generateRandomDepots(int number, double left, double right, double top, double bottom, int min, int max){
 		Set<Depot> result = new HashSet<Depot>();
 		for(int i=0;i<number;i++){
 			Depot aDepot = new Depot();
-			aDepot.location = Position.fromDegrees(randomDouble(left, right), randomDouble(bottom, top));
+			aDepot.location = Position.fromDegrees(randomDouble(left, right), randomDouble(top, bottom));
 			aDepot.price = randomInt(min, max);
 			result.add(aDepot);
 		}

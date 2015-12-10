@@ -20,9 +20,9 @@ public class Ready extends ARequest implements IChatMessage {
 	
 	private Set<IChatUser> users;
 	
-	private HashMap<Position, Depot> depots;
+	private Set<Depot> depots;
 	
-	public Ready(Set<IChatUser> users, HashMap<Position, Depot> depots) {
+	public Ready(Set<IChatUser> users, Set<Depot> depots) {
 		this.users = users;
 		this.depots = depots;
 	}
@@ -31,7 +31,7 @@ public class Ready extends ARequest implements IChatMessage {
 		return this.users;
 	}
 
-	public HashMap<Position, Depot> getDepots() {
+	public Set<Depot> getDepots() {
 		return depots;
 	}
 	@Override
