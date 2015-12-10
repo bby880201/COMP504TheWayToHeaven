@@ -332,7 +332,7 @@ public class Chatroom implements IChatroom {
 			public String apply(Class<?> index,
 					DataPacket<TeamOut> host, IChatUser... params) {
 				model.aTeamOut(host.getData().getID());
-				return "a Team is out";
+				return host.getData().getID()+"is out";
 			}
 		});
 		

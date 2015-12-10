@@ -37,6 +37,7 @@ public class Team implements Serializable {
 		cash -= depot.price;
 		supply +=10000;
 		if(cash < 0){
+			System.out.println("run out of money with "+cash);
 			model.sendGameOver();
 		}
 	}
@@ -60,6 +61,7 @@ public class Team implements Serializable {
 			myLongtitude = aPos.getLongitude().getDegrees();
 		}
 		else{
+			System.out.println("run out of supply with "+supply);
 			model.sendGameOver();
 		}
 	}
