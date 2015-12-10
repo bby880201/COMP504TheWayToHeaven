@@ -29,6 +29,7 @@ import xz42_bb26.game.controller.IViewAdapter;
 import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.TeamComsumeDepot;
 import xz42_bb26.game.model.messages.TeamOut;
+import xz42_bb26.game.model.messages.TeamWins;
 
 public class GameModel {
 	/**
@@ -429,12 +430,18 @@ public class GameModel {
 					public void actionPerformed(ActionEvent e) {
 						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
 						view.update(team);
-							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.01){
+							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
 								timer.stop();
-								team.buySupply(depots.get(PulsingIcon.this.uuid));
-								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
-								depots.remove(depots.get(PulsingIcon.this.getPosition()));
-								PulsingIcon.this.setVisible(false);
+								if(this.equals(desIcon)){
+									globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
+								}
+								else{
+									team.buySupply(depots.get(PulsingIcon.this.uuid));
+									globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
+									depots.remove(depots.get(PulsingIcon.this.getPosition()));
+									PulsingIcon.this.setVisible(false);
+								}
+								
 						}
 					}
 				});

@@ -20,6 +20,10 @@ public class TeamWins extends ARequest implements IChatMessage {
 	 */
 	private static final long serialVersionUID = 7303350744402421839L;
 
+	
+	public TeamWins(UUID uuid) {
+		teamID = uuid;
+	}
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<TeamWins>(TeamWins.class, this);
