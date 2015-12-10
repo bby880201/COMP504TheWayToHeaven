@@ -116,8 +116,7 @@ public class GameModel {
 	
 	public void moveTo(Position pos){
 		if(inGame){
-			team.moveTo(pos);
-			globalChatroom.IMove(team);
+			
 			myBox.move(pos.getLatitude().getDegrees(), pos.getLongitude().getDegrees());
 		}	
 	}
@@ -354,6 +353,8 @@ public class GameModel {
 						TeamBox.this.setHeading(LatLon.greatCircleAzimuth(oriPos, desPos));
 						if (worldModel.getGlobe().getElevationModel().getElevation(curPos.getLatitude(), curPos.getLongitude())>5) {
 							TeamBox.this.moveTo(curPos);
+							team.moveTo(curPos);
+							globalChatroom.IMove(team);
 							oriPos = curPos;
 
 						} else {
