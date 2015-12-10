@@ -94,7 +94,8 @@ public class GameModel {
 		view = iViewAdapter;
 		this.server =server;
 		this.inGame = false;
-		team = new Team(this);
+		team = new Team();
+		team.setModel(this);
 		team.uuid = teamUUID;
 		team.supply = 20000;
 		team.isNavigator = _isNavigator;
@@ -246,6 +247,7 @@ public class GameModel {
 		for (Depot depot : depots.values()) {
 			PulsingIcon icon = new PulsingIcon(circleYellow, depot.position, 100);
 			icon.setSize(new Dimension(20, 20));
+			icon.setToolTipText(depot.price.toString());
 			icon.setVisible(true);
 			depotsIcons.put(icon.getPosition(), icon);
 			view.getIconLayer().addIcon(icon);

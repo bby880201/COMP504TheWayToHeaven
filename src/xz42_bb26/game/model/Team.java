@@ -13,6 +13,7 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
+import javafx.scene.control.SelectionModel;
 
 public class Team implements Serializable {
 	public UUID uuid;
@@ -31,7 +32,7 @@ public class Team implements Serializable {
 
 	public String name;
 
-	private GameModel model;
+	private transient GameModel model;
 	
 	public void buySupply(Depot depot){
 		cash -= depot.price;
@@ -41,7 +42,7 @@ public class Team implements Serializable {
 		}
 	}
 	
-	public Team(GameModel _model) {
+	public void setModel(GameModel _model){
 		model = _model;
 	}
 	
