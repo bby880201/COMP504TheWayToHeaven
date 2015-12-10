@@ -188,7 +188,7 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void sendToChatroom(IChatMessage message) {
-				thisRoom.send(me, message);
+				send(me, message);
 			}
 
 			@Override
