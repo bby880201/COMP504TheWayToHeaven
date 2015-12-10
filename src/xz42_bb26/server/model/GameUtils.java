@@ -16,7 +16,8 @@ public class GameUtils {
 		Set<Depot> result = new HashSet<Depot>();
 		for(int i=0;i<number;i++){
 			Depot aDepot = new Depot();
-			aDepot.location = Position.fromDegrees(randomDouble(left, right), randomDouble(top, bottom));
+			aDepot.latitude = randomDouble(left, right);
+			aDepot.longitude = randomDouble(top, bottom);
 			aDepot.price = randomInt(min, max);
 			result.add(aDepot);
 		}

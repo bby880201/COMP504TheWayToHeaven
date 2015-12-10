@@ -208,7 +208,8 @@ public class GameModel {
 				@Override
 				public void setDepots(Set<Depot> _depots) {
 					for (Depot depot : _depots) {
-						depots.put(depot.location, depot);
+						depot.position = Position.fromDegrees(depot.latitude, depot.longitude);
+						depots.put(depot.position, depot);
 					}
 					initBoxes();
 					renderDepots();
@@ -240,7 +241,7 @@ public class GameModel {
 	private void renderDepots() {
 		depotsIcons = new HashMap<>();
 		for (Depot depot : depots.values()) {
-			PulsingIcon icon = new PulsingIcon(circleYellow, depot.location, 100);
+			PulsingIcon icon = new PulsingIcon(circleYellow, depot.position, 100);
 			icon.setSize(new Dimension(20, 20));
 			icon.setVisible(true);
 			depotsIcons.put(icon.getPosition(), icon);
