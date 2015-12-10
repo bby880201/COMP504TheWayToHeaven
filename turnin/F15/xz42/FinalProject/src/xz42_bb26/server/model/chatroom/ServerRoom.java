@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -80,6 +79,8 @@ public class ServerRoom implements IChatroom {
 	// name of the local user	
 	private IChatUser me;
 	
+	private IChatUser prestub;
+	
 	private IInitUser initMe;
 
 	// private UUID id;
@@ -102,9 +103,9 @@ public class ServerRoom implements IChatroom {
 	
 	private IChatroom thisRoom = this;
 	
-	private transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	private HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
 	
-	private transient Set<IChatUser> players = new HashSet<IChatUser>();
+	private Set<IChatUser> players = new HashSet<IChatUser>();
 	
 	private boolean isPlayable = false;
 
@@ -118,7 +119,7 @@ public class ServerRoom implements IChatroom {
 	public ServerRoom(UUID uuid) throws UnknownHostException, RemoteException {
 
 		initAlgo();
-		IChatUser prestub = new ChatUser("", new IChatUser2ModelAdapter(){
+		prestub = new ChatUser("", new IChatUser2ModelAdapter(){
 			
 			@Override
 			public <T> void receive(IChatUser remote,
@@ -780,8 +781,12 @@ public class ServerRoom implements IChatroom {
 	 */
 	private void refreshList() {
 		if (null != serverAdapter) {
-			Collection<ChatUserEntity> mbList = users.values();
-//			mbList.remove(users.get(me));
+			Set<ChatUserEntity> mbList = new HashSet<ChatUserEntity>(); 
+			for (IChatUser user : users.keySet()) {
+				if(user!=me){
+					mbList.add(users.get(user));
+				}
+			}
 			serverAdapter.refreshList(mbList);
 		}
 	}
