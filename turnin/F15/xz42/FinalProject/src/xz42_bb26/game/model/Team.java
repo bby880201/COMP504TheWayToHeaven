@@ -48,7 +48,7 @@ public class Team implements Serializable {
 		positions.add(aPos);
 		LengthMeasurer measurer = new LengthMeasurer(positions);
 		Model worldModel = (Model)WorldWind.createConfigurationComponent(AVKey.MODEL_CLASS_NAME);
-		measurer.setFollowTerrain(false);
+		measurer.setFollowTerrain(true);
 		consume(measurer.getLength(worldModel.getGlobe()));
 		if(supply > 0){
 			myLocation = aPos;
