@@ -471,7 +471,7 @@ public class GameModel {
 								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
 								depots.remove(depots.get(PulsingIcon.this.getPosition()));
 								PulsingIcon.this.setVisible(false);
-//								view.update(team);
+								view.update(team);
 							}
 						}
 						else{
