@@ -38,6 +38,8 @@ public class GameView extends JFrame {
 	private RenderableLayer sLayer;
 	private IconLayer iconLayer;
 	private JLabel statusLabel;
+	private JLabel supplyLabel;
+	private JLabel cashLabel;
 	MapPanel mapPanel;
 	IModelAdapter model;
 	/**
@@ -115,9 +117,9 @@ public class GameView extends JFrame {
 		else{
 
 			dutyLabel.setText("You are the resource manager");
-			JLabel cashLabel = new JLabel("Current Cash: $100");
+			cashLabel = new JLabel("Current Cash: $100");
 			infoPanel.add(cashLabel);
-			JLabel supplyLabel = new JLabel("Current Supply: 100miles");
+			supplyLabel = new JLabel("Current Supply: 100miles");
 			infoPanel.add(supplyLabel);
 		}
 		
@@ -128,8 +130,13 @@ public class GameView extends JFrame {
 		
 		
 	}
-	public void update(){
+	public void update(Team team){
 		sLayer.firePropertyChange(AVKey.LAYER, null, null);
+		if(!model.isNavigator()){
+			cashLabel.setText("Current Cash: $"+team.cash);
+			supplyLabel.setText("Current Supply: "+team.supply+"meters");
+		}
+		
 	}
 
 	public RenderableLayer getBoxLayer() {
