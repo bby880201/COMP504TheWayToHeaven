@@ -347,8 +347,8 @@ public class Chatroom implements IChatroom {
 			@Override
 			public String apply(Class<?> index,
 					DataPacket<TeamWins> host, IChatUser... params) {
-				model.aTeamWins(host.getData().getID());
-				
+		
+				model.aTeamWins(host.getData().getTeamID());
 				return "A team wins";
 			}
 
