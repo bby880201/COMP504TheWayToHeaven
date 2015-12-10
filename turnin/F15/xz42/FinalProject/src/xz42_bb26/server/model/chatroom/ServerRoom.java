@@ -1,5 +1,7 @@
 package xz42_bb26.server.model.chatroom;
 
+import gov.nasa.worldwind.Model;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.net.UnknownHostException;
@@ -19,6 +21,7 @@ import javax.swing.JLabel;
 
 import xz42_bb26.game.controller.GameController;
 import xz42_bb26.game.model.Depot;
+import xz42_bb26.game.model.messages.Begin;
 import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.Ready;
 import xz42_bb26.server.model.GameUtils;
@@ -110,6 +113,8 @@ public class ServerRoom implements IChatroom {
 	
 	private transient Set<IChatUser> players = new HashSet<IChatUser>();
 	
+	private transient Set<IChatUser> invisiblePlayer = new HashSet<IChatUser>();
+	
 	private boolean isPlayable = false;
 	
 
@@ -138,6 +143,7 @@ public class ServerRoom implements IChatroom {
 
 		id = uuid;
 		users.put(me,null);
+		invisiblePlayer.add(me);
 		initMe = null;
 		displayName = "The Way To Rice Game Server";
 		
@@ -801,7 +807,7 @@ public class ServerRoom implements IChatroom {
 		if (null != serverAdapter) {
 			Set<ChatUserEntity> mbList = new HashSet<ChatUserEntity>(); 
 			for (IChatUser user : users.keySet()) {
-				if(user!=me){
+				if (!invisiblePlayer.contains(user)) {
 					mbList.add(users.get(user));
 				}
 			}
@@ -1058,4 +1064,51 @@ public class ServerRoom implements IChatroom {
 		});
 	}
 
+	public void leaveTeam() {
+		for (TeamRoom tm : teamList.values()){
+			tm.removeMe();
+		}
+	}
+	
+	public void setUserInvisible(IChatUser user) {
+		invisiblePlayer.add(user);
+		refreshList();
+	}
+
+	public void begin() {
+		if (isPlayable == true){
+			Begin bgmsg = new Begin();
+			for (IChatUser usr: players) {
+				(new Thread(){
+					@Override
+					public void run(){
+						try {
+							usr.receive(me, bgmsg.getDataPacket());
+						} catch (RemoteException e) {
+							System.out.println("Begin message sending failed from ServerRoom:");
+							e.printStackTrace();
+						}
+					}
+				}).start();
+			}
+		}
+		else {
+			serverAdapter.append("Please wait until all players are ready!");
+		}
+	}
+
+	public void kick(ChatUserEntity usr) {
+		(new Thread(){
+			@Override
+			public void run() {
+				try {
+					usr.getChatUser().receive(me, new RemoveMe(me).getDataPacket());
+					users.remove(usr.getChatUser());
+				} catch (RemoteException e) {
+					System.out.println("Kick player failed in ServerRoom: ");
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
 }

@@ -174,14 +174,24 @@ public class ServerController {
 
 					@Override
 					public void createTeam(ChatUserEntity member) {
+						serverRoom.setUserInvisible(member.getChatUser());
 						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),member));
-						serverRoom.removeUser(member.getChatUser());
 					}
 
 					@Override
 					public void rejectConnection() {
 						serverRoom.rejectConnection();
 						
+					}
+
+					@Override
+					public void begin() {
+						serverRoom.begin();
+					}
+
+					@Override
+					public void kick(ChatUserEntity usr) {
+						serverRoom.kick(usr);
 					}
 				});
 
