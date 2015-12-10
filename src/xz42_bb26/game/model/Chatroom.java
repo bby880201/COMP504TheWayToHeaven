@@ -315,6 +315,16 @@ public class Chatroom implements IChatroom {
 					IChatUser... params) {
 				
 				users = host.getData().getUsers();
+				for (IChatUser user : users) {
+					if(user!=me){
+						TeamInfoUpdate aInfoUpdateMessage = new TeamInfoUpdate(model.getTeam());
+						try {
+							user.receive(me, aInfoUpdateMessage.getDataPacket());
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+					}
+				}
 				model.setDepots(host.getData().getDepots());
 				return "Users list updated";
 			}
