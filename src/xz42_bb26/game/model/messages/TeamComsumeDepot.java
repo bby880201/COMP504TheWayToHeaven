@@ -18,10 +18,10 @@ public class TeamComsumeDepot extends ARequest implements IChatMessage {
 	/**
 	 * 
 	 */
-	private Position aDepot;
+	private UUID aUuid;
 
-	public TeamComsumeDepot(Position aPos) {
-		this.setaDepot(aPos);
+	public TeamComsumeDepot(UUID id) {
+		this.aUuid = id;
 	}
 
 	@Override
@@ -32,15 +32,8 @@ public class TeamComsumeDepot extends ARequest implements IChatMessage {
 	/**
 	 * @return the aDepot
 	 */
-	public Position getaDepot() {
-		return aDepot;
-	}
-
-	/**
-	 * @param aDepot the aDepot to set
-	 */
-	public void setaDepot(Position aDepot) {
-		this.aDepot = aDepot;
+	public UUID getaDepot() {
+		return aUuid;
 	}
 
 

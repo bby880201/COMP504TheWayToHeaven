@@ -1,6 +1,7 @@
 package xz42_bb26.game.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import gov.nasa.worldwind.geom.Position;
 
@@ -13,4 +14,5 @@ public class Depot implements Serializable {
 	public double latitude;
 	public double longitude;
 	public transient Position position;
+	UUID uuid = UUID.randomUUID();
 }

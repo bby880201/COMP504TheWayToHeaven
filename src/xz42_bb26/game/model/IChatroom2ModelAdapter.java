@@ -20,6 +20,6 @@ public interface IChatroom2ModelAdapter {
 
 	Team getTeam();
 
-	void teamConsume(Position getaDepot);
+	void teamConsume(UUID id);
 
 }
