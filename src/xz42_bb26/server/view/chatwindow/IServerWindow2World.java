@@ -108,6 +108,18 @@ public interface IServerWindow2World<T> {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void begin() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void kick(Object usr) {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 
 	public void installGame();
@@ -115,4 +127,8 @@ public interface IServerWindow2World<T> {
 	public void createTeam(T member);
 
 	public void rejectConnection();
+
+	public void begin();
+	
+	public void kick(T usr);
 }

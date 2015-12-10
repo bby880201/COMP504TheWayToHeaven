@@ -28,6 +28,8 @@ import java.awt.Container;
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
 
+import xz42_bb26.server.model.user.ChatUserEntity;
+
 /**
  * The mini-view GUI panel for the chat window
  * 
@@ -157,16 +159,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		panel.add(new JScrollPane(lsTeam), BorderLayout.CENTER);
 			
 		btnInstallGame = new JButton("Install Game");
-		btnInstallGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (lsMember.getModel().getSize() == 0) {
-					mv2mmAdapt.installGame();
-				}
-				else {
-					append("Some players haven't been assigned to a team yet!");
-				}
-			}
-		});
+		
 		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
 		gbc_btnStartGame.insets = new Insets(0, 0, 5, 0);
 		gbc_btnStartGame.fill = GridBagConstraints.HORIZONTAL;
@@ -239,7 +232,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 			public void actionPerformed(ActionEvent e) {
 				String str = edMsg.getText();
 
-				append("<html>Hello World!<br>" + str +"<br></html>");
+				append("Server Message:" + str);
 
 				toChatroomAdapt.sendMsg(str);
 				edMsg.setText("");
@@ -250,9 +243,32 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		 */
 		btnKick.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toChatroomAdapt.quit();
-				toChatroomAdapt.deleteWindow(thisWindow);
+				Usr usr = lsMember.getSelectedValue();
+				toChatroomAdapt.kick(usr);
 				//TODO change function
+			}
+		});
+		
+		/**
+		 * Leave the current chatroom.
+		 */
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toChatroomAdapt.begin();
+			}
+		});
+		
+		/**
+		 * Let players install game 
+		 */
+		btnInstallGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (lsMember.getModel().getSize() == 0) {
+					toChatroomAdapt.installGame();
+				}
+				else {
+					append("Some players haven't been assigned to a team yet!");
+				}
 			}
 		});
 	}

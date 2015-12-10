@@ -337,6 +337,7 @@ public class ServerModel {
 		try {
 			// quit from all current chatrooms
 			for (IChatroom rm : rooms.values()) {
+				((ServerRoom) rm).leaveTeam();
 				((ServerRoom) rm).removeMe();
 			}
 			registry.unbind(IInitUser.BOUND_NAME);
