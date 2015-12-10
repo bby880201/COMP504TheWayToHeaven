@@ -258,11 +258,10 @@ public class GameModel {
 		}
 
 		BufferedImage circleRed = createBitmap(PatternFactory.PATTERN_CIRCLE, Color.RED);
-		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 20);
-		desIcon.setVisible(false);
-		desIcon.setSize(new Dimension(10,10));
+		desIcon = new PulsingIcon(circleRed,UUID.randomUUID() , Position.fromDegrees(29, -95), 100);
+		desIcon.setVisible(true);
+		desIcon.setSize(new Dimension(20,20));
 		desIcon.setAlwaysOnTop(true);
-		view.getIconLayer().setRegionCulling(false);
 		view.getIconLayer().addIcon(desIcon);
 		
 
