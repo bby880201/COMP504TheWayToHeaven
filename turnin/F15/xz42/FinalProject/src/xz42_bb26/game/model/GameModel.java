@@ -209,6 +209,9 @@ public class GameModel {
 					if(id!=team.uuid){
 						boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
 					}
+					else{
+						view.gameOver();
+					}
 					
 				}
 
