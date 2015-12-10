@@ -80,7 +80,7 @@ public class GameView extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		
 		mapPanel = new MapPanel(Earth.class);
-		mapPanel.setPreferredSize(new java.awt.Dimension(panel.getBounds().width, panel.getBounds().height));
+		mapPanel.setPreferredSize(new java.awt.Dimension(800,600));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
 		mapPanel.addRightClickAction(new IRightClickAction(){
