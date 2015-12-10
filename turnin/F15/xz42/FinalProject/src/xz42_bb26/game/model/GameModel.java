@@ -172,6 +172,12 @@ public class GameModel {
 				@Override
 				public void updateTeamInfo(Team team) {
 					TeamBox aBox = boxList.get(team.uuid);
+					if(aBox==null){
+						aBox= makeTeamBox(team.uuid,Angle.fromDegrees(63), 
+								Angle.fromDegrees(-151), 
+								Material.BLUE, team.name);
+						boxList.put(team.uuid, aBox);
+					}
 					aBox.move(team.myPosition.getLatitude().getDegrees(), team.myPosition.getLongitude().getDegrees());
 					teams.put(team.uuid, team);
 				}
@@ -198,6 +204,11 @@ public class GameModel {
 					depots = _depots;
 					initBoxes();
 					renderDepots();
+				}
+
+				@Override
+				public Team getTeam() {
+					return team;
 				}
 
 

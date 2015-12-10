@@ -17,4 +17,6 @@ public interface IChatroom2ModelAdapter {
 
 	void setDepots(HashMap<Position, Depot> depots);
 
+	Team getTeam();
+
 }

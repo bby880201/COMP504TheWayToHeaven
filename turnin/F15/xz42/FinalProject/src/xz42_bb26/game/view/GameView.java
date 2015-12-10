@@ -37,6 +37,7 @@ public class GameView extends JFrame {
 	
 	private RenderableLayer sLayer;
 	private IconLayer iconLayer;
+	private JLabel statusLabel;
 	MapPanel mapPanel;
 	IModelAdapter model;
 	/**
@@ -94,9 +95,11 @@ public class GameView extends JFrame {
 		JPanel infoPanel = new JPanel();
 		infoPanel.setLayout(new GridLayout(5,1 , 0, 0));
 		contentPane.add(infoPanel, BorderLayout.EAST);
-
+		statusLabel = new JLabel();
+		statusLabel.setText("Waiting server to start.");
+		infoPanel.add(statusLabel);
+		
 		JLabel dutyLabel = new JLabel();
-		GridBagConstraints gbc_dutyLabel = new GridBagConstraints();
 
 		infoPanel.add(dutyLabel);
 		if(model.isNavigator()){
@@ -143,10 +146,12 @@ public class GameView extends JFrame {
 	}
 
 	public void gameBegin() {
+		statusLabel.setText("In game.");
 		JOptionPane.showMessageDialog(this, "Game Start!!!");
 	}
 
 	public void aTeamWins(Team team) {
+		statusLabel.setText("Game Over:"+"Team "+team.name+" wins.");
 		JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
 	}
 
