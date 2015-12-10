@@ -138,6 +138,7 @@ public class GameModel {
 		
 		//Rice 29 -95
 		//
+		System.out.println("initBoxes");
 		myBox = makeTeamBox(UUID.randomUUID(), 
 				Angle.fromDegrees(63), 
 				Angle.fromDegrees(-151), 
