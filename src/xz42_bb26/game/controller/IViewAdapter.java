@@ -6,7 +6,7 @@ import xz42_bb26.game.model.Team;
 
 public interface IViewAdapter {
 
-	void update();
+	void update(Team team);
 
 	public RenderableLayer getBoxLayer();
 

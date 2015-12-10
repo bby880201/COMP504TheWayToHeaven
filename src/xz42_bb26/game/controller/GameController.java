@@ -40,8 +40,8 @@ public class GameController {
 		model = new GameModel(new IViewAdapter() {
 
 			@Override
-			public void update() {
-				view.update();
+			public void update(Team team) {
+				view.update(team);
 			}
 
 			@Override

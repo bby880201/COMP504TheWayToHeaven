@@ -345,7 +345,7 @@ public class GameModel {
 							desPos = prevPos;
 							curPos = prevPos;
 						}
-						view.update();
+						view.update(team);
 					}		 
 				});
 				timer.start();
@@ -419,7 +419,7 @@ public class GameModel {
 				timer = new Timer(frequency, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
-						view.update();
+						view.update(team);
 							if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.01){
 								timer.stop();
 								team.buySupply(depots.get(PulsingIcon.this.uuid));
