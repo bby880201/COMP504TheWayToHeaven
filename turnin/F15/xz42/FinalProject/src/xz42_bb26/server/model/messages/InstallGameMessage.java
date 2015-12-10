@@ -17,15 +17,18 @@ public class InstallGameMessage implements IChatMessage{
 	private final UUID teamID;
 	
 	private final boolean isNavigator;
+	
+	private final String teamName;
 
 	/**
 	 * Constructs a new message containing the specified user to be removed. 
 	 * UUID for the message is auto-generated.
 	 * @param user - user to be removed
 	 */
-	public InstallGameMessage(Boolean isNavigator) {
+	public InstallGameMessage(String teamname,Boolean isNavigator) {
 		this.teamID = UUID.randomUUID();
 		this.isNavigator = isNavigator;
+		this.teamName = teamname;
 	}
 
 
@@ -43,6 +46,14 @@ public class InstallGameMessage implements IChatMessage{
 	 */
 	public boolean isNavigator() {
 		return isNavigator;
+	}
+
+
+	/**
+	 * @return the teamName
+	 */
+	public String getTeamName() {
+		return teamName;
 	}
 
 }

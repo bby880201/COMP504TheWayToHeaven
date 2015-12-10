@@ -136,9 +136,9 @@ public class TeamRoom implements IChatroom {
 			@Override
 			public void run() {
 				try {
-					InstallGameMessage instGameNavigator = new InstallGameMessage(true);
+					InstallGameMessage instGameNavigator = new InstallGameMessage(teamName,true);
 					navig.getChatUser().receive(server, instGameNavigator.getDataPacket());
-					InstallGameMessage instGameManager = new InstallGameMessage(false);
+					InstallGameMessage instGameManager = new InstallGameMessage(teamName,false);
 					manag.getChatUser().receive(server, instGameManager.getDataPacket());
 				} catch (RemoteException e) {
 					e.printStackTrace();
