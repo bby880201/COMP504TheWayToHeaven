@@ -264,7 +264,6 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			
@@ -283,7 +282,6 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -328,7 +326,6 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -356,7 +353,6 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -404,7 +400,6 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 			
 		});
@@ -437,7 +432,6 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 		});
 
@@ -469,7 +463,6 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;				
 			}
 			
 		});
@@ -506,7 +499,6 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;					
 			}
 			
 		});
@@ -532,7 +524,7 @@ public class ServerRoom implements IChatroom {
 					String str = data.getDataPacket().execute(msgAlgo, data.getSender());
 					System.out.println(str);
 					
-					return "ed unknown data type: " + host.getData().getUnknownType() + " from: "
+					return "Received unknown data type: " + host.getData().getUnknownType() + " from: "
 					+ users.get(data.getSender());
 				}
 				else {
@@ -542,7 +534,6 @@ public class ServerRoom implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;					
 			}
 			
 		});
@@ -554,6 +545,7 @@ public class ServerRoom implements IChatroom {
 			 */	
 			private static final long serialVersionUID = 2964027427383796628L;
 
+			private ICmd2ModelAdapter adapt;
 		
 
 			@Override
@@ -562,7 +554,7 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
+				adapt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -595,7 +587,6 @@ public class ServerRoom implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -615,13 +606,15 @@ public class ServerRoom implements IChatroom {
 			 */
 			private static final long serialVersionUID = 2831393211088585807L;
 
+			private ICmd2ModelAdapter adapt;
+
 			@Override
 			/**
 			 * Set the ICmd2ModelAdapter of this command
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
+				adapt = cmd2ModelAdpt;
 			}
 
 			@Override

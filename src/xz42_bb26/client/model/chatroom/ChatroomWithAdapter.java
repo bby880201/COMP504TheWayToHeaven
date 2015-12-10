@@ -243,7 +243,6 @@ public class ChatroomWithAdapter implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			
@@ -262,7 +261,6 @@ public class ChatroomWithAdapter implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -307,7 +305,6 @@ public class ChatroomWithAdapter implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -335,7 +332,6 @@ public class ChatroomWithAdapter implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
@@ -383,7 +379,6 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 			
 		});
@@ -416,7 +411,6 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 		});
 
@@ -448,7 +442,6 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;				
 			}
 			
 		});
@@ -485,7 +478,6 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;					
 			}
 			
 		});
@@ -521,37 +513,8 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;					
 			}
 			
-		});
-		
-		
-		// handle startGame type cmd as known cmd type 
-		msgAlgo.setCmd(StartGameMessage.class, new ADataPacketAlgoCmd<String, StartGameMessage, IChatUser>() {
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */	
-			private static final long serialVersionUID = 2964027427383796628L;
-
-		
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
-
-			@Override
-			public String apply(Class<?> index, DataPacket<StartGameMessage> host,
-					IChatUser... params) {
-//				GameController gameController = new GameController();
-//				gameController.start();
-				return "Start Game";
-			}
 		});
 		
 		// handle RemoveMe type cmd as known cmd type 
@@ -568,7 +531,6 @@ public class ChatroomWithAdapter implements IChatroom {
 			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
 			 */
 			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
 			}
 
 			@Override
