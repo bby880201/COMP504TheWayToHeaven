@@ -465,6 +465,7 @@ public class GameModel {
 							if(PulsingIcon.this.uuid.equals(desIcon.uuid)){
 								System.out.println("getIntoRangeOfDestination");
 								globalChatroom.send(globalChatroom.getMe(), new TeamWins(team.uuid));
+								view.aTeamWins(team);
 							}
 							else{
 								team.buySupply(depots.get(PulsingIcon.this.uuid));
