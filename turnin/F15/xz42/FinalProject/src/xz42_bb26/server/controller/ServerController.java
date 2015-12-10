@@ -169,16 +169,21 @@ public class ServerController {
 					
 					@Override
 					public void installGame() {
-						model.rejectConnection();
 						serverRoom.installGame();
 					}
 
 					@Override
 					public void createTeam(List<ChatUserEntity> members) {
-						for (ChatUserEntity user: members) {
-							serverRoom.removeUser(user.getChatUser());
-						}
 						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),members));
+						for (ChatUserEntity usr : members){
+							serverRoom.removeUser(usr.getChatUser());
+						}
+					}
+
+					@Override
+					public void rejectConnection() {
+						serverRoom.rejectConnection();
+						
 					}
 				});
 
@@ -278,10 +283,8 @@ public class ServerController {
 
 					@Override
 					public void refreshTeam(Collection<TeamRoom> collection) {
-						// TODO Auto-generated method stub
 						cw.refreshTeam(collection);
 					}
-
 				};
 			}
 			

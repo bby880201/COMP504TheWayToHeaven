@@ -4,14 +4,17 @@
 package xz42_bb26.server.model.chatroom;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import provided.datapacket.DataPacket;
 import xz42_bb26.server.model.messages.InstallGameMessage;
+import xz42_bb26.server.model.user.ChatUser;
 import xz42_bb26.server.model.user.ChatUserEntity;
 import xz42_bb26.server.model.user.GameUser;
+import xz42_bb26.server.model.user.IChatUser2ModelAdapter;
 import xz42_bb26.server.model.user.IGameUser;
 import common.IChatUser;
 import common.IChatroom;
@@ -34,21 +37,39 @@ public class TeamRoom implements IChatroom {
 	
 	private final IGameUser manag;
 	
-	private final ArrayList<IChatUser> stubList = new ArrayList<IChatUser>();
+	private final Set<IChatUser> stubList;
 	
 	private final UUID id;
 	
 	private String teamName;
+	
+	private IChatUser prestub;
+	
+	private IChatUser serverInRm;
 	
 	public TeamRoom(String name, IChatUser srv, ChatUserEntity memb1, ChatUserEntity memb2) {
 		server = srv;
 		navig = new GameUser(memb1, true);
 		manag = new GameUser(memb2, false);
 		teamName = name;
-		stubList.add(srv);
-		stubList.add(navig.getChatUser());
-		stubList.add(manag.getChatUser());
+		stubList = new HashSet<IChatUser>();
 		id = UUID.randomUUID();
+		
+		try {
+			prestub = new ChatUser("serverInRoom", new IChatUser2ModelAdapter(){
+				
+				@Override
+				public <T> void receive(IChatUser remote,
+						DataPacket<? extends IChatMessage> dp) {
+					System.out.println(dp);				
+				}
+			});
+			
+			serverInRm = (IChatUser) UnicastRemoteObject.exportObject(prestub, IChatUser.BOUND_PORT_SERVER);
+			stubList.add(serverInRm);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -80,11 +101,7 @@ public class TeamRoom implements IChatroom {
 	 */
 	@Override
 	public Set<IChatUser> getUsers() {
-		Set<IChatUser> users = new HashSet<IChatUser>();
-		users.add(navig.getChatUser());
-		users.add(manag.getChatUser());
-		users.add(server);
-		return users;
+		return stubList;
 	}
 
 	/* (non-Javadoc)
@@ -144,9 +161,6 @@ public class TeamRoom implements IChatroom {
 					e.printStackTrace();
 				}
 			}
-		}).start();
-		
-		// TODO Auto-generated method stub
-		
+		}).start();		
 	}
 }

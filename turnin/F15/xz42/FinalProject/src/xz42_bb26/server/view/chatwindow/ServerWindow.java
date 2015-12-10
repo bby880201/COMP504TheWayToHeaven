@@ -54,6 +54,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	private JButton btnKick;
 	private JButton btnInstallGame;
 	private JList<TmRm> lsTeam;
+	private JButton btnPlay;
 
 	/**
 	 * Constructor that takes an instance of IChatWindow2Model
@@ -154,24 +155,31 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		lsTeam.setToolTipText("Display the current teams in the room.");
 		lsTeam.setBorder(new TitledBorder(null, "Team List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.add(new JScrollPane(lsTeam), BorderLayout.CENTER);
-
+			
 		btnInstallGame = new JButton("Install Game");
 		btnInstallGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				if (lsMember.getModel().getSize() == 0) {
-//					mv2mmAdapt.installGame();
-//				}
-//				else {
-//					append("Some players haven't been assigned to a team yet!");
-//				}
-				mv2mmAdapt.installGame();
+				if (lsMember.getModel().getSize() == 0) {
+					mv2mmAdapt.installGame();
+				}
+				else {
+					append("Some players haven't been assigned to a team yet!");
+				}
 			}
 		});
 		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
+		gbc_btnStartGame.insets = new Insets(0, 0, 5, 0);
 		gbc_btnStartGame.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnStartGame.gridx = 0;
-		gbc_btnStartGame.gridy = 5;
+		gbc_btnStartGame.gridy = 4;
 		panel_4.add(btnInstallGame, gbc_btnStartGame);
+		
+		btnPlay = new JButton("Play!");
+		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
+		gbc_btnPlay.fill = GridBagConstraints.BOTH;
+		gbc_btnPlay.gridx = 0;
+		gbc_btnPlay.gridy = 5;
+		panel_4.add(btnPlay, gbc_btnPlay);
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -219,6 +227,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 			public void actionPerformed(ActionEvent e) {
 				List<Usr> teamMems = lsMember.getSelectedValuesList();
 				if (teamMems.size() == 2) {
+					toChatroomAdapt.rejectConnection();
 					toChatroomAdapt.createTeam(teamMems);
 				}
 				else {
@@ -233,7 +242,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 			public void actionPerformed(ActionEvent e) {
 				String str = edMsg.getText();
 
-				append("Server:\n" + str + "\n");
+				append("<html>Hello World!<br>" + str +"<br></html>");
 
 				toChatroomAdapt.sendMsg(str);
 				edMsg.setText("");

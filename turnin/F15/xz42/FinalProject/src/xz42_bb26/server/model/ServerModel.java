@@ -492,9 +492,4 @@ public class ServerModel {
 		}).start();
 		return team;
 	}
-
-	public void rejectConnection() {
-		// TODO Auto-generated method stub
-		
-	}
 }

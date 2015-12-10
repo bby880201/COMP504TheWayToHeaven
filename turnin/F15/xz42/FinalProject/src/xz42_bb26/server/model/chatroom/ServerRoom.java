@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 
 import xz42_bb26.game.controller.GameController;
 import xz42_bb26.game.model.messages.ProvideGameUser;
+import xz42_bb26.game.model.messages.Ready;
 import xz42_bb26.server.model.messages.InstallGameMessage;
 import xz42_bb26.server.model.messages.StringMessage;
 import xz42_bb26.server.model.messages.UnknownTypeData;
@@ -87,7 +88,7 @@ public class ServerRoom implements IChatroom {
 	private UUID id;
 	
 	// name of the chatroom
-	private String displayName;
+	private String displayName = "The Way To Rice Game Server";
 
 	private HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
 	
@@ -103,9 +104,9 @@ public class ServerRoom implements IChatroom {
 	
 	private IChatroom thisRoom = this;
 	
-	private HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	private transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
 	
-	private Set<IChatUser> players = new HashSet<IChatUser>();
+	private transient Set<IChatUser> players = new HashSet<IChatUser>();
 	
 	private boolean isPlayable = false;
 
@@ -325,8 +326,8 @@ public class ServerRoom implements IChatroom {
 					IChatUser... params) {
 				
 				IChatUser remote = host.getData().getUser();
-				
 				infoRequest(remote);
+
 				return "User joined: " + users.get(params[0]);
 			}
 		});
@@ -620,8 +621,10 @@ public class ServerRoom implements IChatroom {
 				players.add(player);
 				if (players.size() == teamList.size()*2){
 					setPlayable(true);
+					Ready gameReady = new Ready(players, null);
+					
 				}
-				return "";
+				return "Receive " + players.size() + " players' response";
 			}
 		});
 	}
@@ -728,11 +731,6 @@ public class ServerRoom implements IChatroom {
 	 * @return display of this chatroom
 	 */
 	public String getName() {
-		if (users.size() > 0) {
-			displayName = "Chat with " + Integer.toString(users.size()) + "members";
-		} else {
-			displayName = "Empty room";
-		}
 		return displayName;
 	}
 
@@ -1014,6 +1012,29 @@ public class ServerRoom implements IChatroom {
 	 */
 	public void setPlayable(boolean isPlayable) {
 		this.isPlayable = isPlayable;
+	}
+
+	public void rejectConnection() {
+		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 4437548779304355227L;
+
+			@Override
+			public String apply(Class<?> index, DataPacket<AAddMe> host,
+					IChatUser... params) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 }
