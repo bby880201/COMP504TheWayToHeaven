@@ -380,7 +380,7 @@ public class Chatroom implements IChatroom {
 			public String apply(Class<?> index,
 					DataPacket<TeamComsumeDepot> host, IChatUser... params) {
 				model.teamConsume(host.getData().getaDepot());
-				return "a Team is out";
+				return "depot"+host.getData().getaDepot()+"is consumed";
 			}
 		});
 		msgAlgo.setCmd(Begin.class, new ADataPacketAlgoCmd<String, Begin, IChatUser>() {
@@ -407,7 +407,7 @@ public class Chatroom implements IChatroom {
 			public String apply(Class<?> index,
 					DataPacket<Begin> host, IChatUser... params) {
 				model.gameBigin();
-				return "a Team is out";
+				return "Game begins!";
 			}
 		});
 	}
