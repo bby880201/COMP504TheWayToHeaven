@@ -12,8 +12,6 @@ import java.util.UUID;
 
 import javax.swing.Timer;
 
-import com.sun.prism.Presentable;
-
 import common.IChatUser;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
@@ -27,9 +25,6 @@ import gov.nasa.worldwind.render.Material;
 import gov.nasa.worldwind.render.PatternFactory;
 import gov.nasa.worldwind.render.ShapeAttributes;
 import gov.nasa.worldwind.render.UserFacingIcon;
-import gov.nasa.worldwindx.applications.sar.actions.DeletePositionsAction;
-import javafx.geometry.Pos;
-import provided.datapacket.DataPacket;
 import xz42_bb26.game.controller.IViewAdapter;
 import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.TeamComsumeDepot;

@@ -1,7 +1,5 @@
 package xz42_bb26.server.view.chatwindow;
 
-import java.util.List;
-
 /**
  * Mini-View2Model adapter that enables the mini-view (chat window) to communicate 
  * to the model.

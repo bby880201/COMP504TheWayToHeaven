@@ -8,23 +8,18 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import gov.nasa.worldwind.avlist.AVKey;
-import gov.nasa.worldwind.geom.LatLon;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Earth;
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
-import gov.nasa.worldwind.render.Box;
 import map.MapPanel;
 import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.Team;
 import map.IRightClickAction;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.GridLayout;
 
 public class GameView extends JFrame {

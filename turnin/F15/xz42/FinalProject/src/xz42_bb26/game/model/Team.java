@@ -2,18 +2,13 @@ package xz42_bb26.game.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
-
-import com.sun.prism.Mesh;
 
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
-import javafx.scene.control.SelectionModel;
 
 public class Team implements Serializable {
 	public UUID uuid;

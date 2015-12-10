@@ -5,15 +5,11 @@ import java.rmi.RemoteException;
 import java.util.UUID;
 
 import common.IChatUser;
-import common.IChatroom;
-import common.demo.Chatroom;
 import common.message.IChatMessage;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import provided.datapacket.DataPacket;
-import xz42_bb26.client.controller.ChatAppController;
-import xz42_bb26.client.model.user.ChatUser;
 import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
 import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.GameModel;

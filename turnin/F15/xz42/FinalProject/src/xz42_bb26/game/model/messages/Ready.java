@@ -1,12 +1,10 @@
 package xz42_bb26.game.model.messages;
 
-import java.util.HashMap;
 import java.util.Set;
 
 import common.IChatUser;
 import common.message.ARequest;
 import common.message.IChatMessage;
-import gov.nasa.worldwind.geom.Position;
 import provided.datapacket.DataPacket;
 import xz42_bb26.game.model.Depot;
 

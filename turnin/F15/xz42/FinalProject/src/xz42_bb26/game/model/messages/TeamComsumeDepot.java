@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import common.message.ARequest;
 import common.message.IChatMessage;
-import gov.nasa.worldwind.geom.Position;
-import javafx.geometry.Pos;
 import provided.datapacket.DataPacket;
 
 public class TeamComsumeDepot extends ARequest implements IChatMessage {

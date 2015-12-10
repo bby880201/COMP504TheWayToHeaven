@@ -9,7 +9,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Supplier;
 
 import javax.swing.JButton;
@@ -27,8 +26,6 @@ import java.awt.Container;
 
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
-
-import xz42_bb26.server.model.user.ChatUserEntity;
 
 /**
  * The mini-view GUI panel for the chat window
