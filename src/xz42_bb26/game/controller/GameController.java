@@ -83,6 +83,12 @@ public class GameController {
 			public void buySupply(Depot depot) {
 				model.buySupply(depot);
 			}
+
+			@Override
+			public Team getTeam() {
+				// TODO Auto-generated method stub
+				return model.getTeam();
+			}
 			
 		});
 	}

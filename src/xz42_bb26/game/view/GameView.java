@@ -158,8 +158,15 @@ public class GameView extends JFrame {
 	}
 
 	public void aTeamWins(Team team) {
-		statusLabel.setText("Game Over:"+"Team "+team.name+" wins.");
-		JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
+		if(team.uuid.equals(model.getTeam().uuid)){
+			statusLabel.setText("Game Over:"+"You win.");
+			JOptionPane.showMessageDialog(this, "YOU WIN");
+		}
+		else{
+			statusLabel.setText("Game Over:"+"Team "+team.name+" wins.");
+			JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
+		}
+		
 	}
 
 	public void gameOver() {
