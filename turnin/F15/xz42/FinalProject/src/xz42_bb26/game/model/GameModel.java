@@ -274,7 +274,9 @@ public class GameModel {
 			PulsingIcon icon = new PulsingIcon(circleYellow,depot.uuid, depot.position, 500);
 			icon.setSize(new Dimension(20, 20));
 			icon.setToolTipText(depot.price.toString());
-			icon.setVisible(true);
+			if(!isNavigator()){
+				icon.setVisible(true);
+			}
 			depotsIcons.put(depot.uuid, icon);
 			view.getIconLayer().addIcon(icon);
 		}
@@ -442,8 +444,7 @@ public class GameModel {
 			if (timer == null) {
 				timer = new Timer(frequency, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
-						view.update(team);
+//						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
 						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.1){
 							System.out.println("getIntoRangeOfAIcon");
 							timer.stop();
@@ -456,6 +457,7 @@ public class GameModel {
 								globalChatroom.send(globalChatroom.getMe(), new TeamComsumeDepot(uuid));
 								depots.remove(depots.get(PulsingIcon.this.getPosition()));
 								PulsingIcon.this.setVisible(false);
+//								view.update(team);
 							}
 						}
 						else{

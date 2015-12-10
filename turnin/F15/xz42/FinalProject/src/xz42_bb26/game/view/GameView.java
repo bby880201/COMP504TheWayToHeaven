@@ -48,9 +48,9 @@ public class GameView extends JFrame {
 				initGUI();
 				mapPanel.start();
 
-				if(!model.isNavigator()){
+//				if(!model.isNavigator()){
 					mapPanel.addLayer(iconLayer);
-				}
+//				}
 				mapPanel.addLayer(sLayer);
 				setLocationRelativeTo(null);
 			    setVisible(true);
