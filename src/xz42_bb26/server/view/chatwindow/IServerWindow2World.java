@@ -102,9 +102,17 @@ public interface IServerWindow2World<T> {
 			// TODO Auto-generated method stub
 			
 		}
+
+		@Override
+		public void rejectConnection() {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 
 	public void installGame();
 	
 	public void createTeam(List<T> members);
+
+	public void rejectConnection();
 }

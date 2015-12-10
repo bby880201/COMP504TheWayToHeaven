@@ -1,7 +1,6 @@
 package xz42_bb26.game.model.messages;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import common.IChatUser;
@@ -19,10 +18,11 @@ public class Ready extends ARequest implements IChatMessage {
 	 */
 	private static final long serialVersionUID = 4402431958967360485L;
 	
-	private HashSet<IChatUser> users;
+	private Set<IChatUser> users;
+	
 	private HashMap<Position, Depot> depots;
 	
-	public Ready(HashSet<IChatUser> users, HashMap<Position, Depot> depots) {
+	public Ready(Set<IChatUser> users, HashMap<Position, Depot> depots) {
 		this.users = users;
 		this.depots = depots;
 	}
