@@ -25,8 +25,8 @@ public class InstallGameMessage implements IChatMessage{
 	 * UUID for the message is auto-generated.
 	 * @param user - user to be removed
 	 */
-	public InstallGameMessage(String teamname,Boolean isNavigator) {
-		this.teamID = UUID.randomUUID();
+	public InstallGameMessage(UUID uuid,String teamname,Boolean isNavigator) {
+		this.teamID = uuid;
 		this.isNavigator = isNavigator;
 		this.teamName = teamname;
 	}

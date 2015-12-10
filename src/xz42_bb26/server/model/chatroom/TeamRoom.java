@@ -4,6 +4,8 @@
 package xz42_bb26.server.model.chatroom;
 
 import java.rmi.RemoteException;
+import java.util.UUID;
+
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import xz42_bb26.server.model.messages.InstallGameMessage;
@@ -86,9 +88,10 @@ public class TeamRoom extends ServerRoom {
 			@Override
 			public void run() {
 				try {
-					InstallGameMessage instGameNavigator = new InstallGameMessage(teamName,true);
+					UUID uuid = UUID.randomUUID();
+					InstallGameMessage instGameNavigator = new InstallGameMessage(uuid,teamName,true);
 					navig.getChatUser().receive(server, instGameNavigator.getDataPacket());
-					InstallGameMessage instGameManager = new InstallGameMessage(teamName,false);
+					InstallGameMessage instGameManager = new InstallGameMessage(uuid,teamName,false);
 					manag.getChatUser().receive(server, instGameManager.getDataPacket());
 				} catch (RemoteException e) {
 					e.printStackTrace();
