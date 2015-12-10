@@ -16,4 +16,6 @@ public interface IViewAdapter {
 
 	public IconLayer getIconLayer();
 
+	void gameOver();
+
 }
