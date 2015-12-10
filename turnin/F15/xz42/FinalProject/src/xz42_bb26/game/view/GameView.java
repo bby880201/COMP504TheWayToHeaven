@@ -87,13 +87,6 @@ public class GameView extends JFrame {
 		mapPanel.setPreferredSize(new java.awt.Dimension(800,600));
 		panel.add(mapPanel, BorderLayout.CENTER);
 		
-		mapPanel.addRightClickAction(new IRightClickAction(){
-
-			@Override
-			public void apply(Position p) {
-				model.moveTo(p);
-			}});
-		
 		
 		
 		JPanel infoPanel = new JPanel();
@@ -111,6 +104,13 @@ public class GameView extends JFrame {
 			JLabel destLabel = new JLabel("Your destination is Rice ");
 			GridBagConstraints gbc_destLabel = new GridBagConstraints();
 			infoPanel.add(destLabel, gbc_destLabel);
+			mapPanel.addRightClickAction(new IRightClickAction(){
+
+				@Override
+				public void apply(Position p) {
+					model.moveTo(p);
+				}
+			});
 		}
 		else{
 
