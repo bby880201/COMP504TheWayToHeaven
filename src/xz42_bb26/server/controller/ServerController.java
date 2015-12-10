@@ -173,11 +173,9 @@ public class ServerController {
 					}
 
 					@Override
-					public void createTeam(List<ChatUserEntity> members) {
-						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),members));
-						for (ChatUserEntity usr : members){
-							serverRoom.removeUser(usr.getChatUser());
-						}
+					public void createTeam(ChatUserEntity member) {
+						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),member));
+						serverRoom.removeUser(member.getChatUser());
 					}
 
 					@Override

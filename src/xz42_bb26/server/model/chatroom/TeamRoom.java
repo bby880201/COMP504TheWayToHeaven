@@ -3,6 +3,7 @@
  */
 package xz42_bb26.server.model.chatroom;
 
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import common.message.IChatMessage;
  * @author bb26
  *
  */
-public class TeamRoom implements IChatroom {
+public class TeamRoom extends ServerRoom {
 
 	/**
 	 * 
@@ -33,27 +34,24 @@ public class TeamRoom implements IChatroom {
 	
 	private final IChatUser server;
 	
-	private final IGameUser navig;
+	private IGameUser navig;
 	
-	private final IGameUser manag;
-	
-	private final Set<IChatUser> stubList;
-	
-	private final UUID id;
-	
+	private IGameUser manag;
+		
+	private final HashSet<IChatUser> stubList;
+		
 	private String teamName;
 	
 	private IChatUser prestub;
 	
 	private IChatUser serverInRm;
 	
-	public TeamRoom(String name, IChatUser srv, ChatUserEntity memb1, ChatUserEntity memb2) {
+	public TeamRoom(String name, IChatUser srv, ChatUserEntity memb1) throws Exception {
+		super();
 		server = srv;
 		navig = new GameUser(memb1, true);
-		manag = new GameUser(memb2, false);
 		teamName = name;
 		stubList = new HashSet<IChatUser>();
-		id = UUID.randomUUID();
 		
 		try {
 			prestub = new ChatUser("serverInRoom", new IChatUser2ModelAdapter(){
@@ -72,12 +70,8 @@ public class TeamRoom implements IChatroom {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see common.IChatroom#getID()
-	 */
-	@Override
-	public UUID getID() {
-		return id;
+	public void setManager(ChatUserEntity man) {
+		manag = new GameUser(man, false);
 	}
 
 	/* (non-Javadoc)
@@ -100,7 +94,7 @@ public class TeamRoom implements IChatroom {
 	 * @see common.IChatroom#getUsers()
 	 */
 	@Override
-	public Set<IChatUser> getUsers() {
+	public HashSet<IChatUser> getUsers() {
 		return stubList;
 	}
 
@@ -109,8 +103,7 @@ public class TeamRoom implements IChatroom {
 	 */
 	@Override
 	public boolean addUser(IChatUser user) {
-		//users are fixed, this method is disallowed
-		return false;
+		return stubList.add(user);
 	}
 
 	/* (non-Javadoc)
@@ -118,8 +111,7 @@ public class TeamRoom implements IChatroom {
 	 */
 	@Override
 	public boolean removeUser(IChatUser user) {
-		//users are fixed, this method is disallowed
-		return false;
+		return stubList.remove(user);
 	}
 
 	/* (non-Javadoc)
@@ -132,7 +124,7 @@ public class TeamRoom implements IChatroom {
 			public void run() {
 				try {
 					for (IChatUser stub:stubList){
-						if (stub!=sender){
+						if (!(sender.equals(stub))){
 							stub.receive(sender, message.getDataPacket());
 						}
 					}
