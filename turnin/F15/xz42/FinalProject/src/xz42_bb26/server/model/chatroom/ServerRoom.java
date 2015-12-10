@@ -563,7 +563,7 @@ public class ServerRoom implements IChatroom {
 				UUID uuid = host.getData().getID();
 				String teamName = host.getData().getTeamName();
 				
-				GameController gameController = new GameController(uuid, me, teamName, host.getData().isNavigator());
+				GameController gameController = new GameController(host.getData().getID(), me, teamName, host.getData().isNavigator());
 				try {
 					gameController.start();
 				} catch (RemoteException e) {
