@@ -170,7 +170,7 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void sendToChatroom(IChatMessage message) {
-				// TODO Auto-generated method stub	
+				send(stub, message);
 			}
 
 			@Override
@@ -191,8 +191,11 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void sendMsgTo(IChatMessage msg, IChatUser chatUser) {
-				// TODO Auto-generated method stub
-				
+				try {
+					chatUser.receive(stub, msg.getDataPacket());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
 			}
 
 		};
