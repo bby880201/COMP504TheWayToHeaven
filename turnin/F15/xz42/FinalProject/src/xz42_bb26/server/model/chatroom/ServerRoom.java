@@ -88,23 +88,23 @@ public class ServerRoom implements IChatroom {
 	private UUID id;
 	
 	// name of the chatroom
-	private String displayName = "The Way To Rice Game Server";
+	private String displayName;
 
-	private HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
+	protected HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
 	
-	private transient HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
+	protected transient HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
 	
-	private transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
+	protected transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
 	
-	private transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
+	protected transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
-	private transient IMixedDataDictionary mixDict = new MixedDataDictionary();
+	protected transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
-	private DataPacketAlgo<String, IChatUser> msgAlgo;
+	protected DataPacketAlgo<String, IChatUser> msgAlgo;
 	
 	private IChatroom thisRoom = this;
 	
-	private transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	protected transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
 	
 	private transient Set<IChatUser> players = new HashSet<IChatUser>();
 	
@@ -136,6 +136,7 @@ public class ServerRoom implements IChatroom {
 		id = uuid;
 		users.put(me,null);
 		initMe = null;
+		displayName = "The Way To Rice Game Server";
 		
 	}
 
@@ -279,7 +280,7 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public String apply(Class<?> index, DataPacket<ATextMessage> host,
 					IChatUser... params) {
-
+				
 				IChatUser remote = params[0];
 
 				JLabel content = new JLabel(users.get(remote).getName() + " says:\n" + host.getData().getText() + "\n");
