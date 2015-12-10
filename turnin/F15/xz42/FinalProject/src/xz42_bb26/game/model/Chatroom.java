@@ -331,8 +331,8 @@ public class Chatroom implements IChatroom {
 			@Override
 			public String apply(Class<?> index,
 					DataPacket<TeamOut> host, IChatUser... params) {
-				model.aTeamOut(host.getData().getID());
-				return host.getData().getID()+"is out";
+				model.aTeamOut(host.getData().getTeamID());
+				return host.getData().getTeamID()+"is out";
 			}
 		});
 		
