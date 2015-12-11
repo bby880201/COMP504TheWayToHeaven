@@ -389,9 +389,11 @@ public class GameModel {
 						TeamBox.this.setHeading(LatLon.greatCircleAzimuth(oriPos, desPos));
 						if (worldModel.getGlobe().getElevationModel().getElevation(curPos.getLatitude(), curPos.getLongitude())>5) {
 							TeamBox.this.moveTo(curPos);
-							team.moveTo(curPos);
-							if(isNavigator()){
-								globalChatroom.IMove(team);
+							if(TeamBox.this.equals(myBox)){
+								team.moveTo(curPos);
+								if(isNavigator()){
+									globalChatroom.IMove(team);
+								}
 							}
 							oriPos = curPos;
 

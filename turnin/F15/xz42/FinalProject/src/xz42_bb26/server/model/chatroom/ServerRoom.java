@@ -144,7 +144,7 @@ public class ServerRoom implements IChatroom {
 		me = (IChatUser) UnicastRemoteObject.exportObject(prestub, IChatUser.BOUND_PORT_SERVER);
 
 		id = uuid;
-		users.put(me,null);
+		users.put(me, new ChatUserEntity(me ,"Server","127.0.0.1"));
 		invisiblePlayer.add(me);
 		initMe = null;
 		displayName = "Game Server Lobby";	
