@@ -38,6 +38,7 @@ public class TeamRoom extends ServerRoom {
 	public TeamRoom(String name, IChatUser srv) throws Exception {
 		super();
 		teamName = name;
+		setName(name);
 		
 		server = srv;
 		navig = null;

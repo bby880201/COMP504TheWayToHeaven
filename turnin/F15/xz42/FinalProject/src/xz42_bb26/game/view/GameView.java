@@ -65,6 +65,7 @@ public class GameView extends JFrame {
 	 */
 	public GameView(IModelAdapter iModelAdapter) {
 		this.model = iModelAdapter;
+		
 	}
 	
 	private void initGUI(){
