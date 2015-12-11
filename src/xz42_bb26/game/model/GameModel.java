@@ -95,7 +95,7 @@ public class GameModel {
 		team = new Team();
 		team.setModel(this);
 		team.uuid = teamUUID;
-		team.supply = 15000;
+		team.supply = 10000;
 		team.myLatitude = 63;
 		team.myLongtitude = -151;
 		team.isNavigator = _isNavigator;
@@ -382,7 +382,7 @@ public class GameModel {
 						
 						if(!inGame) return;
 						
-						double speed = 1.0/2/ang.degrees;
+						double speed = 0.5/2/ang.degrees;
 						n=n+speed;
 						curPos = Position.interpolateGreatCircle(n, oriPos, desPos);
 						prevPos = Position.interpolateGreatCircle(n-speed, oriPos, desPos);
