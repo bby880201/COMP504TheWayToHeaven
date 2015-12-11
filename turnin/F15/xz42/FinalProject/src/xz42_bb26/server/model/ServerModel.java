@@ -471,7 +471,7 @@ public class ServerModel {
 		return ip;
 	}
 
-	public TeamRoom creatTeam(IChatUser srv, ChatUserEntity mb) {
+	public TeamRoom createTeam(IChatUser srv, ChatUserEntity mb) {
 		if (tempTeam == null) {
 			try {
 				tempTeam = new TeamRoom(mb + "'s team", srv);
@@ -512,6 +512,7 @@ public class ServerModel {
 				}
 			}).start();
 			
+			tempTeam = null;
 			return null;
 		}		
 	}

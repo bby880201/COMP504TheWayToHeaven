@@ -95,7 +95,7 @@ public class ServerRoom implements IChatroom {
 
 	protected HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
 	
-	protected transient HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
+	protected HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
 	
 	protected transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
 	
@@ -889,6 +889,7 @@ public class ServerRoom implements IChatroom {
 	public boolean addUser(IChatUser user) {
 		boolean added = users.put(user,new ChatUserEntity(user)) != null;
 		// Refresh the member list to display in the GUI panel
+		System.out.println("User: " + user);
 		infoRequest(user);
 		return added;
 	}
@@ -900,8 +901,6 @@ public class ServerRoom implements IChatroom {
 		userInfo.put(infoReq.getID(), newEntity);
 		users.put(user,newEntity);
 		refreshList();
-		
-		serverAdapter.append("User joined: " + newEntity);
 		
 		(new Thread(){
 			@Override
