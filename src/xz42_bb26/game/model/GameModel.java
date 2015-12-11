@@ -203,8 +203,8 @@ public class GameModel {
 						System.out.println(team.toString());
 						TeamBox aBox = boxList.get(_team.uuid);
 						if(aBox==null){
-							aBox= makeTeamBox(_team.uuid,Angle.fromDegrees(63), 
-									Angle.fromDegrees(-151), 
+							aBox= makeTeamBox(_team.uuid,Angle.fromDegrees(_team.myLatitude), 
+									Angle.fromDegrees(_team.myLongtitude), 
 									Material.BLUE, _team.name);
 							view.getBoxLayer().addRenderable(aBox);
 							boxList.put(_team.uuid, aBox);
