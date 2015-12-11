@@ -97,9 +97,9 @@ public class ServerRoom implements IChatroom {
 	
 	protected HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
 	
-	protected transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
+	protected BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
 	
-	protected transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
+	protected HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
 	protected transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
@@ -107,11 +107,11 @@ public class ServerRoom implements IChatroom {
 	
 	private IChatroom thisRoom = this;
 	
-	protected transient HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	protected HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
 	
-	private transient Set<IChatUser> players = new HashSet<IChatUser>();
+	private Set<IChatUser> players = new HashSet<IChatUser>();
 	
-	private transient Set<IChatUser> invisiblePlayer = new HashSet<IChatUser>();
+	private Set<IChatUser> invisiblePlayer = new HashSet<IChatUser>();
 	
 	private boolean isPlayable = false;
 	
@@ -124,6 +124,8 @@ public class ServerRoom implements IChatroom {
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
 	public ServerRoom(UUID uuid) throws UnknownHostException, RemoteException {
+		
+		
 
 		initAlgo();
 		prestub = new ChatUser("", new IChatUser2ModelAdapter(){
@@ -143,7 +145,7 @@ public class ServerRoom implements IChatroom {
 		users.put(me,null);
 		invisiblePlayer.add(me);
 		initMe = null;
-		displayName = "The Way To Rice Game Server";	
+		displayName = "Game Server Lobby";	
 	}
 
 	/**
@@ -388,14 +390,17 @@ public class ServerRoom implements IChatroom {
 					DataPacket<AChatUserInfoResponse> host, IChatUser... params) {
 				
 				ChatUserEntity info = userInfo.get(host.getData().getID());
-				info.setIp(host.getData().getIP());
-				info.setName(host.getData().getName());
-				users.put(params[0], info);
-				refreshList();
+				if (null != info){
+					info.setIp(host.getData().getIP());
+					info.setName(host.getData().getName());
+					users.put(params[0], info);
+					refreshList();
+					
+					userInfo.remove(host.getData().getID());
+				}
 				
-				userInfo.remove(host.getData().getID());
 				
-				return "User info updated from: " + users.get(params[0]);
+				return "User info updated from: " + host.getData().getName() + " " + users.get(params[0]);
 			}
 
 			@Override
@@ -890,7 +895,6 @@ public class ServerRoom implements IChatroom {
 		boolean added = users.put(user,new ChatUserEntity(user)) != null;
 		// Refresh the member list to display in the GUI panel
 		System.out.println("User: " + user);
-		infoRequest(user);
 		return added;
 	}
 	
@@ -944,7 +948,8 @@ public class ServerRoom implements IChatroom {
 			public void run() {
 				for (IChatUser user : users.keySet()) {
 					// send message to users other than myself
-					if (!user.equals(me)) {
+//					if (!user.equals(me)) {
+					if (true) {
 						try {
 							user.receive(me, message.getDataPacket());
 						} catch (RemoteException e) {
