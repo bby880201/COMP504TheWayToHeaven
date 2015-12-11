@@ -174,7 +174,7 @@ public class ServerController {
 					@Override
 					public void createTeam(ChatUserEntity member) {
 						serverRoom.setUserInvisible(member.getChatUser());
-						serverRoom.addTeam(model.creatTeam(serverRoom.getMe(),member));
+						serverRoom.addTeam(model.createTeam(serverRoom.getMe(),member));
 					}
 
 					@Override
