@@ -470,7 +470,7 @@ public class GameModel {
 				timer = new Timer(frequency, new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 //						PulsingIcon.this.setBackgroundScale(scales[++scaleIndex % scales.length]);
-						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.3){
+						if (Position.greatCircleDistance(myBox.getCenterPosition(), PulsingIcon.this.getPosition()).degrees<0.8){
 							System.out.println("getIntoRangeOfAIcon");
 							timer.stop();
 							if(PulsingIcon.this.uuid.equals(desIcon.uuid)){
