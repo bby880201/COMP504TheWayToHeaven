@@ -85,9 +85,9 @@ public class TeamRoom extends ServerRoom {
 	}
 
 	public void installGame() {
-		(new Thread() {
-			@Override
-			public void run() {
+//		(new Thread() {
+//			@Override
+//			public void run() {
 				try {
 					UUID uuid = UUID.randomUUID();
 					InstallGameMessage instGameNavigator = new InstallGameMessage(uuid,teamName,true);
@@ -97,7 +97,7 @@ public class TeamRoom extends ServerRoom {
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
-			}
-		}).start();		
+//			}
+//		}).start();		
 	}
 }

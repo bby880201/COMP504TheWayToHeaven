@@ -627,9 +627,9 @@ public class ServerRoom implements IChatroom {
 					IChatUser... params) {
 				IChatUser player = host.getData().getStub();
 				players.add(player);
-				if (players.size() == teamList.size()*2){
+//				if (players.size() == teamList.size()*2){
 					setPlayable(true);
-					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(50, 14,60 ,-150, -70, 1, 10);
+					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(50, 14,70 ,-150, -70, 1, 10);
 					Ready gameReady = new Ready(players,depots);
 					
 					(new Thread(){
@@ -646,7 +646,7 @@ public class ServerRoom implements IChatroom {
 						}
 					}).start();
 					
-				}
+//				}
 				return "Receive " + players.size() + " players' response";
 			}
 		});
