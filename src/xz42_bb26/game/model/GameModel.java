@@ -95,12 +95,12 @@ public class GameModel {
 		team = new Team();
 		team.setModel(this);
 		team.uuid = teamUUID;
-		team.supply = 20000;
+		team.supply = 5000;
 		team.myLatitude = 63;
 		team.myLongtitude = -151;
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
-		team.cash = 200;
+		team.cash = 100;
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
