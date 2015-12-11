@@ -95,7 +95,7 @@ public class GameModel {
 		team = new Team();
 		team.setModel(this);
 		team.uuid = teamUUID;
-		team.supply = 5000;
+		team.supply = 15000;
 		team.myLatitude = 63;
 		team.myLongtitude = -151;
 		team.isNavigator = _isNavigator;
@@ -227,8 +227,11 @@ public class GameModel {
 				@Override
 				public void aTeamOut(UUID id) {
 					if(id!=team.uuid){
-						boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
-						boxList.get(id).stop();
+						if(boxList.get(id)!=null){
+							boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
+							boxList.get(id).stop();
+						}
+		
 					}
 					else{
 						inGame = false;
