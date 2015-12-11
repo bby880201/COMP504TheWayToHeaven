@@ -629,7 +629,7 @@ public class ServerRoom implements IChatroom {
 				players.add(player);
 				if (players.size() == teamList.size()*2){
 					setPlayable(true);
-					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(100, 14,60 ,-150, -70, 1, 10);
+					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(50, 14,60 ,-150, -70, 1, 10);
 					Ready gameReady = new Ready(players,depots);
 					
 					(new Thread(){
