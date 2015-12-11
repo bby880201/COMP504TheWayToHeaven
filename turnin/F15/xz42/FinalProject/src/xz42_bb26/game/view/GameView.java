@@ -265,7 +265,7 @@ public class GameView extends JFrame {
 		lblSupply.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		stPanel.add(lblSupply);
 		
-		lblSupplyNum = new JLabel("5000");
+		lblSupplyNum = new JLabel("15000");
 		stPanel.add(lblSupplyNum);
 		
 		JLabel lblMiles = new JLabel("Units");
