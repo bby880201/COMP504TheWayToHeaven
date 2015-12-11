@@ -144,9 +144,11 @@ public class GameModel {
 				Material.GREEN, "Your team");
 		view.getBoxLayer().addRenderable(myBox);
 		for (Team team : teams.values()) {
-			boxList.put(team.uuid, makeTeamBox(team.uuid,Angle.fromDegrees(63), 
+			TeamBox newBox = makeTeamBox(team.uuid,Angle.fromDegrees(63), 
 					Angle.fromDegrees(-151), 
-					Material.BLUE, team.name));
+					Material.BLUE, team.name);
+			boxList.put(team.uuid, newBox);
+			view.getBoxLayer().addRenderable(newBox);
 		}
 	}
 	/**
@@ -202,9 +204,12 @@ public class GameModel {
 							aBox= makeTeamBox(_team.uuid,Angle.fromDegrees(63), 
 									Angle.fromDegrees(-151), 
 									Material.BLUE, _team.name);
+							view.getBoxLayer().addRenderable(aBox);
 							boxList.put(_team.uuid, aBox);
 						}
+						teams.put(_team.uuid, _team);
 						_team.myLocation = Position.fromDegrees(_team.myLatitude, _team.myLongtitude);
+						_team.setModel(GameModel.this);
 						aBox.move(_team.myLatitude, _team.myLongtitude);
 						teams.put(_team.uuid, _team);
 					}
