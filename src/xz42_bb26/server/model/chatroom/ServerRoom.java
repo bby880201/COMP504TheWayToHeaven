@@ -631,7 +631,7 @@ public class ServerRoom implements IChatroom {
 				players.add(player);
 //				if (players.size() == teamList.size()*2){
 					setPlayable(true);
-					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(50, 14,70 ,-150, -70, 10, 20);
+					Set<Depot> depots = GameUtils.singleton.generateRandomDepots(100, 14,70 ,-150, -70, 10, 20);
 					Ready gameReady = new Ready(players,depots);
 					
 					(new Thread(){

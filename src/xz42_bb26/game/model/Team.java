@@ -67,7 +67,7 @@ public class Team implements Serializable {
 	}
 	
 	private void consume(double length){
-		this.supply -= 0.003*length;
+		this.supply -= Math.abs(0.003*length);
 	}
 	
 	public void checkWin(){	
