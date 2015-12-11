@@ -101,6 +101,7 @@ public class GameModel {
 		team.isNavigator = _isNavigator;
 		team.name = _teamName;
 		team.cash = 100;
+
 		if(team.isNavigator){
 			userName = _teamName + "_Navigator";
 		}
