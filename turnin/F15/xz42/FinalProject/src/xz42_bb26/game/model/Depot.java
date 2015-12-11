@@ -14,5 +14,5 @@ public class Depot implements Serializable {
 	public double latitude;
 	public double longitude;
 	public transient Position position;
-	UUID uuid = UUID.randomUUID();
+	public UUID uuid = UUID.randomUUID();
 }

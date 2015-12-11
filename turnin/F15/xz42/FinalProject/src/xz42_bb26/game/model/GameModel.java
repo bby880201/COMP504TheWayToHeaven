@@ -227,10 +227,12 @@ public class GameModel {
 				public void aTeamOut(UUID id) {
 					if(id!=team.uuid){
 						boxList.get(id).getAttributes().setInteriorMaterial(Material.BLACK);
+						boxList.get(id).stop();
 					}
 					else{
 						inGame = false;
 						view.gameOver();
+						myBox.stop();
 					}
 					
 				}
@@ -239,9 +241,13 @@ public class GameModel {
 				public void aTeamWins(UUID id) {
 					inGame = false;
 					if(id.equals(team.uuid)){
+						myBox.stop();
 						view.aTeamWins(team);
 					}
 					else{
+						for (TeamBox aBox : boxList.values()) {
+							aBox.stop();
+						}
 						view.aTeamWins(teams.get(id));
 					}
 					
@@ -267,7 +273,6 @@ public class GameModel {
 					depots.remove(id);
 					depotsIcons.get(id).stop();
 					depotsIcons.get(id).setVisible(false);
-					
 				}
 
 
@@ -281,7 +286,7 @@ public class GameModel {
 	}
 
 	private void renderDepots() {
-		depotsIcons = new HashMap<>();
+		depotsIcons = new HashMap<UUID, PulsingIcon>();
 		for (Depot depot : depots.values()) {
 			PulsingIcon icon = new PulsingIcon(circleYellow,depot.uuid, depot.position, 500);
 			icon.setSize(new Dimension(20, 20));

@@ -268,7 +268,7 @@ public class GameView extends JFrame {
 		lblSupplyNum = new JLabel("10000");
 		stPanel.add(lblSupplyNum);
 		
-		JLabel lblMiles = new JLabel("Miles");
+		JLabel lblMiles = new JLabel("Units");
 		stPanel.add(lblMiles);	
 	}
 	
