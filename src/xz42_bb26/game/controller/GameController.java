@@ -86,8 +86,12 @@ public class GameController {
 
 			@Override
 			public Team getTeam() {
-				// TODO Auto-generated method stub
 				return model.getTeam();
+			}
+
+			@Override
+			public void quit() {
+				model.quit();
 			}
 			
 		});

@@ -13,6 +13,7 @@ import java.util.UUID;
 import javax.swing.Timer;
 
 import common.IChatUser;
+import common.demo.message.chat.RemoveMe;
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -537,6 +538,10 @@ public class GameModel {
 
 	public Team getTeam() {
 		return team;
+	}
+
+	public void quit() {
+		globalChatroom.send(globalChatroom.getMe(), new RemoveMe(globalChatroom.getMe()));
 	}
 	
 

@@ -25,6 +25,12 @@ public interface IModelAdapter {
 		@Override
 		public void buySupply(Depot depot) {			
 		}
+
+		@Override
+		public void quit() {
+			// TODO Auto-generated method stub
+			
+		}
 	};
 
 	boolean isNavigator();
@@ -34,5 +40,7 @@ public interface IModelAdapter {
 	void buySupply(Depot depot);
 
 	Team getTeam();
+
+	void quit();
 
 }
