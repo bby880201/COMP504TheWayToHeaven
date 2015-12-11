@@ -424,6 +424,7 @@ public class ServerModel {
 			chatRoom.setChatWindowAdapter(toView.makeChatRoom(chatRoom));
 			// add members in the remote chatroom to the created local chatroom
 			for (IChatUser user : rm.getUsers()) {
+				chatRoom.infoRequest(user);
 				chatRoom.addUser(user);
 			}
 			// broadcast addMe command to all the members in the chatroom
@@ -480,7 +481,7 @@ public class ServerModel {
 			}
 			
 			IInitUser init = connectTo(mb.getIp());
-			AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) tempTeam, false);
+			AInvitation2Chatroom invite = new Invitation2Chatroom((IChatroom) tempTeam, true);
 
 			(new Thread() {
 				@Override
