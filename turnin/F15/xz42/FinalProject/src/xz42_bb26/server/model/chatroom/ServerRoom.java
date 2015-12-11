@@ -7,10 +7,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -93,13 +95,13 @@ public class ServerRoom implements IChatroom {
 	// name of the chatroom
 	private String displayName;
 
-	protected HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
+	protected Map<IChatUser,ChatUserEntity> users = new ConcurrentHashMap<IChatUser,ChatUserEntity>();
 	
-	protected HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
+	protected Map<UUID, ChatUserEntity> userInfo = new ConcurrentHashMap<UUID, ChatUserEntity>();
 	
 	protected BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
 	
-	protected HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
+	protected Map<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
 	protected transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
@@ -107,7 +109,7 @@ public class ServerRoom implements IChatroom {
 	
 	private IChatroom thisRoom = this;
 	
-	protected HashMap<UUID,TeamRoom> teamList = new HashMap<UUID,TeamRoom>();
+	protected Map<UUID,TeamRoom> teamList = new ConcurrentHashMap<UUID,TeamRoom>();
 	
 	private Set<IChatUser> players = new HashSet<IChatUser>();
 	
