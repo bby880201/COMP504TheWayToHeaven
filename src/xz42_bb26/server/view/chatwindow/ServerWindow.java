@@ -26,6 +26,7 @@ import java.awt.Container;
 
 import javax.swing.BoxLayout;
 import javax.swing.border.TitledBorder;
+import javax.swing.ListSelectionModel;
 
 /**
  * The mini-view GUI panel for the chat window
@@ -117,6 +118,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		panel_6.setLayout(new BorderLayout(0, 0));
 
 		lsMember = new JList<Usr>();
+		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lsMember.setToolTipText("Display the current members in the chatroom.");
 		lsMember.setBorder(new TitledBorder(null, "Member List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_6.add(new JScrollPane(lsMember), BorderLayout.CENTER);
