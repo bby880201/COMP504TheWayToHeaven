@@ -263,7 +263,9 @@ public class GameModel {
 						depot.position = Position.fromDegrees(depot.latitude, depot.longitude);
 						depots.put(depot.uuid, depot);
 					}
-					initBoxes();
+					if(myBox == null){
+						initBoxes();
+					}
 					renderDepots();
 				}
 
