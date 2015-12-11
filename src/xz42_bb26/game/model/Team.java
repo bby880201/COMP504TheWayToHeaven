@@ -35,7 +35,7 @@ public class Team implements Serializable {
 	
 	public void buySupply(Depot depot){
 		cash -= depot.price;
-		supply +=5000;
+		supply +=3000;
 		if(cash < 0){
 			System.out.println("run out of money with "+cash);
 			model.sendGameOver();
@@ -67,7 +67,7 @@ public class Team implements Serializable {
 	}
 	
 	private void consume(double length){
-		this.supply -= 0.001*length;
+		this.supply -= 0.003*length;
 	}
 	
 	public void checkWin(){	
