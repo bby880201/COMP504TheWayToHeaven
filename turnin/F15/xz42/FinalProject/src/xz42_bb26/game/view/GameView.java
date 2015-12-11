@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -100,7 +102,12 @@ public class GameView extends JFrame {
 		iconLayer = new IconLayer();
 		sLayer = new RenderableLayer();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				quit();
+			}
+		});
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -312,7 +319,10 @@ public class GameView extends JFrame {
 		taGamePhase.setText("Game Over: Sorry, you ran out of supply or money!");
 		JOptionPane.showMessageDialog(this, "Game Over! You lose for out of supply.");
 	}
-
+	private void quit() {
+		System.out.println("ChatGUI: Server is quitting...");
+		toModel.quit();
+	}
 	
 	
 }

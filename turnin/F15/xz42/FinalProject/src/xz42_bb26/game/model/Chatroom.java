@@ -14,6 +14,7 @@ import common.IChatUser;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
 import common.IInitUser;
+import common.demo.message.chat.RemoveMe;
 import common.message.IChatMessage;
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
@@ -408,6 +409,34 @@ public class Chatroom implements IChatroom {
 					DataPacket<Begin> host, IChatUser... params) {
 				model.gameBigin();
 				return "Game begins!";
+			}
+		});
+		
+		msgAlgo.setCmd(RemoveMe.class, new ADataPacketAlgoCmd<String, RemoveMe, IChatUser>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6681106016892170401L;
+
+			/**
+			 * declare a static final serialVersionUID of type long to fix the warning
+			 */
+
+			@Override
+			/**
+			 * Set the ICmd2ModelAdapter of this command
+			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+			 */
+			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+				_cmd2ModelAdpt = cmd2ModelAdpt;
+			}
+
+			@Override
+			public String apply(Class<?> index,
+					DataPacket<RemoveMe> host, IChatUser... params) {
+				users.remove(host.getData().getUser());
+				return "A Player Leaves";
 			}
 		});
 	}
