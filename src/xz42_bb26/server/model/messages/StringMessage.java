@@ -8,7 +8,7 @@ import common.message.chat.ATextMessage;
 
 /**
  * This class wraps around a String. Served as testing Unknown Data Type purpose
- * @author bb26, xc7
+ * @author bb26, xz42
  */
 public class StringMessage extends ATextMessage {
 

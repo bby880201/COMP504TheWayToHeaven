@@ -63,7 +63,7 @@ import common.message.init.AInvitation2Chatroom;
 
 /**
  * This class implements the IChatroom interface. 
- * @author bb26, xc7
+ * @author bb26, xz42
  */
 public class ServerRoom implements IChatroom {
 	

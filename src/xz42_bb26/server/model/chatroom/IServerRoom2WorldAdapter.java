@@ -14,7 +14,7 @@ import common.IInitUser;
  * Mini-Model2World adapter that enables the mini-model (chat room) to communicate 
  * to the local system.
  * 
- * @author xc7, bb26 
+ * @author xz42, bb26 
  * @param <T> The type of the data being held.
  */
 public interface IServerRoom2WorldAdapter<T, TmRm> {
@@ -127,17 +127,35 @@ public interface IServerRoom2WorldAdapter<T, TmRm> {
 		}
 
 	};
-
+	/**
+	 * Display the container to the scrollable 
+	 * @param containerSupplier
+	 */
 	public void display(Supplier<Component> containerSupplier);
-
+	/**
+	 * Getter of username
+	 * @return username
+	 */
 	public String getName();
-
+	/**
+	 * Getter of ip
+	 * @return ip
+	 */
 	public String getIp();
-
+	/**
+	 * Speak to an ip
+	 * @param ip the ip to speak to 
+	 */
 	public void speakTo(String ip);
-
+	/**
+	 * popup a frame
+	 * @param frameFac the frame
+	 */
 	public void popUp(Supplier<JFrame> frameFac);
-
+	/**
+	 * Refresh team list
+	 * @param collection the container of the team list
+	 */
 	public void refreshTeam(Collection<TmRm> collection);
 
 }

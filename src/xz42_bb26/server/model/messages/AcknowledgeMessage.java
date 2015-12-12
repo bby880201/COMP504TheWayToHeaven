@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * This class wraps around a String. Served as testing Unknown Data Type purpose
- * @author bb26, xc7
+ * @author bb26, xz42
  */
 public class AcknowledgeMessage implements Serializable {
 	
