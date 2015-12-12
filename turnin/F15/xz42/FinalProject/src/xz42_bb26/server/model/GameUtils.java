@@ -5,7 +5,11 @@ import java.util.Random;
 import java.util.Set;
 
 import xz42_bb26.game.model.Depot;
-
+/**
+ * 
+ * @author zhenxiaolei
+ *
+ */
 public class GameUtils {
 	static public GameUtils singleton = new GameUtils();
 	
