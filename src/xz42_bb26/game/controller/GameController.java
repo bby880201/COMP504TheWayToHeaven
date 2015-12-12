@@ -17,7 +17,11 @@ import xz42_bb26.game.model.GameUser;
 import xz42_bb26.game.model.Team;
 import xz42_bb26.game.view.GameView;
 import xz42_bb26.game.view.IModelAdapter;
-
+/**
+ * This is the game controller
+ * @author zhenxiaolei
+ *
+ */
 public class GameController {
 	/**
 	 * Model of the MVC.
@@ -96,11 +100,20 @@ public class GameController {
 			
 		});
 	}
+	/**
+	 * Starting the Game.
+	 * @throws RemoteException
+	 */
 	public void start() throws RemoteException {	
 		view.start();
 		model.start();
 	}
 	
+	/**
+	 * This is the main function for testing the game individually.
+	 * Can be removed.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

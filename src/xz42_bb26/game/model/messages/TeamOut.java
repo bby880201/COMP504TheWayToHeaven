@@ -14,11 +14,19 @@ public class TeamOut extends ARequest implements IChatMessage {
 
 	
 	/**
-	 * 
+	 * Generated id
 	 */
 	private static final long serialVersionUID = 8353675427415511872L;
+	
+	/**
+	 * The UUID of the team which is out
+	 */
 	private UUID teamID;
 
+	/**
+	 * Constructor
+	 * @param teamID The UUID of the team which is out
+	 */
 	public TeamOut(UUID teamID) {
 		this.setTeamID(teamID);
 	}
@@ -29,6 +37,7 @@ public class TeamOut extends ARequest implements IChatMessage {
 	}
 
 	/**
+	 * Getter of teamID
 	 * @return the teamID
 	 */
 	public UUID getTeamID() {
@@ -36,6 +45,7 @@ public class TeamOut extends ARequest implements IChatMessage {
 	}
 
 	/**
+	 * Setter of teamID
 	 * @param teamID the teamID to set
 	 */
 	public void setTeamID(UUID teamID) {

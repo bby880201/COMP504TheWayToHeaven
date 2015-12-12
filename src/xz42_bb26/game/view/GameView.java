@@ -38,38 +38,76 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
 
 import java.awt.FlowLayout;
-
+/**
+ * View of the game
+ * @author bb26 xz42
+ *
+ */
 public class GameView extends JFrame {
 
 	/**
-	 * 
+	 * Generated id
 	 */
 	private static final long serialVersionUID = 8909380491432619237L;
-	
+	/**
+	 * max height of full screen
+	 */
 	private final int maxHeight;
+	/**
+	 * min height of full screen
+	 */
 	private final int maxWidth;
-	
+	/**
+	 * the center pane
+	 */
 	private JPanel contentPane;
+	/**
+	 * The status panel
+	 */
 	private JPanel stPanel;
+	/**
+	 * The map
+	 */
 	private MapPanel map;
-		
+	/**
+	 * The game phase text field
+	 */
 	private JTextArea taGamePhase;
+	/**
+	 * The instruction text field
+	 */
 	private JTextArea taGameInstr;
+	/**
+	 * The other info text field
+	 */
 	private JTextArea taOtherInfo;
-
+	/**
+	 * The layer of the boxes
+	 */
 	private RenderableLayer sLayer;
+	/**
+	 * The layer of the points
+	 */
 	private IconLayer iconLayer;
-
+	/**
+	 * The adapter to model
+	 */
 	private IModelAdapter toModel = IModelAdapter.NULL_OBJECT;
-
+	/**
+	 * The role label
+	 */
 	private JLabel lblRole;
-
+	/**
+	 * The cash label
+	 */
 	private JLabel lblCashNum;
-
+	/**
+	 * The supply label
+	 */
 	private JLabel lblSupplyNum;
 
 	/**
-	 * Launch the application.
+	 * Launch the view for testing.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -83,21 +121,25 @@ public class GameView extends JFrame {
 			}
 		});
 	}
-
+	/**
+	 * The testing constructor
+	 */
 	public GameView() {
 		maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 		maxHeight =	Toolkit.getDefaultToolkit().getScreenSize().height;
 	}
 	
 	/**
-	 * Create the frame.
+	 * Constructor of the GameView.
 	 */
 	public GameView(IModelAdapter iModelAdapter) {
 		toModel = iModelAdapter;
 		maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 		maxHeight =	Toolkit.getDefaultToolkit().getScreenSize().height;
 	}
-	
+	/**
+	 * init the view
+	 */
 	public void initialize() {
 		iconLayer = new IconLayer();
 		sLayer = new RenderableLayer();
@@ -187,7 +229,9 @@ public class GameView extends JFrame {
 		
 		pack();
 	}
-
+	/**
+	 * Start
+	 */
 	public void start(){
 		
 		this.setVisible(true);
@@ -214,7 +258,9 @@ public class GameView extends JFrame {
 			}
 		});
 	}
-	
+	/**
+	 * Init view for navigator
+	 */
 	public void initNavig(){
 		map.addRightClickAction(new IRightClickAction(){
 			@Override
@@ -233,7 +279,9 @@ public class GameView extends JFrame {
 		lblRole = new JLabel("Driver");
 		stPanel.add(lblRole);
 	}
-	
+	/**
+	 * Init view for manager
+	 */
 	public void initManag(){
 		taGameInstr.append("You are the resource manager!!\n\nYou need to communicate with your partener about your team's"
 				+ " cash, supply, nearest supply depots, and the way to your destiny!");
@@ -271,7 +319,10 @@ public class GameView extends JFrame {
 		JLabel lblMiles = new JLabel("Units");
 		stPanel.add(lblMiles);	
 	}
-	
+	/**
+	 * Update view
+	 * @param team the team infomation
+	 */
 	public void update(Team team){
 		sLayer.firePropertyChange(AVKey.LAYER, null, null);
 		if(! toModel.isNavigator()){
@@ -279,15 +330,24 @@ public class GameView extends JFrame {
 			lblSupplyNum.setText(Double.toString(team.supply));
 		}
 	}
-
+	/**
+	 * Getter of the layer of boxes
+	 * @return the layer of boxes
+	 */
 	public RenderableLayer getBoxLayer() {
 		return sLayer;
 	}
-	
+	/**
+	 * Getter of the layer of points
+	 * @return
+	 */
 	public IconLayer getIconLayer(){
 		return iconLayer;
 	}
-	
+	/**
+	 * Ask the user if he want to spend money on a depot
+	 * @param depot
+	 */
 	public void checkDepots(Depot depot){
 		String ObjButtons[] = {"Yes","No"};
         int PromptResult = JOptionPane.showOptionDialog(null,"Are you sure you want to exit?","Online Examination System",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
@@ -296,13 +356,18 @@ public class GameView extends JFrame {
             toModel.buySupply(depot);
         }
 	}
-
+	/**
+	 * Game start
+	 */
 	public void gameBegin() {
 		taGamePhase.setText("Game is began! Hurry up go to your destiny!!");
 		JOptionPane.showMessageDialog(this, "Game Start!!!");
 		map.setPosition(Position.fromDegrees(63, -151,3000000), true);
 	}
-
+	/**
+	 * A team wins
+	 * @param team the winning team
+	 */
 	public void aTeamWins(Team team) {
 		if(team.uuid.equals(toModel.getTeam().uuid)){
 			taGamePhase.setText("Game Over:"+"You win!!!!");
@@ -314,11 +379,16 @@ public class GameView extends JFrame {
 		}
 		
 	}
-
+	/**
+	 * The game over
+	 */
 	public void gameOver() {
 		taGamePhase.setText("Game Over: Sorry, you ran out of supply or money!");
 		JOptionPane.showMessageDialog(this, "Game Over! You lose for out of supply.");
 	}
+	/**
+	 * Quit the game
+	 */
 	private void quit() {
 		System.out.println("ChatGUI: Server is quitting...");
 		toModel.quit();

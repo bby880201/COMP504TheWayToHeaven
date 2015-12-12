@@ -13,14 +13,19 @@ import provided.datapacket.DataPacket;
  */
 public class TeamWins extends ARequest implements IChatMessage {
 
-	
+	/**
+	 * The uuid of the team wins
+	 */
 	private UUID teamID;
 	/**
-	 * 
+	 * Generated id
 	 */
 	private static final long serialVersionUID = 7303350744402421839L;
 
-	
+	/**
+	 * Constructor
+	 * @param uuid The uuid of the team wins
+	 */
 	public TeamWins(UUID uuid) {
 		teamID = uuid;
 	}
@@ -30,6 +35,7 @@ public class TeamWins extends ARequest implements IChatMessage {
 	}
 
 	/**
+	 * Getter of teamID
 	 * @return the teamID
 	 */
 	public UUID getTeamID() {
@@ -37,6 +43,7 @@ public class TeamWins extends ARequest implements IChatMessage {
 	}
 
 	/**
+	 * Setter of teamID
 	 * @param teamID the teamID to set
 	 */
 	public void setTeamID(UUID teamID) {

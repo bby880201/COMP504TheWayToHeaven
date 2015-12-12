@@ -16,13 +16,23 @@ import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
  *
  */
 public class GameUser implements IChatUser {
-	
+	/**
+	 * The adapter of model
+	 */
 	private IChatUser2ModelAdapter toModelAdapter;
-	
+	/**
+	 * The client's name
+	 */
 	private String name;
-	
+	/**
+	 * The time user generated
+	 */
 	private long time;
-	
+	/**
+	 * Constructor
+	 * @param name the client's name
+	 * @param toModel the adapter
+	 */
 	public GameUser(String name, IChatUser2ModelAdapter toModel){
 		this.toModelAdapter = toModel;
 		this.name = name;
@@ -38,6 +48,9 @@ public class GameUser implements IChatUser {
 		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
 		return name + " " + format.format(date);	
 	}
+	/**
+	 * Receive messages
+	 */
 	@Override
 	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp) throws RemoteException {
 		toModelAdapter.receive(sender, dp);
