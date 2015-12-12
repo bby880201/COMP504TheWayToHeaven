@@ -15,7 +15,7 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
 /**
  * The team information structure
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class Team implements Serializable {

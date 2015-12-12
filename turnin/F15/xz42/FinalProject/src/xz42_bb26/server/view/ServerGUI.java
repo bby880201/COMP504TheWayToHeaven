@@ -39,7 +39,7 @@ import javax.swing.ListSelectionModel;
 /**
  * The main GUI frame of the ChatApp program.
  * 
- * @author xc7, bb26
+ * @author xz42, bb26
  *
  * @param <Room> Generic type for chatroom
  * @param <Usr> Generic type for user

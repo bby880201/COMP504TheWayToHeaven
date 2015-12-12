@@ -19,7 +19,7 @@ import xz42_bb26.game.view.GameView;
 import xz42_bb26.game.view.IModelAdapter;
 /**
  * This is the game controller
- * @author zhenxiaolei
+ * @author xz42, bb26
  *
  */
 public class GameController {

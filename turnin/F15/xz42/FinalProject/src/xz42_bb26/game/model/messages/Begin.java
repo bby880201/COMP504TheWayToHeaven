@@ -5,7 +5,7 @@ import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
 /**
  * This is a message that the server telling the clients game begins
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class Begin extends ARequest implements IChatMessage {

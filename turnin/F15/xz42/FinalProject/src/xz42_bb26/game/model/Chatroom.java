@@ -30,7 +30,7 @@ import xz42_bb26.game.model.messages.TeamWins;
 /**
  * 
  * This is the chatroom in which the game clients communicate
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class Chatroom implements IChatroom {

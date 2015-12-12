@@ -10,7 +10,7 @@ import xz42_bb26.game.model.Depot;
 /**
  * This is a ready message server sends to clients.
  * Providing all game users and depots information
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class Ready extends ARequest implements IChatMessage {
