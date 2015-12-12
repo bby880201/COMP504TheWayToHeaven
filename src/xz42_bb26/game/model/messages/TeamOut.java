@@ -7,7 +7,7 @@ import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
 /**
  * This is a message to claim a team is out.
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class TeamOut extends ARequest implements IChatMessage {

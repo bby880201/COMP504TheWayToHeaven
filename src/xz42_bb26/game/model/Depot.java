@@ -6,7 +6,7 @@ import java.util.UUID;
 import gov.nasa.worldwind.geom.Position;
 /**
  * This is a depot structure
- * @author zhenxiaolei
+ * @author xz42, bb26
  *
  */
 public class Depot implements Serializable {

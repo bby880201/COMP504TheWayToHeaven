@@ -5,7 +5,11 @@ import java.util.UUID;
 import common.message.ARequest;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
-
+/**
+ * The message comuse a depot
+ * @author xz42, bb26
+ *
+ */
 public class TeamComsumeDepot extends ARequest implements IChatMessage {
 
 	

@@ -5,7 +5,7 @@ import xz42_bb26.game.model.Depot;
 import xz42_bb26.game.model.Team;
 /**
  * The adapter from view to model
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public interface IModelAdapter {

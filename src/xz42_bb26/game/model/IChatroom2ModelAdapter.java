@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 /**
  * The adapter from chatroom to model
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public interface IChatroom2ModelAdapter {

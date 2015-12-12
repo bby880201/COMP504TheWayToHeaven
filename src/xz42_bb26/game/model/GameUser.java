@@ -12,7 +12,7 @@ import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
 
 /**
  * This class contains the fields and methods associated with the ChatUser.
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class GameUser implements IChatUser {

@@ -33,7 +33,7 @@ import xz42_bb26.game.model.messages.TeamOut;
 import xz42_bb26.game.model.messages.TeamWins;
 /**
  * This is the main model of the game
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class GameModel {

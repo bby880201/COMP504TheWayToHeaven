@@ -5,7 +5,7 @@ import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
 /**
  * This is a message that broadcast the team infomation to all users
- * @author xz42
+ * @author xz42, bb26
  *
  */
 import xz42_bb26.game.model.Team;

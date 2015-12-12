@@ -8,7 +8,7 @@ import provided.datapacket.DataPacket;
 
 /**
  * This is a message class for a team to claim it wins
- * @author xz42
+ * @author xz42, bb26
  *
  */
 public class TeamWins extends ARequest implements IChatMessage {
