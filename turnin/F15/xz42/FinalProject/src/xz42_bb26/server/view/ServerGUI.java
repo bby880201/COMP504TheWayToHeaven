@@ -46,18 +46,53 @@ import javax.swing.ListSelectionModel;
  */
 public class ServerGUI<Room, Usr, ChatUsr, TmRm> {
 
-	@SuppressWarnings({ "unchecked" })
+	/**
+	 * The to model adapter
+	 */
 	private IView2ModelAdapter<Room, Usr,ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
+	/**
+	 * The main frame
+	 */
 	private JFrame frame;
+	/**
+	 * Ip input field
+	 */
 	private JTextField tfIPInput;
+	/**
+	 * Tab panel
+	 */
 	private JTabbedPane tabbedPane;
+	/**
+	 * Get chatroom button
+	 */
 	private JButton btnGetChatrooms;
+	/**
+	 * Chat with button
+	 */
 	private JButton btnChatWith;
+	/**
+	 * Quit button
+	 */
 	private JButton btnQuit;
+	/**
+	 * Join chatroom button
+	 */
 	private JButton btnJoinChatroom;
+	/**
+	 * Connet To panel
+	 */
 	private JPanel panel_1;
+	/**
+	 * Join chatroom panel
+	 */
 	private JPanel panel_2;
+	/**
+	 * Chatroom list panel
+	 */
 	private JPanel panel_3;
+	/**
+	 * Room list
+	 */
 	private JList<Room> lsRooms;
 
 	/**

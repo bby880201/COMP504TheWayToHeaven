@@ -33,7 +33,7 @@ import javax.swing.ListSelectionModel;
  * 
  * @author bb26
  *
- * @param <Usr>
+ * @param <Usr,TmRm>
  */
 public class ServerWindow<Usr,TmRm> extends JSplitPane {
 
@@ -41,19 +41,53 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -8432378916828183998L;
-
+	/**
+	 * The adapter to model
+	 */
 	private IServerWindow2World<Usr> toChatroomAdapt;
-
+	/**
+	 * This window
+	 */
 	private ServerWindow<Usr,TmRm> thisWindow = this;
+	/**
+	 * The message input
+	 */
 	private JEditorPane edMsg;
+	/**
+	 * Member list
+	 */
 	private JList<Usr> lsMember;
+	/**
+	 * The scrollable screen
+	 */
 	private JScrollPane scDisplay;
+	/**
+	 * The display panel
+	 */
 	private JPanel plDisplay;
+	/**
+	 * Create team button
+	 */
 	private JButton btnCreateTeam;
+	/**
+	 * Send message button
+	 */
 	private JButton btnSend;
+	/**
+	 * Kick player button
+	 */
 	private JButton btnKick;
+	/**
+	 * Install game button
+	 */
 	private JButton btnInstallGame;
+	/**
+	 * Team list
+	 */
 	private JList<TmRm> lsTeam;
+	/**
+	 * Start game button
+	 */
 	private JButton btnPlay;
 
 	/**
@@ -320,12 +354,17 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		plDisplay.revalidate();
 		plDisplay.repaint();
 	}
-
+	/**
+	 * Set the diplay name of the room
+	 * @param displayName
+	 */
 	public void refreshRoomName(String displayName) {
-		//TODO need to be done!
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Refresh team list information
+	 * @param teamList team list 
+	 */
 	public void refreshTeam(Collection<TmRm> teamList) {
 		lsTeam.setListData((TmRm[]) teamList.toArray());
 	}
