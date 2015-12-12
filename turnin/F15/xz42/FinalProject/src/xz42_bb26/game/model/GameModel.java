@@ -31,11 +31,13 @@ import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.TeamComsumeDepot;
 import xz42_bb26.game.model.messages.TeamOut;
 import xz42_bb26.game.model.messages.TeamWins;
-
+/**
+ * This is the main model of the game
+ * @author xz42
+ *
+ */
 public class GameModel {
-	/**
-	 * Model to view adapter.
-	 */
+
 	/**
 	 * World wind model, used to get elevations. 
 	 */
@@ -72,17 +74,29 @@ public class GameModel {
 	 * Current username like teamA_Navigator
 	 */
 	private String userName;
-	
+	/**
+	 * The information of the depots
+	 */
 	public HashMap<UUID,Depot> depots= new HashMap<UUID, Depot>();
-	
+	/**
+	 * The game status
+	 */
 	private boolean inGame;
-	
+	/**
+	 * The list of the team boxes
+	 */
 	private HashMap<UUID, TeamBox> boxList= new HashMap<UUID, TeamBox>();
-	
+	/**
+	 * THIS team box
+	 */
 	private TeamBox myBox;
-	
+	/**
+	 * The point of the destination
+	 */
 	PulsingIcon desIcon;
-	
+	/**
+	 * The points of the depots
+	 */
 	private HashMap<UUID, PulsingIcon> depotsIcons;
 	/**
 	 * Constructor of the game model.
@@ -112,10 +126,11 @@ public class GameModel {
 		
 	}
 	
-	public void updateStatus(){
-		
-	}
-	
+
+	/**
+	 * Move my box to a position
+	 * @param pos
+	 */
 	public void moveTo(Position pos){
 		if(inGame){
 			
@@ -134,7 +149,9 @@ public class GameModel {
 		box.move(desLat, desLon);
 	}
 	
-	
+	/**
+	 * Init the boxes to the view
+	 */
 	public void initBoxes(){
 		
 		//Rice 29 -95
@@ -163,6 +180,15 @@ public class GameModel {
 		return (int)Math.floor((Math.random()*(1+max-min))+min);
 	}
 	
+	/**
+	 * Generate the boxes
+	 * @param uuid the id of the team
+	 * @param lat latitude
+	 * @param lon longitude
+	 * @param color color of the box
+	 * @param teamName team name
+	 * @return a generated team box
+	 */
 	public TeamBox makeTeamBox(UUID uuid, Angle lat, Angle lon, Material color, String teamName) {
 
 		ShapeAttributes attrs = new BasicShapeAttributes();
@@ -178,6 +204,10 @@ public class GameModel {
 		return box4;
 	}
 	
+	/**
+	 * Model start
+	 * @throws RemoteException remote excepotions
+	 */
 	public void start() throws RemoteException {
 		try {
 			
@@ -290,7 +320,9 @@ public class GameModel {
 		}
 		
 	}
-
+	/**
+	 * render the depots points to the view
+	 */
 	private void renderDepots() {
 		depotsIcons = new HashMap<UUID, PulsingIcon>();
 		for (Depot depot : depots.values()) {
@@ -322,10 +354,19 @@ public class GameModel {
 
 		
 	}
+	/**
+	 * Get the job of the player
+	 * @return is navigator = true; is manager = false
+	 */
 	public boolean isNavigator() {
 		return team.isNavigator;
 	}
 	
+	/**
+	 * The team box class extend the box in the map apis
+	 * @author xz42
+	 *
+	 */
 	private class TeamBox extends Box{
 		/**
 		 * Location interpolated point.
@@ -373,9 +414,7 @@ public class GameModel {
 			this.curPos = this.getCenterPosition();
 			this.desPos = this.getCenterPosition();
 			this.ang = Position.greatCircleDistance(oriPos, desPos);
-//			this.uuid = uuid;
-//			if (limit!=null)
-//				this.limit = limit;
+
 
 			if (timer==null) {
 				timer = new Timer(500, new ActionListener() {
@@ -436,7 +475,7 @@ public class GameModel {
 
 	
 	/**
-	 * Pulsing icon represents alarms.
+	 * Pulsing icons for depots and destination.
 	 * @author xz42
 	 *
 	 */
@@ -450,7 +489,7 @@ public class GameModel {
 		 */
 		protected int scaleIndex = 0;
 		/**
-		 * Scale steps.
+		 * Scale steps. which is not used for bad perforomance
 		 */
 		protected double[] scales = new double[] {1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.25, 3,
 				2.75, 2.5, 2.25, 2, 1.75, 1.5};
@@ -537,6 +576,9 @@ public class GameModel {
 		image = PatternFactory.blur(image, 13);
 		return image;
 	}
+	/**
+	 * Tell someone game is over
+	 */
 	public void sendGameOver() {
 		TeamOut aTeamOutMessage = new TeamOut(team.uuid);
 		globalChatroom.send(globalChatroom.getMe(), aTeamOutMessage);
@@ -544,15 +586,24 @@ public class GameModel {
 		view.gameOver();
 	}
 
+	/**
+	 * Calculate the cash and supply after get to a depot
+	 * @param depot
+	 */
 	public void buySupply(Depot depot) {
 		team.buySupply(depot);
 		
 	}
-
+	/**
+	 * Getter of my team
+	 * @return my team
+	 */
 	public Team getTeam() {
 		return team;
 	}
-
+	/**
+	 * Tell everyone I leave the game
+	 */
 	public void quit() {
 		globalChatroom.send(globalChatroom.getMe(), new RemoveMe(globalChatroom.getMe()));
 	}

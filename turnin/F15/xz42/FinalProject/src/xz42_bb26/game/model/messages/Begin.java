@@ -3,7 +3,11 @@ package xz42_bb26.game.model.messages;
 import common.message.ARequest;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
-
+/**
+ * This is a message that the server telling the clients game begins
+ * @author xz42
+ *
+ */
 public class Begin extends ARequest implements IChatMessage {
 
 	

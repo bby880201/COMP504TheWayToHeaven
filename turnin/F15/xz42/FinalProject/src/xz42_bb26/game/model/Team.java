@@ -13,26 +13,52 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.util.measure.LengthMeasurer;
-
+/**
+ * The team information structure
+ * @author xz42
+ *
+ */
 public class Team implements Serializable {
+	/**
+	 * team id
+	 */
 	public UUID uuid;
-	
+	/**
+	 * supply left
+	 */
 	public double supply;
-	
+	/**
+	 * cash left
+	 */
 	public double cash;
-	
+	/**
+	 * Current position
+	 */
 	public transient Position myLocation;
-	
+	/**
+	 * latitude of the position
+	 */
 	public double myLatitude;
-	
+	/**
+	 * longitude of the position
+	 */
 	public double myLongtitude;
-	
+	/**
+	 * whether is the navigator or the manager
+	 */
 	public boolean isNavigator= true;
-
+	/**
+	 * team name
+	 */
 	public String name;
-
+	/**
+	 * An adapter of the model
+	 */
 	private transient GameModel model;
-	
+	/**
+	 * The behavior when get to a depot
+	 * @param depot the depot ge to
+	 */
 	public void buySupply(Depot depot){
 		cash -= depot.price;
 		supply +=3000;
@@ -41,11 +67,17 @@ public class Team implements Serializable {
 			model.sendGameOver();
 		}
 	}
-	
+	/**
+	 * The setter of the model adapter
+	 * @param _model the model adapter
+	 */
 	public void setModel(GameModel _model){
 		model = _model;
 	}
-	
+	/**
+	 * Move to a position
+	 * @param aPos the position
+	 */
 	public void moveTo(Position aPos){
 		ArrayList<Position> positions = new ArrayList<Position>();
 		myLocation = Position.fromDegrees(myLatitude, myLongtitude);
@@ -65,14 +97,17 @@ public class Team implements Serializable {
 			model.sendGameOver();
 		}
 	}
-	
+	/**
+	 * Cost some supply when moving
+	 * @param length the length moved
+	 */
 	private void consume(double length){
 		this.supply -= Math.abs(0.003*length);
 	}
 	
-	public void checkWin(){	
-	}
-	
+	/**
+	 * To string
+	 */
 	public String toString(){
 		return uuid+"team: "+name+"is now on "+myLatitude+","+myLongtitude+"with cash "+cash+"and supply "+supply; 
 	}

@@ -27,7 +27,12 @@ import xz42_bb26.game.model.messages.TeamComsumeDepot;
 import xz42_bb26.game.model.messages.TeamInfoUpdate;
 import xz42_bb26.game.model.messages.TeamOut;
 import xz42_bb26.game.model.messages.TeamWins;
-
+/**
+ * 
+ * This is the chatroom in which the game clients communicate
+ * @author xz42
+ *
+ */
 public class Chatroom implements IChatroom {
 	/**
 	 * The IChatUser
@@ -62,8 +67,15 @@ public class Chatroom implements IChatroom {
 	 */
 	private HashMap<IChatUser,Team> teams;
 	
+	/**
+	 * The model adapter
+	 */
 	private IChatroom2ModelAdapter model;
 	
+	/**
+	 * Model adapter setter
+	 * @param model the model adapter
+	 */
 	public void setChatroom2ModelAdapter(IChatroom2ModelAdapter model){
 		this.model = model;
 	}
@@ -73,7 +85,7 @@ public class Chatroom implements IChatroom {
 	 * 
 	 * @param userName
 	 *            the name of the user
-	 * @throws RemoteException
+	 * @throws RemoteException Remote exceptions
 	 */
 	public Chatroom(String userName) throws RemoteException {
 
@@ -104,7 +116,7 @@ public class Chatroom implements IChatroom {
 	/**
 	 * Get current user stub in the chatroom
 	 * 
-	 * @return
+	 * @return the stub of the user
 	 */
 	public IChatUser getMe() {
 		return me;
@@ -144,6 +156,9 @@ public class Chatroom implements IChatroom {
 		return users.add(user);
 	}
 
+	/**
+	 * Broadcast messages to the chatroom
+	 */
 	@Override
 	public void send(IChatUser sender, IChatMessage message) {
 		(new Thread() {
@@ -176,6 +191,9 @@ public class Chatroom implements IChatroom {
 		return users.remove(user);
 	}
 
+	/**
+	 * Init the packet algos for the messages
+	 */
 	private void initAlgo() {
 		// initialize the cmd2model adapter, which grant the unknown command access
 		// to limited local GUI 
@@ -312,7 +330,7 @@ public class Chatroom implements IChatroom {
 			}
 		});
 		
-		// command for chat user info request
+		// command for a team out
 		msgAlgo.setCmd(TeamOut.class, new ADataPacketAlgoCmd<String, TeamOut, IChatUser>() {
 
 			/**
@@ -337,7 +355,7 @@ public class Chatroom implements IChatroom {
 			}
 		});
 		
-		// command for chat user info response
+		// command for a team wins
 		msgAlgo.setCmd(TeamWins.class, new ADataPacketAlgoCmd<String, TeamWins, IChatUser>() {
 
 			/**
@@ -360,7 +378,7 @@ public class Chatroom implements IChatroom {
 			
 		});
 		
-		// command for chat user info request
+		// command for cosume a depot
 		msgAlgo.setCmd(TeamComsumeDepot.class, new ADataPacketAlgoCmd<String, TeamComsumeDepot, IChatUser>() {
 
 			/**
@@ -384,6 +402,7 @@ public class Chatroom implements IChatroom {
 				return "depot"+host.getData().getaDepot()+"is consumed";
 			}
 		});
+		//command for game begins
 		msgAlgo.setCmd(Begin.class, new ADataPacketAlgoCmd<String, Begin, IChatUser>() {
 
 			/**
@@ -412,6 +431,7 @@ public class Chatroom implements IChatroom {
 			}
 		});
 		
+		//command for a player left
 		msgAlgo.setCmd(RemoveMe.class, new ADataPacketAlgoCmd<String, RemoveMe, IChatUser>() {
 
 			/**
@@ -440,7 +460,10 @@ public class Chatroom implements IChatroom {
 			}
 		});
 	}
-
+	/**
+	 * Send a message to others that a team moves
+	 * @param team the team moving
+	 */
 	public void IMove(Team team) {
 		TeamInfoUpdate aMessage = new TeamInfoUpdate(team);
 		send(me, aMessage);
