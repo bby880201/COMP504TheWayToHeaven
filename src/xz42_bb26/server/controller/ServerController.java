@@ -27,7 +27,7 @@ import xz42_bb26.server.view.chatwindow.IServerWindow2World;
 
 /**
  * MVC Controller for the system, which oversees the model and view of the system
- * @author bb26, xc7
+ * @author xz42, bb26
  */
 public class ServerController {
 	// field representing the view of the system
@@ -271,7 +271,7 @@ public class ServerController {
 					public void speakTo(String ip) {
 						model.chatWith(ip);
 					}
-
+		
 					@Override
 					public void popUp(Supplier<JFrame> frameFac) {
 						EventQueue.invokeLater(new Runnable() {

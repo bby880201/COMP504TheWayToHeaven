@@ -4,7 +4,7 @@ package xz42_bb26.server.view.chatwindow;
  * Mini-View2Model adapter that enables the mini-view (chat window) to communicate 
  * to the model.
  * 
- * @author bb26, xc7
+ * @author bb26, xz42
  */
 public interface IServerWindow2World<T> {
 
@@ -119,14 +119,26 @@ public interface IServerWindow2World<T> {
 			
 		}
 	};
-
+	/**
+	 * Install game to the clients
+	 */
 	public void installGame();
-	
+	/**
+	 * Create a team with a team member
+	 * @param member the team member
+	 */
 	public void createTeam(T member);
-
+	/**
+	 * Reject connection when game started
+	 */
 	public void rejectConnection();
-
+	/**
+	 * Game start
+	 */
 	public void begin();
-	
+	/**
+	 * kick a user out
+	 * @param usr the user to be kicked out
+	 */
 	public void kick(T usr);
 }

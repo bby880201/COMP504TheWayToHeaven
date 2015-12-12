@@ -2,7 +2,7 @@ package xz42_bb26.server.view;
 
 /**
  * Adapter that the view uses to communicate to the model.
- * @author bb26, xc7
+ * @author bb26, xz42
  */
 public interface IView2ModelAdapter<Room, User, ChatUser> {
 
@@ -37,7 +37,9 @@ public interface IView2ModelAdapter<Room, User, ChatUser> {
 	 * @return A set of Room
 	 */
 	public void getListRooms(String ip);
-
+	/**
+	 * The adapter to model
+	 */
 	@SuppressWarnings("rawtypes")
 	public static final IView2ModelAdapter NULL_OBJECT = new IView2ModelAdapter() {
 		@Override
