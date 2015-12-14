@@ -11,6 +11,9 @@ import xz42_bb26.game.model.Depot;
  *
  */
 public class GameUtils {
+	/**
+	 * A singleton of this class
+	 */
 	static public GameUtils singleton = new GameUtils();
 	
 	private GameUtils(){};

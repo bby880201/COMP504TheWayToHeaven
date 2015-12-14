@@ -6,21 +6,35 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import provided.datapacket.DataPacket;
+import xz42_bb26.server.model.user.IInitUser2ModelAdapter;
 import common.IInitUser;
 import common.message.IInitMessage;
 
+/**
+ * This class implements the IInitUser interface, which could be convert to stub 
+ * @author bb26
+ *
+ */
 public class InitUser implements IInitUser {
 	
 	/**
-	 * declare a static final serialVersionUID of type long to fix the warning
+	 * the name of this user
 	 */
-	// the name of this user
 	private String name;
-	// the IP address of this user
+	
+	/**
+	 *  the IP address of this user
+	 */
 	private String IP;
-	// for the purpose of distinguishing multiple stubs representing the same user
+	
+	/**
+	 *  for the purpose of distinguishing multiple stubs representing the same user
+	 */
 	private long time;
-	// an adapter communicate to model
+	
+	/**
+	 *  an adapter communicate to model
+	 */
 	private transient IInitUser2ModelAdapter toModelAdap;
 
 	/**
@@ -60,6 +74,11 @@ public class InitUser implements IInitUser {
 		return name + " " + format.format(date) + "@" + IP;
 	}
 
+	/**
+	 * Implement the method in interface
+	 * @param sender sender stub
+	 * @param dp data packet need to be transmitted
+	 */
 	@Override
 	public void receive(IInitUser sender, DataPacket<? extends IInitMessage> dp)
 			throws RemoteException {

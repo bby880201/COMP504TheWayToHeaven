@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.swing.JFrame;
+
 import common.IChatUser;
 import common.IChatroom;
 import common.ICmd2ModelAdapter;
@@ -60,11 +61,13 @@ public class Chatroom implements IChatroom {
 	/**
 	 * The command to model adapter
 	 */
+	@SuppressWarnings("unused")
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
 
 	/**
 	 * Current Info of teams
 	 */
+	@SuppressWarnings("unused")
 	private HashMap<IChatUser,Team> teams;
 	
 	/**

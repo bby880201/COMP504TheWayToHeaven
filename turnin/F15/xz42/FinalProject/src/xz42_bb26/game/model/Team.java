@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import javax.annotation.Resource;
-
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
-
 import gov.nasa.worldwind.Model;
 import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.avlist.AVKey;
@@ -19,6 +15,10 @@ import gov.nasa.worldwind.util.measure.LengthMeasurer;
  *
  */
 public class Team implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5192671148676572316L;
 	/**
 	 * team id
 	 */

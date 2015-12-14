@@ -16,8 +16,14 @@ public class InstallGameMessage implements IChatMessage{
 	 */
 	private final UUID teamID;
 	
+	/**
+	 * Represent if this player is navigator
+	 */
 	private final boolean isNavigator;
 	
+	/**
+	 * Team name
+	 */
 	private final String teamName;
 
 	/**
@@ -32,10 +38,18 @@ public class InstallGameMessage implements IChatMessage{
 	}
 
 
+	/**
+	 * Return UUID
+	 * @return teamID team's UUID
+	 */
 	public UUID getID() {
 		return teamID;
 	}
 
+	/**
+	 * Return data packet of this message
+	 * @return data packet of this message
+	 */
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<InstallGameMessage>(InstallGameMessage.class, this);
 	}

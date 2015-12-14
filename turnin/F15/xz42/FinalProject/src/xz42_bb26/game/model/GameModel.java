@@ -487,10 +487,12 @@ public class GameModel {
 		/**
 		 * Scale factor of the icon image.
 		 */
+		@SuppressWarnings("unused")
 		protected int scaleIndex = 0;
 		/**
 		 * Scale steps. which is not used for bad perforomance
 		 */
+		@SuppressWarnings("unused")
 		protected double[] scales = new double[] {1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.25, 3,
 				2.75, 2.5, 2.25, 2, 1.75, 1.5};
 		/**
@@ -551,6 +553,7 @@ public class GameModel {
 		/**
 		 * Star the pulsing timer.
 		 */
+		@SuppressWarnings("unused")
 		private void starTimer(){
 			timer.start();
 		}

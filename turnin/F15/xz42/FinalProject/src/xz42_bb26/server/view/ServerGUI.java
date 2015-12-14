@@ -49,6 +49,7 @@ public class ServerGUI<Room, Usr, ChatUsr, TmRm> {
 	/**
 	 * The to model adapter
 	 */
+	@SuppressWarnings("unchecked")
 	private IView2ModelAdapter<Room, Usr,ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
 	/**
 	 * The main frame
