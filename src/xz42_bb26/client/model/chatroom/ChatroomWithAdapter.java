@@ -73,7 +73,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	// mark as "transient" to prevent it from being serialized during any 
 	// transport process
 	/**
-	 * A adapter for command to communicate to other parts of applicaiton
+	 * A adapter for command to communicate to other parts of this application
 	 */
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
 	
@@ -126,7 +126,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	private transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
 	/**
-	 * A place to support API
+	 * A place where remote users can put stuffs in
 	 */
 	private transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
@@ -181,8 +181,8 @@ public class ChatroomWithAdapter implements IChatroom {
 	}
 
 	/**
-	 * Return init user of client
-	 * @return init user of client
+	 * Return init user of the client
+	 * @return init user of the client
 	 */
 	private IInitUser getInitUser() {
 		if (chatWindowAdapter != IChatRoom2WorldAdapter.NULL_OBJECT) {
@@ -832,6 +832,10 @@ public class ChatroomWithAdapter implements IChatroom {
 		return added;
 	}
 	
+	/**
+	 * Send a user info request to a given user stub
+	 * @param user a given user stub
+	 */
 	public void infoRequest(IChatUser user) {
 		ChatUserEntity newEntity = new ChatUserEntity(user);
 		AChatUserInfoRequest infoReq = new ChatUserInfoRequest();

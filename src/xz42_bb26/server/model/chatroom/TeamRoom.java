@@ -23,18 +23,36 @@ import common.message.chat.AChatUserInfoResponse;
 public class TeamRoom extends ServerRoom {
 
 	/**
-	 * 
+	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = 8191388183040152624L;
 	
+	/**
+	 * Chat user stub of server
+	 */
 	private final IChatUser server;
 	
+	/**
+	 * Navigator role player
+	 */
 	private IGameUser navig;
 	
+	/**
+	 * Manager role player
+	 */
 	private IGameUser manag;
 				
+	/**
+	 * Team name
+	 */
 	private String teamName;
 	
+	/**
+	 * Constructor of this class
+	 * @param name team name
+	 * @param srv server's stub
+	 * @throws Exception
+	 */
 	public TeamRoom(String name, IChatUser srv) throws Exception {
 		super();
 		teamName = name;
@@ -79,11 +97,17 @@ public class TeamRoom extends ServerRoom {
 		});
 	}
 	
+	/**
+	 * Override toString method to just return the team name
+	 */
 	@Override
 	public String toString(){
 		return teamName;
 	}
 
+	/**
+	 * Install games to team members
+	 */
 	public void installGame() {
 //		(new Thread() {
 //			@Override

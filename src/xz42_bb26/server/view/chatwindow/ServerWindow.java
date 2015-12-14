@@ -365,6 +365,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	 * Refresh team list information
 	 * @param teamList team list 
 	 */
+	@SuppressWarnings("unchecked")
 	public void refreshTeam(Collection<TmRm> teamList) {
 		lsTeam.setListData((TmRm[]) teamList.toArray());
 	}

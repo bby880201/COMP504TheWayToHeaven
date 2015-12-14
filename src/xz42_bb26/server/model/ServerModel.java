@@ -53,18 +53,41 @@ public class ServerModel {
 	 */
 	private IRMIUtils rmiUtils;
 
+	/**
+	 * Init user stub of myself
+	 */
 	private IInitUser me = null;
+	
+	/**
+	 * Room list mapping UUID to its stub 
+	 */
 	// field stores a list of room 
 	private HashMap<UUID, IChatroom> rooms;
+	
+	/**
+	 * Adapter used to talk to views and other models 
+	 */
 	// instance of model2view adapter
 	private IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity,TeamRoom> toView;
 
+	/**
+	 * Command algos to process different data packet types and handle unknown data types
+	 */
 	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
+	/**
+	 * Name of the server
+	 */
 	private String userName = "Game Server";
 	
+	/**
+	 * IP address
+	 */
 	private String ip;
-
+	
+	/**
+	 * Temporary team room for create team method 
+	 */
 	private TeamRoom tempTeam;
 
 	/**
@@ -458,20 +481,36 @@ public class ServerModel {
 		}).start();
 	}
 
+	/**
+	 * Return init user stub
+	 * @return init user stub
+	 */
 	public IInitUser getInitUser() {
 		return me;
 	}
 
-
+	/**
+	 * Return user name of the server
+	 * @return user name of the server
+	 */
 	public String getName() {
 		return userName;
 	}
 
-
+	/**
+	 * Return IP address
+	 * @return IP address
+	 */
 	public String getIp() {
 		return ip;
 	}
 
+	/**
+	 * Create teams for selected members
+	 * @param srv server's chat user stub
+	 * @param mb member's information object
+	 * @return a chat room for team players 
+	 */
 	public TeamRoom createTeam(IChatUser srv, ChatUserEntity mb) {
 		if (tempTeam == null) {
 			try {

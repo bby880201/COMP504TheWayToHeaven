@@ -26,11 +26,12 @@ import xz42_bb26.game.model.messages.ProvideGameUser;
 import xz42_bb26.game.model.messages.Ready;
 import xz42_bb26.server.model.GameUtils;
 import xz42_bb26.server.model.messages.InstallGameMessage;
-import xz42_bb26.server.model.messages.StringMessage;
-import xz42_bb26.server.model.messages.UnknownTypeData;
-import xz42_bb26.server.model.user.ChatUser;
 import xz42_bb26.server.model.user.ChatUserEntity;
-import xz42_bb26.server.model.user.IChatUser2ModelAdapter;
+import xz42_bb26.client.model.user.IChatUser2ModelAdapter;
+import xz42_bb26.client.model.messages.StringMessage;
+import xz42_bb26.client.model.messages.UnknownTypeData;
+import xz42_bb26.client.model.user.ChatUser;
+
 import provided.datapacket.ADataPacketAlgoCmd;
 import provided.datapacket.DataPacket;
 import provided.datapacket.DataPacketAlgo;
@@ -66,55 +67,108 @@ import common.message.init.AInvitation2Chatroom;
  * @author bb26, xz42
  */
 public class ServerRoom implements IChatroom {
-	
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -3024875875412221054L;
 
+	/**
+	 * The adapter used to communicate to other parts of the server
+	 */
 	@SuppressWarnings("unchecked")
 	private transient IServerRoom2WorldAdapter<ChatUserEntity, TeamRoom> serverAdapter = IServerRoom2WorldAdapter.NULL_OBJECT;
 	
+	/**
+	 * A adapter for command to communicate to other parts of the server
+	 */
 	// default command to model adapter that provides unknown command limited 
 	// access to local system
 	// mark as "transient" to prevent it from being serialized during any 
 	// transport process
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
 	
+	/**
+	 * Chat user stub of this mini model
+	 */
 	// name of the local user	
 	private IChatUser me;
 	
+	/**
+	 * Chat user of this mini model, needed by stub
+	 */
 	private IChatUser prestub;
-	
+
+	/**
+	 * Init user stub of main model
+	 */
 	private IInitUser initMe;
 
+	/**
+	 * UUID
+	 */
 	// private UUID id;
 	private UUID id;
 	
+	/**
+	 * Name of chat room
+	 */
 	// name of the chatroom
 	private String displayName;
 
+	/**
+	 * IChatUser stub list, mapped to its user information
+	 */
 	protected Map<IChatUser,ChatUserEntity> users = new ConcurrentHashMap<IChatUser,ChatUserEntity>();
 	
+	/**
+	 * UUID of IChatUserInfoRequest data packet mapped to its user information, used to handel user info request
+	 */
 	protected Map<UUID, ChatUserEntity> userInfo = new ConcurrentHashMap<UUID, ChatUserEntity>();
 	
+	/**
+	 * A blocking queue used to handle IInitUserRequest
+	 */
 	protected BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
-	
+
+	/**
+	 * Data packet cache used to cache unknown data packet
+	 */
 	protected Map<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
+	/**
+	 * A place where remote users can put stuffs in
+	 */
 	protected transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
+	/**
+	 * Data packet command algo
+	 */
 	protected DataPacketAlgo<String, IChatUser> msgAlgo;
 	
+	/**
+	 * A reference of this model
+	 */
 	private IChatroom thisRoom = this;
 	
+	/**
+	 * A list of team room, mapped to their UUID
+	 */
 	protected Map<UUID,TeamRoom> teamList = new ConcurrentHashMap<UUID,TeamRoom>();
 	
+	/**
+	 * A set of all players
+	 */
 	private Set<IChatUser> players = new HashSet<IChatUser>();
 	
+	/**
+	 * A set of players that will not displayed on view 
+	 */
 	private Set<IChatUser> invisiblePlayer = new HashSet<IChatUser>();
 	
+	/**
+	 * A flag indicating if the game can be started
+	 */
 	private boolean isPlayable = false;
 	
 
@@ -127,8 +181,6 @@ public class ServerRoom implements IChatroom {
 	 */
 	public ServerRoom(UUID uuid) throws UnknownHostException, RemoteException {
 		
-		
-
 		initAlgo();
 		prestub = new ChatUser("", new IChatUser2ModelAdapter(){
 			
@@ -160,6 +212,10 @@ public class ServerRoom implements IChatroom {
 		this(UUID.randomUUID());
 	}
 
+	/**
+	 * Return init user of the server
+	 * @return init user of the server
+	 */
 	private IInitUser getInitUser() {
 		if (serverAdapter != IServerRoom2WorldAdapter.NULL_OBJECT) {
 			initMe = serverAdapter.getInitUser();
@@ -552,6 +608,7 @@ public class ServerRoom implements IChatroom {
 			 */	
 			private static final long serialVersionUID = 2964027427383796628L;
 
+			@SuppressWarnings("unused")
 			private ICmd2ModelAdapter adapt;
 		
 
@@ -567,7 +624,6 @@ public class ServerRoom implements IChatroom {
 			@Override
 			public String apply(Class<?> index, DataPacket<InstallGameMessage> host,
 					IChatUser... params) {
-				UUID uuid = host.getData().getID();
 				String teamName = host.getData().getTeamName();
 				
 				GameController gameController = new GameController(host.getData().getID(), me, teamName, host.getData().isNavigator());
@@ -613,6 +669,7 @@ public class ServerRoom implements IChatroom {
 			 */
 			private static final long serialVersionUID = 2831393211088585807L;
 
+			@SuppressWarnings("unused")
 			private ICmd2ModelAdapter adapt;
 
 			@Override
@@ -900,6 +957,10 @@ public class ServerRoom implements IChatroom {
 		return added;
 	}
 	
+	/**
+	 * Send a user info request to a given user stub
+	 * @param user a given user stub
+	 */
 	public void infoRequest(IChatUser user) {
 		ChatUserEntity newEntity = new ChatUserEntity(user);
 		AChatUserInfoRequest infoReq = new ChatUserInfoRequest();
@@ -964,11 +1025,18 @@ public class ServerRoom implements IChatroom {
 		
 	}
 
+	/**
+	 * return UUID of this chat room
+	 * @return id UUID of this chat room
+	 */
 	@Override
 	public UUID getID() {
 		return id;
 	}
 
+	/**
+	 * Install the game to all players in teams
+	 */
 	public void installGame() {
 		for (TeamRoom team : teamList.values()) {
 			(new Thread(){
@@ -980,7 +1048,10 @@ public class ServerRoom implements IChatroom {
 		}
 	}
 
-
+	/**
+	 * Chat with a given user
+	 * @param user the user to chat with
+	 */
 	public void speakTo(ChatUserEntity user) {
 		
 		(new Thread(){
@@ -994,6 +1065,10 @@ public class ServerRoom implements IChatroom {
 
 	}
 	
+	/**
+	 * Get the init user stub from a given user information
+	 * @param user a given user information
+	 */
 	public void getRemoteInitUser(IChatUser user) {
 		
 		AInitUserRequest initUsrReq = new InitUserRequest();
@@ -1012,6 +1087,10 @@ public class ServerRoom implements IChatroom {
 		}).start();
 	}
 
+	/**
+	 * Add a team to the team list
+	 * @param team
+	 */
 	public void addTeam(TeamRoom team) {
 		if (null!=team){
 			teamList.put(team.getID(),team);
@@ -1019,11 +1098,15 @@ public class ServerRoom implements IChatroom {
 		}	
 	}
 	
+	/**
+	 * Refresh team list on GUI
+	 */
 	private void refreshTeam() {
 		serverAdapter.refreshTeam(teamList.values());
 	}
 
 	/**
+	 * Return if the game can be started
 	 * @return the isPlayable
 	 */
 	public boolean isPlayable() {
@@ -1037,6 +1120,9 @@ public class ServerRoom implements IChatroom {
 		this.isPlayable = isPlayable;
 	}
 
+	/**
+	 * Change the command to reject all incomming connection
+	 */
 	public void rejectConnection() {
 		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
 
@@ -1057,17 +1143,27 @@ public class ServerRoom implements IChatroom {
 		});
 	}
 
+	/**
+	 * Let all team players remove server
+	 */
 	public void leaveTeam() {
 		for (TeamRoom tm : teamList.values()){
 			tm.removeMe();
 		}
 	}
 	
+	/**
+	 * Set the given user to invisible on GUI's user list
+	 * @param user given user 
+	 */
 	public void setUserInvisible(IChatUser user) {
 		invisiblePlayer.add(user);
 		refreshList();
 	}
 
+	/**
+	 * Start the game
+	 */
 	public void begin() {
 		if (isPlayable == true){
 			Begin bgmsg = new Begin();
@@ -1090,6 +1186,10 @@ public class ServerRoom implements IChatroom {
 		}
 	}
 
+	/**
+	 * Kick out a selected user
+	 * @param usr a selected user
+	 */
 	public void kick(ChatUserEntity usr) {
 		(new Thread(){
 			@Override
