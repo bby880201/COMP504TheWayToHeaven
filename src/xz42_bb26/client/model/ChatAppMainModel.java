@@ -52,16 +52,36 @@ public class ChatAppMainModel {
 	 */
 	private IRMIUtils rmiUtils;
 
+	/**
+	 * Init user stub of myself
+	 */
 	private IInitUser me = null;
+	
+	/**
+	 * Room list mapping UUID to its stub 
+	 */
 	// field stores a list of room 
 	private HashMap<UUID, IChatroom> rooms;
+	
+	/**
+	 * Adapter used to talk to views and other models 
+	 */
 	// instance of model2view adapter
 	private IModel2ViewAdapter<IInitUser,IChatUser,IChatroom,ChatUserEntity> toView;
 
+	/**
+	 * Command algos to process different data packet types and handle unknown data types
+	 */
 	private DataPacketAlgo<String, IInitUser> msgAlgo;
 
+	/**
+	 * User names of this client
+	 */
 	private String userName = "xz42_bb26";
 	
+	/**
+	 * Users IP
+	 */
 	private String ip;
 
 	/**
@@ -74,6 +94,7 @@ public class ChatAppMainModel {
 		// initialize an empty set of rooms
 		rooms = new HashMap<UUID, IChatroom>();
 
+		// init data packet algos
 		msgAlgo = new DataPacketAlgo<String, IInitUser>(new ADataPacketAlgoCmd<String, Object, IInitUser>() {
 			/**
 			 * declare a static final serialVersionUID of type long to fix the warning
@@ -151,6 +172,9 @@ public class ChatAppMainModel {
 			}
 		});
 		
+		/**
+		 * Handle room list request 
+		 */
 		msgAlgo.setCmd(AChatroomListRequest.class, new ADataPacketAlgoCmd<String, AChatroomListRequest, IInitUser>() {
 
 			/**
@@ -185,7 +209,9 @@ public class ChatAppMainModel {
 			
 		});
 		
-		
+		/**
+		 * Handle room list response
+		 */
 		msgAlgo.setCmd(AChatroomListResponse.class, new ADataPacketAlgoCmd<String, AChatroomListResponse, IInitUser>() {
 
 			/**
@@ -241,6 +267,9 @@ public class ChatAppMainModel {
 			
 		}); 
 		
+		/**
+		 * Handle init user response
+		 */
 		msgAlgo.setCmd(AInitUserInfoResponse.class, new ADataPacketAlgoCmd<String, AInitUserInfoResponse, IInitUser>() {
 
 			/**
@@ -456,16 +485,26 @@ public class ChatAppMainModel {
 		}).start();
 	}
 
+	/**
+	 * Return init user stub of this client
+	 * @return init user stub of this client
+	 */
 	public IInitUser getInitUser() {
 		return me;
 	}
 
-
+	/**
+	 * Return user name of this client
+	 * @return user name of this client
+	 */
 	public String getName() {
 		return userName;
 	}
 
-
+	/**
+	 * Return user IP of this client
+	 * @return user IP of this client
+	 */
 	public String getIp() {
 		return ip;
 	}

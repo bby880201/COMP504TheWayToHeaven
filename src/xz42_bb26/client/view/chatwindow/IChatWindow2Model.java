@@ -96,6 +96,10 @@ public interface IChatWindow2Model<T> {
 		}
 	};
 
+	/**
+	 * Start a game from client side, need to be implemented when
+	 * necessary. 
+	 */
 	public void startGame();
 
 }

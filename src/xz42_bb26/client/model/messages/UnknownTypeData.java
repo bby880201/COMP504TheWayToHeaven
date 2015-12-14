@@ -14,8 +14,19 @@ import common.IInitUser;
  */
 public class UnknownTypeData {
 	
+	/**
+	 * Data packet need to be cached
+	 */
 	private final DataPacket<Object> dp;
+	
+	/**
+	 * Sender's chat user stub
+	 */
 	private final IChatUser sender;
+	
+	/**
+	 * Sender's init user stub
+	 */
 	private final IInitUser initSender;
 
 	public UnknownTypeData(DataPacket<Object> host, IChatUser remote) {
@@ -24,6 +35,10 @@ public class UnknownTypeData {
 		initSender = null;
 	}
 	
+	/**
+	 * Return the data packet of this message
+	 * @return the data packet of this message
+	 */
 	public UnknownTypeData(DataPacket<Object> host, IInitUser remote) {
 		dp = host;
 		sender = null;
@@ -31,21 +46,21 @@ public class UnknownTypeData {
 	}
 	
 	/**
-	 * @return the dp
+	 * @return the data packet
 	 */
 	public DataPacket<Object> getDataPacket() {
 		return dp;
 	}
 
 	/**
-	 * @return the sender
+	 * @return the sender stub
 	 */
 	public IChatUser getSender() {
 		return sender;
 	}
 
 	/**
-	 * @return the initSender
+	 * @return the initSender stub
 	 */
 	public IInitUser getInitSender() {
 		return initSender;

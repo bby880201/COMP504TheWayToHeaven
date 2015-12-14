@@ -8,6 +8,7 @@ import common.IChatUser;
 import common.message.IChatMessage;
 
 /**
+ * The adapter interface which may used by chat user stub to communicate to rest parts of the applicaiton
  * @author bb26
  *
  */

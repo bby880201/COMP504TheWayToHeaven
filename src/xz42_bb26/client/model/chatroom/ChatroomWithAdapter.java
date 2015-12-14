@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import xz42_bb26.client.model.messages.StartGameMessage;
 import xz42_bb26.client.model.messages.StringMessage;
 import xz42_bb26.client.model.messages.UnknownTypeData;
 import xz42_bb26.client.model.user.ChatUser;
@@ -57,11 +56,15 @@ import common.message.init.AInvitation2Chatroom;
  * @author bb26, xc7
  */
 public class ChatroomWithAdapter implements IChatroom {
+	
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -1842717037685994672L;
 
+	/**
+	 * The adapter used to communicate to other parts of this application
+	 */
 	@SuppressWarnings("unchecked")
 	private transient IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter = IChatRoom2WorldAdapter.NULL_OBJECT;
 	
@@ -69,33 +72,72 @@ public class ChatroomWithAdapter implements IChatroom {
 	// access to local system
 	// mark as "transient" to prevent it from being serialized during any 
 	// transport process
+	/**
+	 * A adapter for command to communicate to other parts of applicaiton
+	 */
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
 	
 	// name of the local user
+	/**
+	 * Chat user of this mini model, needed by stub
+	 */
 	private IChatUser me;
 	
+	/**
+	 * Chat user stub of this mini model
+	 */
 	private IChatUser stub;
 	
+	/**
+	 * Init user stub of main model
+	 */
 	private IInitUser initMe;
 
 	// private UUID id;
+	/**
+	 * UUID
+	 */
 	private UUID id;
 	
 	// name of the chatroom
+	/**
+	 * Name of chat room
+	 */
 	private String displayName;
 
+	/**
+	 * IChatUser stub list, mapped to its user information
+	 */
 	private HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
 	
+	/**
+	 * UUID of IChatUserInfoRequest data packet mapped to its user information, used to handel user info request
+	 */
 	private transient HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
 	
+	/**
+	 * A blocking queue used to handle IInitUserRequest
+	 */
 	private transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
 	
+	/**
+	 * Data packet cache used to cache unknown data packet
+	 */
 	private transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
 	
+	/**
+	 * A place to support API
+	 */
 	private transient IMixedDataDictionary mixDict = new MixedDataDictionary();
 
+	/**
+	 * Data packet command algo
+	 */
 	private DataPacketAlgo<String, IChatUser> msgAlgo;
 	
+	/**
+	 * A reference of this model
+	 */
 	private IChatroom thisRoom = this;
 
 	/**
@@ -138,6 +180,10 @@ public class ChatroomWithAdapter implements IChatroom {
 		this(UUID.randomUUID());
 	}
 
+	/**
+	 * Return init user of client
+	 * @return init user of client
+	 */
 	private IInitUser getInitUser() {
 		if (chatWindowAdapter != IChatRoom2WorldAdapter.NULL_OBJECT) {
 			initMe = chatWindowAdapter.getInitUser();
@@ -851,29 +897,25 @@ public class ChatroomWithAdapter implements IChatroom {
 		
 	}
 
+	/**
+	 * return UUID of this chat room
+	 * @return id UUID of this chat room
+	 */
 	@Override
 	public UUID getID() {
 		return id;
 	}
 
+	/**
+	 * Start the game, should be modified when used
+	 */
 	public void startGame() {
-		StartGameMessage startGame = new StartGameMessage();
-		for (IChatUser user : users.keySet()) {
-			try {
-				// send startgame message to users in the chatroom other than myself
-				user.receive(stub, startGame.getDataPacket());
-			} catch (RemoteException e) {
-				System.out.println(
-						"Broadcast to start game failed!\nRemote exception invite " + ": " + user + e + "\n");
-				e.printStackTrace();
-			}
-		}
-//		GameController gameController = new GameController();
-//		gameController.start();
-		
 	}
 
-
+	/**
+	 * Chat with a given user
+	 * @param user the user to chat with
+	 */
 	public void speakTo(ChatUserEntity user) {
 		
 		(new Thread(){
@@ -885,6 +927,10 @@ public class ChatroomWithAdapter implements IChatroom {
 
 	}
 	
+	/**
+	 * Get the init user stub from a given user information
+	 * @param user a given user information
+	 */
 	public void getRemoteInitUser(IChatUser user) {
 		
 		AInitUserRequest initUsrReq = new InitUserRequest();

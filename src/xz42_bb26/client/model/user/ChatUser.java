@@ -18,15 +18,27 @@ import common.message.IChatMessage;
  *
  */
 public class ChatUser implements IChatUser {
-		
+	
+	/**
+	 * The adapter used to communicate to rest parts of the application
+	 */
 	private IChatUser2ModelAdapter toModelAdap;
 	
+	/**
+	 * Name of the user
+	 */
 	private String name;
 		
+	/**
+	 * Object created time
+	 */
 	private long time;
 	
-	
-	
+	/**
+	 * Constructor of the class, take the name and an adapter for parameters
+	 * @param name  name of the user
+	 * @param toModel adapter used to communicate to rest parts of the application
+	 */
 	public ChatUser(String name, IChatUser2ModelAdapter toModel) {
 		this.toModelAdap = toModel;
 		this.name = name;
@@ -72,6 +84,9 @@ public class ChatUser implements IChatUser {
 		return name + " " + format.format(date);	
 	}
 
+	/**
+	 * Implement the receive method of interface  
+	 */
 	@Override
 	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp)
 			throws RemoteException {

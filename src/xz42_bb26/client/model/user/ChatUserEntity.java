@@ -8,28 +8,48 @@ import java.io.Serializable;
 import common.IChatUser;
 
 /**
+ * A class wrapped most of information need for a user stub 
  * @author bb26
  *
  */
 public class ChatUserEntity implements Serializable{
 	
 	/**
-	 * 
+	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
 	private static final long serialVersionUID = -4734953263106665787L;
 
+	/**
+	 * User's name
+	 */
 	private String name;
 	
+	/**
+	 * User's IP address
+	 */
 	private String ip;
 	
+	/**
+	 * User's chat user stub
+	 */
 	private IChatUser me;
 		
+	/**
+	 * Constructor of this class
+	 * @param chatUser User's chat user stub
+	 * @param name User's name
+	 * @param ip User's IP address
+	 */
 	public ChatUserEntity(IChatUser chatUser, String name, String ip) {
 		setName(name);
 		setIp(ip);
 		setChatUser(chatUser);
 	}
 	
+	/**
+	 * Constructor of this class, for anonymous user 
+	 * @param chatUser User's chat user stub
+	 */
 	public ChatUserEntity(IChatUser chatUser) {
 		this(chatUser, "Anonymous", "0.0.0.0");
 	}
@@ -49,28 +69,28 @@ public class ChatUserEntity implements Serializable{
 	}
 
 	/**
-	 * @return the ip
+	 * @return the IP address
 	 */
 	public String getIp() {
 		return ip;
 	}
 
 	/**
-	 * @param ip the ip to set
+	 * @param ip the IP to set
 	 */
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
 
 	/**
-	 * @return the ChatUser
+	 * @return the ChatUser stub
 	 */
 	public IChatUser getChatUser() {
 		return me;
 	}
 
 	/**
-	 * @param me the ChatUser to set
+	 * @param me the ChatUser stub to set
 	 */
 	public void setChatUser(IChatUser me) {
 		this.me = me;

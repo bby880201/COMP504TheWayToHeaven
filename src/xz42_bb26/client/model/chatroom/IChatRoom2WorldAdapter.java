@@ -122,14 +122,34 @@ public interface IChatRoom2WorldAdapter<T> {
 
 	};
 
+	/**
+	 * Display a component at chat room content panel
+	 * @param containerSupplier  A factory contains the content need to be displayed
+	 */
 	public void display(Supplier<Component> containerSupplier);
 
+	/**
+	 * Get the name from model side
+	 * @return name of the model
+	 */
 	public String getName();
 
+	/**
+	 * Get the IP address of model
+	 * @return IP address of model
+	 */
 	public String getIp();
 
+	/**
+	 * Connect to and create a chat room with the user of given IP address
+	 * @param ip the IP used to connect
+	 */
 	public void speakTo(String ip);
 
+	/**
+	 * Directly pop-up a JFrame window, may be used to display games from servers
+	 * @param frameFac A factory making displayed frame
+	 */
 	public void popUp(Supplier<JFrame> frameFac);
 
 }
