@@ -56,11 +56,19 @@ public class StringMessage extends ATextMessage {
 		return msg;
 	}
 
+	/**
+	 * Returns the UUID of this message
+	 * @return the UUID of this message
+	 */
 	@Override
 	public UUID getID() {
 		return msgID;
 	}
 
+	/**
+	 * Return the data packet of this message
+	 * @return the data packet of this message
+	 */
 	@Override
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<ATextMessage>(ATextMessage.class, this);

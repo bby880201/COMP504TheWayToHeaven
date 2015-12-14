@@ -27,6 +27,7 @@ import xz42_bb26.client.view.chatwindow.IChatWindow2Model;
  * MVC Controller for the system, which oversees the model and view of the system
  * @author bb26, xc7
  */
+
 public class ChatAppController {
 	// field representing the view of the system
 	private MainGUI<IChatroom, IInitUser, ChatUserEntity> view;
@@ -48,14 +49,6 @@ public class ChatAppController {
 				model.stop();
 			}
 
-			/**
-			 * Connect to the RMI Registry at the given remote host, and grab the 
-			 * stub from that registry. Then create a local chatroom with the remote 
-			 * user represented by the given IP address, and inform the remote user 
-			 * to create a local chatroom.
-			 * 
-			 * @param ip The remote IP address to connect to.
-			 */
 			@Override
 			public void chatWith(String ip) {
 				model.chatWith(ip);
@@ -67,13 +60,6 @@ public class ChatAppController {
 			}
 
 			@Override
-			/**
-			 * Upon given a chatroom to join, create a local chatroom and add existing 
-			 * users in the given chatroom into the local chatroom. Then broadcast 
-			 * to users in remote chatroom to add my stub into their local chatrooms.
-			 * 
-			 * @param rm the chatroom to join
-			 */
 			public void joinChatroom(IChatroom rm) {
 				if (rm != null) {
 					model.joinRoom(rm);
@@ -164,6 +150,10 @@ public class ChatAppController {
 						chatRoom.speakTo(user);
 					}
 					
+					/**
+					 * Start a game from client side, need to be implemented when
+					 * necessary. 
+					 */
 					@Override
 					public void startGame() {
 						chatRoom.startGame();

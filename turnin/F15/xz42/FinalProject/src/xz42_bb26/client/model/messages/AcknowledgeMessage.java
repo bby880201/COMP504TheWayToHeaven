@@ -13,6 +13,9 @@ public class AcknowledgeMessage implements Serializable {
 	 */
 	private static final long serialVersionUID = -7898658335679753053L;
 
+	/**
+	 * Acknowledge string
+	 */
 	private String ack;
 
 	/**
