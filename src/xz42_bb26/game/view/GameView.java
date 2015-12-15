@@ -38,6 +38,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EtchedBorder;
 
 import java.awt.FlowLayout;
+
 /**
  * View of the game
  * @author bb26 xz42
@@ -121,22 +122,24 @@ public class GameView extends JFrame {
 			}
 		});
 	}
+
 	/**
 	 * The testing constructor
 	 */
 	public GameView() {
 		maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-		maxHeight =	Toolkit.getDefaultToolkit().getScreenSize().height;
+		maxHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 	}
-	
+
 	/**
 	 * Constructor of the GameView.
 	 */
 	public GameView(IModelAdapter iModelAdapter) {
 		toModel = iModelAdapter;
 		maxWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-		maxHeight =	Toolkit.getDefaultToolkit().getScreenSize().height;
+		maxHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 	}
+
 	/**
 	 * init the view
 	 */
@@ -149,43 +152,47 @@ public class GameView extends JFrame {
 				quit();
 			}
 		});
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+
 		stPanel = new JPanel();
 		stPanel.setForeground(Color.BLACK);
 		stPanel.setBackground(Color.WHITE);
-		stPanel.setBorder(new TitledBorder(null, "Status", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		stPanel.setBorder(new TitledBorder(null, "Status",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		stPanel.setPreferredSize(new Dimension(maxWidth, 50));
 		contentPane.add(stPanel, BorderLayout.NORTH);
 		stPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		JPanel instrPanel = new JPanel();
 		instrPanel.setBackground(Color.WHITE);
 		instrPanel.setBorder(null);
 		instrPanel.setPreferredSize(new Dimension(200, maxHeight));
 		contentPane.add(instrPanel, BorderLayout.EAST);
 		instrPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel instrPanel_1 = new JPanel();
 		instrPanel_1.setBackground(Color.WHITE);
-		instrPanel_1.setBorder(new TitledBorder(null, "Game Phase", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		instrPanel_1.setPreferredSize(new Dimension(200, maxHeight/5));
+		instrPanel_1.setBorder(new TitledBorder(null, "Game Phase",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		instrPanel_1.setPreferredSize(new Dimension(200, maxHeight / 5));
 		instrPanel.add(instrPanel_1, BorderLayout.NORTH);
 
 		JPanel instrPanel_2 = new JPanel();
 		instrPanel_2.setBackground(Color.WHITE);
-		instrPanel_2.setBorder(new TitledBorder(null, "Game Instruction", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		instrPanel_2.setPreferredSize(new Dimension(200, 3*maxHeight/5));
+		instrPanel_2.setBorder(new TitledBorder(null, "Game Instruction",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		instrPanel_2.setPreferredSize(new Dimension(200, 3 * maxHeight / 5));
 		instrPanel.add(instrPanel_2, BorderLayout.CENTER);
-		
+
 		JPanel instrPanel_3 = new JPanel();
 		instrPanel_3.setBackground(Color.WHITE);
-		instrPanel_3.setBorder(new TitledBorder(null, "Other Info", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		instrPanel_3.setPreferredSize(new Dimension(200, maxHeight/5));
+		instrPanel_3.setBorder(new TitledBorder(null, "Other Info",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		instrPanel_3.setPreferredSize(new Dimension(200, maxHeight / 5));
 		instrPanel.add(instrPanel_3, BorderLayout.SOUTH);
 		instrPanel_2.setLayout(new BorderLayout(0, 0));
 		instrPanel_1.setLayout(new BorderLayout(0, 0));
@@ -195,45 +202,52 @@ public class GameView extends JFrame {
 		taGamePhase.setWrapStyleWord(true);
 		taGamePhase.setEditable(false);
 		JScrollPane scrollPane_1 = new JScrollPane(taGamePhase);
-		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		instrPanel_1.add(scrollPane_1);
-		
+
 		taGameInstr = new JTextArea();
 		taGameInstr.setLineWrap(true);
 		taGameInstr.setWrapStyleWord(true);
 		taGameInstr.setEditable(false);
 		JScrollPane scrollPane_2 = new JScrollPane(taGameInstr);
-		scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_2
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		instrPanel_2.add(scrollPane_2, BorderLayout.CENTER);
 		instrPanel_3.setLayout(new BorderLayout(0, 0));
-		
+
 		taOtherInfo = new JTextArea();
 		taOtherInfo.setLineWrap(true);
 		taOtherInfo.setWrapStyleWord(true);
 		taOtherInfo.setEditable(false);
 		JScrollPane scrollPane_3 = new JScrollPane(taOtherInfo);
-		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_3
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		instrPanel_3.add(scrollPane_3);
-		
+
 		JPanel mapPanel = new JPanel();
 		mapPanel.setForeground(Color.GREEN);
-		mapPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(0, 255, 0), new Color(64, 64, 64)), "Game Map", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 255, 0)));
+		mapPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, new Color(0, 255, 0), new Color(64, 64,
+						64)), "Game Map", TitledBorder.LEADING,
+				TitledBorder.TOP, null, new Color(0, 255, 0)));
 		mapPanel.setBackground(Color.DARK_GRAY);
 		mapPanel.setPreferredSize(new Dimension(maxWidth - 200, maxHeight - 50));
 		contentPane.add(mapPanel, BorderLayout.CENTER);
-		
+
 		map = new MapPanel(Earth.class);
 		map.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		mapPanel.add(map, BorderLayout.CENTER);
-		map.setPreferredSize(new Dimension(maxWidth-250, maxHeight-150));
-		
+		map.setPreferredSize(new Dimension(maxWidth - 250, maxHeight - 150));
+
 		pack();
 	}
+
 	/**
 	 * Start
 	 */
-	public void start(){
-		
+	public void start() {
+
 		this.setVisible(true);
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -242,94 +256,99 @@ public class GameView extends JFrame {
 				setBounds(0, 0, maxWidth, maxHeight);
 				map.start();
 
-//				if(!model.isNavigator()){
+				//				if(!model.isNavigator()){
 				map.addLayer(iconLayer);
-//				}
+				//				}
 				map.addLayer(sLayer);
 				setLocationRelativeTo(null);
-			    setVisible(true);
-			    
-			    if(toModel.isNavigator()){
+				setVisible(true);
+
+				if (toModel.isNavigator()) {
 					initNavig();
-				}
-				else{
+				} else {
 					initManag();
-				}			
+				}
 			}
 		});
 	}
+
 	/**
 	 * Init view for navigator
 	 */
-	public void initNavig(){
-		map.addRightClickAction(new IRightClickAction(){
+	public void initNavig() {
+		map.addRightClickAction(new IRightClickAction() {
 			@Override
 			public void apply(Position p) {
 				toModel.moveTo(p);
 			}
 		});
-		
-		taGameInstr.append("You are the driver!!\n\nYou can control your team to move to wherever you want,"
-				+ " but don't forget you need supply to live! Communicate to your partener to find a path to your destiny!");
+
+		taGameInstr
+				.append("You are the driver!!\n\nYou can control your team to move to wherever you want,"
+						+ " but don't forget you need supply to live! Communicate to your partener to find a path to your destiny!");
 
 		JLabel lblNewLabel_1 = new JLabel("Player Role:");
 		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		stPanel.add(lblNewLabel_1);
-		
+
 		lblRole = new JLabel("Driver");
 		stPanel.add(lblRole);
 	}
+
 	/**
 	 * Init view for manager
 	 */
-	public void initManag(){
-		taGameInstr.append("You are the resource manager!!\n\nYou need to communicate with your partener about your team's"
-				+ " cash, supply, nearest supply depots, and the way to your destiny!");
-		
+	public void initManag() {
+		taGameInstr
+				.append("You are the resource manager!!\n\nYou need to communicate with your partener about your team's"
+						+ " cash, supply, nearest supply depots, and the way to your destiny!");
+
 		JLabel lblNewLabel_1 = new JLabel("Player Role:");
 		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		stPanel.add(lblNewLabel_1);
-		
+
 		lblRole = new JLabel("Resource Manager");
 		stPanel.add(lblRole);
-		
+
 		JLabel label_3 = new JLabel("                        ");
 		stPanel.add(label_3);
-		
+
 		JLabel lblCash = new JLabel("Cash:");
 		lblCash.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		stPanel.add(lblCash);
-		
+
 		JLabel label_2 = new JLabel("$");
 		stPanel.add(label_2);
-		
+
 		lblCashNum = new JLabel("100");
 		stPanel.add(lblCashNum);
-		
+
 		JLabel lblEmpty = new JLabel("                        ");
 		stPanel.add(lblEmpty);
-		
+
 		JLabel lblSupply = new JLabel("Supply:");
 		lblSupply.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		stPanel.add(lblSupply);
-		
+
 		lblSupplyNum = new JLabel("15000");
 		stPanel.add(lblSupplyNum);
-		
+
 		JLabel lblMiles = new JLabel("Units");
-		stPanel.add(lblMiles);	
+		stPanel.add(lblMiles);
 	}
+
 	/**
 	 * Update view
 	 * @param team the team infomation
 	 */
-	public void update(Team team){
+	public void update(Team team) {
 		sLayer.firePropertyChange(AVKey.LAYER, null, null);
-		if(! toModel.isNavigator()){
+		if (!toModel.isNavigator()) {
 			lblCashNum.setText(Double.toString(team.cash));
 			lblSupplyNum.setText(Double.toString(team.supply));
 		}
 	}
+
 	/**
 	 * Getter of the layer of boxes
 	 * @return the layer of boxes
@@ -337,55 +356,66 @@ public class GameView extends JFrame {
 	public RenderableLayer getBoxLayer() {
 		return sLayer;
 	}
+
 	/**
 	 * Getter of the layer of points
 	 * @return
 	 */
-	public IconLayer getIconLayer(){
+	public IconLayer getIconLayer() {
 		return iconLayer;
 	}
+
 	/**
 	 * Ask the user if he want to spend money on a depot
 	 * @param depot
 	 */
-	public void checkDepots(Depot depot){
-		String ObjButtons[] = {"Yes","No"};
-        int PromptResult = JOptionPane.showOptionDialog(null,"Are you sure you want to exit?","Online Examination System",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
-        if(PromptResult==JOptionPane.YES_OPTION)
-        {
-            toModel.buySupply(depot);
-        }
+	public void checkDepots(Depot depot) {
+		String ObjButtons[] = { "Yes", "No" };
+		int PromptResult = JOptionPane.showOptionDialog(null,
+				"Are you sure you want to exit?", "Online Examination System",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
+				ObjButtons, ObjButtons[1]);
+		if (PromptResult == JOptionPane.YES_OPTION) {
+			toModel.buySupply(depot);
+		}
 	}
+
 	/**
 	 * Game start
 	 */
 	public void gameBegin() {
 		taGamePhase.setText("Game is began! Hurry up go to your destiny!!");
 		JOptionPane.showMessageDialog(this, "Game Start!!!");
-		map.setPosition(Position.fromDegrees(63, -151,3000000), true);
+		map.setPosition(Position.fromDegrees(63, -151, 3000000), true);
 	}
+
 	/**
 	 * A team wins
 	 * @param team the winning team
 	 */
 	public void aTeamWins(Team team) {
-		if(team.uuid.equals(toModel.getTeam().uuid)){
-			taGamePhase.setText("Game Over:"+"You win!!!!");
-			JOptionPane.showMessageDialog(this, "CONGRATULATIONS!!! YOU WIN!!!");
+		if (team.uuid.equals(toModel.getTeam().uuid)) {
+			taGamePhase.setText("Game Over:" + "You win!!!!");
+			JOptionPane
+					.showMessageDialog(this, "CONGRATULATIONS!!! YOU WIN!!!");
+		} else {
+			taGamePhase.setText("Game Over: " + "Team " + team.name + " wins.");
+			JOptionPane.showMessageDialog(this, "Team " + team.name
+					+ " wins. You lose.");
 		}
-		else{
-			taGamePhase.setText("Game Over: "+"Team "+team.name+" wins.");
-			JOptionPane.showMessageDialog(this, "Team "+team.name+" wins. You lose.");
-		}
-		
+
 	}
+
 	/**
 	 * The game over
 	 */
 	public void gameOver() {
-		taGamePhase.setText("Game Over: Sorry, you ran out of supply or money!");
-		JOptionPane.showMessageDialog(this, "Game Over! You lose for out of supply.");
+		taGamePhase
+				.setText("Game Over: Sorry, you ran out of supply or money!");
+		JOptionPane.showMessageDialog(this,
+				"Game Over! You lose for out of supply.");
 	}
+
 	/**
 	 * Quit the game
 	 */
@@ -393,6 +423,5 @@ public class GameView extends JFrame {
 		System.out.println("ChatGUI: Server is quitting...");
 		toModel.quit();
 	}
-	
-	
+
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 import common.message.ARequest;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
+
 /**
  * The message comuse a depot
  * @author xz42, bb26
@@ -12,7 +13,6 @@ import provided.datapacket.DataPacket;
  */
 public class TeamComsumeDepot extends ARequest implements IChatMessage {
 
-	
 	/**
 	 * Generated serial version id
 	 */
@@ -43,6 +43,5 @@ public class TeamComsumeDepot extends ARequest implements IChatMessage {
 	public UUID getaDepot() {
 		return aUuid;
 	}
-
 
 }

@@ -15,22 +15,22 @@ import common.message.IInitMessage;
  *
  */
 public class InitUser implements IInitUser {
-	
+
 	/**
 	 * the name of this user
 	 */
 	private String name;
-	
+
 	/**
 	 *  the IP address of this user
 	 */
 	private String IP;
-	
+
 	/**
 	 *  for the purpose of distinguishing multiple stubs representing the same user
 	 */
 	private long time;
-	
+
 	/**
 	 *  an adapter communicate to model
 	 */
@@ -48,7 +48,7 @@ public class InitUser implements IInitUser {
 		this.IP = IP;
 		this.time = System.currentTimeMillis();
 	}
-	
+
 	@Override
 	/**
 	 * Override hashCode() method to create a hashcode from all the accessible values in IUser.
@@ -62,7 +62,7 @@ public class InitUser implements IInitUser {
 		hash = hash * 7 + Long.valueOf(time).hashCode();
 		return hash;
 	}
-	
+
 	/**
 	 * Override the toString method of this class
 	 */
@@ -81,7 +81,7 @@ public class InitUser implements IInitUser {
 	@Override
 	public void receive(IInitUser sender, DataPacket<? extends IInitMessage> dp)
 			throws RemoteException {
-		toModelAdap.receive(sender, dp);		
+		toModelAdap.receive(sender, dp);
 	}
 
 }

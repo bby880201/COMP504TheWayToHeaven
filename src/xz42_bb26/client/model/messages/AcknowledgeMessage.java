@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author bb26, xc7
  */
 public class AcknowledgeMessage implements Serializable {
-	
+
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */

@@ -5,7 +5,7 @@ import java.util.UUID;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
 
-public class InstallGameMessage implements IChatMessage{
+public class InstallGameMessage implements IChatMessage {
 
 	/**
 	 * Auto-generated UID. 
@@ -15,12 +15,12 @@ public class InstallGameMessage implements IChatMessage{
 	 * ID of this message. 
 	 */
 	private final UUID teamID;
-	
+
 	/**
 	 * Represent if this player is navigator
 	 */
 	private final boolean isNavigator;
-	
+
 	/**
 	 * Team name
 	 */
@@ -31,12 +31,11 @@ public class InstallGameMessage implements IChatMessage{
 	 * UUID for the message is auto-generated.
 	 * @param user - user to be removed
 	 */
-	public InstallGameMessage(UUID uuid,String teamname,Boolean isNavigator) {
+	public InstallGameMessage(UUID uuid, String teamname, Boolean isNavigator) {
 		this.teamID = uuid;
 		this.isNavigator = isNavigator;
 		this.teamName = teamname;
 	}
-
 
 	/**
 	 * Return UUID
@@ -51,9 +50,9 @@ public class InstallGameMessage implements IChatMessage{
 	 * @return data packet of this message
 	 */
 	public DataPacket<? extends IChatMessage> getDataPacket() {
-		return new DataPacket<InstallGameMessage>(InstallGameMessage.class, this);
+		return new DataPacket<InstallGameMessage>(InstallGameMessage.class,
+				this);
 	}
-
 
 	/**
 	 * @return the isNavigator
@@ -61,7 +60,6 @@ public class InstallGameMessage implements IChatMessage{
 	public boolean isNavigator() {
 		return isNavigator;
 	}
-
 
 	/**
 	 * @return the teamName

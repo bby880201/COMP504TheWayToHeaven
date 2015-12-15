@@ -21,5 +21,6 @@ public interface IInitUser2ModelAdapter {
 	 * @param remote The remove IInitUser, the sender of the ADataPacket
 	 * @param dp An instance of ADatPacket class which wraps the data being sent
 	 */
-	public <T> void receive(IInitUser remote, DataPacket<? extends IInitMessage> dp);
+	public <T> void receive(IInitUser remote,
+			DataPacket<? extends IInitMessage> dp);
 }

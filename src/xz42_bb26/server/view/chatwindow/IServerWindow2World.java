@@ -92,50 +92,55 @@ public interface IServerWindow2World<T> {
 		@Override
 		public void installGame() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void createTeam(Object member) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void rejectConnection() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void begin() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void kick(Object usr) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
+
 	/**
 	 * Install game to the clients
 	 */
 	public void installGame();
+
 	/**
 	 * Create a team with a team member
 	 * @param member the team member
 	 */
 	public void createTeam(T member);
+
 	/**
 	 * Reject connection when game started
 	 */
 	public void rejectConnection();
+
 	/**
 	 * Game start
 	 */
 	public void begin();
+
 	/**
 	 * kick a user out
 	 * @param usr the user to be kicked out

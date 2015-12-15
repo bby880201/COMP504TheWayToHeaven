@@ -3,6 +3,7 @@ package xz42_bb26.game.controller;
 import gov.nasa.worldwind.layers.IconLayer;
 import gov.nasa.worldwind.layers.RenderableLayer;
 import xz42_bb26.game.model.Team;
+
 /**
  * The model to view adapter
  * @author xz42, bb26

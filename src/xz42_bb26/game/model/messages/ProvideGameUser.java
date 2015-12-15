@@ -11,8 +11,9 @@ import provided.datapacket.DataPacket;
  *
  */
 public class ProvideGameUser extends ARequest implements IChatMessage {
-	
+
 	IChatUser gameUser;
+
 	/**
 	 * Constructor 
 	 * @param _gameUser the game's chatuser
@@ -30,6 +31,7 @@ public class ProvideGameUser extends ARequest implements IChatMessage {
 	public DataPacket<? extends IChatMessage> getDataPacket() {
 		return new DataPacket<ProvideGameUser>(ProvideGameUser.class, this);
 	}
+
 	/**
 	 * Get the game's chat user
 	 * @return the chatUser stub

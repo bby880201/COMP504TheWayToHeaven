@@ -37,6 +37,7 @@ public interface IView2ModelAdapter<Room, User, ChatUser> {
 	 * @return A set of Room
 	 */
 	public void getListRooms(String ip);
+
 	/**
 	 * The adapter to model
 	 */

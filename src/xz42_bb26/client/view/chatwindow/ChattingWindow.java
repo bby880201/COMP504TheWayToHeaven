@@ -1,5 +1,7 @@
 package xz42_bb26.client.view.chatwindow;
 
+import xz42_bb26.client.view.MainGUI;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,6 +43,23 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
+	/**
+	 * <pre>
+	 *           0..*     1..1
+	 * ChattingWindow ------------------------> MainGUI
+	 *           chattingWindow        &gt;       mainGUI
+	 * </pre>
+	 */
+	private MainGUI mainGUI;
+
+	public void setMainGUI(MainGUI value) {
+		this.mainGUI = value;
+	}
+
+	public MainGUI getMainGUI() {
+		return this.mainGUI;
+	}
+
 	private static final long serialVersionUID = -8432378916828183998L;
 
 	private IChatWindow2Model<Usr> toChatroomAdapt;
@@ -105,13 +124,15 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbl_panel_4.columnWidths = new int[] { 0, 0 };
 		gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_4.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_4.rowWeights = new double[] { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+				0.0, Double.MIN_VALUE };
 		panel_4.setLayout(gbl_panel_4);
 		panel_4.setMinimumSize(new Dimension(150, 200));
 		panel_4.setMaximumSize(new Dimension(150, 1000));
-		
+
 		panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Invite Friend", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(null, "Invite Friend",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.gridheight = 3;
 		gbc_panel.fill = GridBagConstraints.BOTH;
@@ -120,10 +141,10 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbc_panel.gridy = 0;
 		panel_4.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{134, 0};
-		gbl_panel.rowHeights = new int[]{28, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.columnWidths = new int[] { 134, 0 };
+		gbl_panel.rowHeights = new int[] { 28, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		tfInvite = new JTextField();
@@ -142,7 +163,8 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbc_btnInvite.gridx = 0;
 		gbc_btnInvite.gridy = 1;
 		panel.add(btnInvite, gbc_btnInvite);
-		btnInvite.setToolTipText("Invite the remote user as specified by the IP address to the current chatroom.");
+		btnInvite
+				.setToolTipText("Invite the remote user as specified by the IP address to the current chatroom.");
 
 		JPanel panel_6 = new JPanel();
 		GridBagConstraints gbc_panel_6 = new GridBagConstraints();
@@ -155,12 +177,14 @@ public class ChattingWindow<Usr> extends JSplitPane {
 
 		lsMember = new JList<Usr>();
 		lsMember.setToolTipText("Display the current members in the chatroom.");
-		lsMember.setBorder(new TitledBorder(null, "Member List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		lsMember.setBorder(new TitledBorder(null, "Member List",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		panel_6.add(new JScrollPane(lsMember), BorderLayout.CENTER);
 
 		btnSpeakTo = new JButton("Speak To");
-		btnSpeakTo.setToolTipText("Speak to a chosen member from the member list of this chatroom.");
+		btnSpeakTo
+				.setToolTipText("Speak to a chosen member from the member list of this chatroom.");
 
 		GridBagConstraints gbc_btnSpeakTo = new GridBagConstraints();
 		gbc_btnSpeakTo.fill = GridBagConstraints.HORIZONTAL;
@@ -168,7 +192,7 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		gbc_btnSpeakTo.gridx = 0;
 		gbc_btnSpeakTo.gridy = 4;
 		panel_4.add(btnSpeakTo, gbc_btnSpeakTo);
-		
+
 		btnStartGame = new JButton("Start Game");
 		btnStartGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -206,7 +230,8 @@ public class ChattingWindow<Usr> extends JSplitPane {
 		btnSend.setToolTipText("Send the message.");
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -307,21 +332,20 @@ public class ChattingWindow<Usr> extends JSplitPane {
 	public void deleteWindow() {
 		toChatroomAdapt.deleteWindow(thisWindow);
 	}
-	
+
 	/**
 	 * Display a container
 	 * @param containerSupplier the container needs to be displayed
 	 */
 	public void display(Supplier<Component> containerSupplier) {
-		
+
 		plDisplay.add(containerSupplier.get());
 		plDisplay.revalidate();
 		plDisplay.repaint();
 	}
 
 	public void refreshRoomName(String displayName) {
-		
+
 	}
-	
-	
+
 }

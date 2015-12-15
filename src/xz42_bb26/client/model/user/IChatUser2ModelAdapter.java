@@ -18,6 +18,7 @@ public interface IChatUser2ModelAdapter {
 	 * @param remote The remove IChatUser, the sender of the ADataPacket
 	 * @param dp An instance of ADatPacket class which wraps the data being sent
 	 */
-	public <T> void receive(IChatUser remote, DataPacket<? extends IChatMessage> dp);
-	
+	public <T> void receive(IChatUser remote,
+			DataPacket<? extends IChatMessage> dp);
+
 }

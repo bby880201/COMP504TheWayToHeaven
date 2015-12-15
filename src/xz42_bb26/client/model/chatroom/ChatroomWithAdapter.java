@@ -1,5 +1,7 @@
 package xz42_bb26.client.model.chatroom;
 
+import xz42_bb26.client.model.ChatAppMainModel;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.net.UnknownHostException;
@@ -56,10 +58,27 @@ import common.message.init.AInvitation2Chatroom;
  * @author bb26, xc7
  */
 public class ChatroomWithAdapter implements IChatroom {
-	
+
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
+	/**
+	 * <pre>
+	 *           0..*     1..1
+	 * ChatroomWithAdapter ------------------------> ChatAppMainModel
+	 *           chatroomWithAdapter        &gt;       chatAppMainModel
+	 * </pre>
+	 */
+	private ChatAppMainModel chatAppMainModel;
+
+	public void setChatAppMainModel(ChatAppMainModel value) {
+		this.chatAppMainModel = value;
+	}
+
+	public ChatAppMainModel getChatAppMainModel() {
+		return this.chatAppMainModel;
+	}
+
 	private static final long serialVersionUID = -1842717037685994672L;
 
 	/**
@@ -67,7 +86,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 */
 	@SuppressWarnings("unchecked")
 	private transient IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter = IChatRoom2WorldAdapter.NULL_OBJECT;
-	
+
 	// default command to model adapter that provides unknown command limited 
 	// access to local system
 	// mark as "transient" to prevent it from being serialized during any 
@@ -76,18 +95,18 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * A adapter for command to communicate to other parts of this application
 	 */
 	private transient ICmd2ModelAdapter _cmd2ModelAdpt;
-	
+
 	// name of the local user
 	/**
 	 * Chat user of this mini model, needed by stub
 	 */
 	private IChatUser me;
-	
+
 	/**
 	 * Chat user stub of this mini model
 	 */
 	private IChatUser stub;
-	
+
 	/**
 	 * Init user stub of main model
 	 */
@@ -98,7 +117,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * UUID
 	 */
 	private UUID id;
-	
+
 	// name of the chatroom
 	/**
 	 * Name of chat room
@@ -108,23 +127,24 @@ public class ChatroomWithAdapter implements IChatroom {
 	/**
 	 * IChatUser stub list, mapped to its user information
 	 */
-	private HashMap<IChatUser,ChatUserEntity> users = new HashMap<IChatUser,ChatUserEntity>();
-	
+	private HashMap<IChatUser, ChatUserEntity> users = new HashMap<IChatUser, ChatUserEntity>();
+
 	/**
 	 * UUID of IChatUserInfoRequest data packet mapped to its user information, used to handel user info request
 	 */
 	private transient HashMap<UUID, ChatUserEntity> userInfo = new HashMap<UUID, ChatUserEntity>();
-	
+
 	/**
 	 * A blocking queue used to handle IInitUserRequest
 	 */
-	private transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(1);
-	
+	private transient BlockingQueue<IInitUser> initUserBq = new ArrayBlockingQueue<IInitUser>(
+			1);
+
 	/**
 	 * Data packet cache used to cache unknown data packet
 	 */
 	private transient HashMap<UUID, UnknownTypeData> unknownDataCache = new HashMap<UUID, UnknownTypeData>();
-	
+
 	/**
 	 * A place where remote users can put stuffs in
 	 */
@@ -134,7 +154,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * Data packet command algo
 	 */
 	private DataPacketAlgo<String, IChatUser> msgAlgo;
-	
+
 	/**
 	 * A reference of this model
 	 */
@@ -147,26 +167,28 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @throws UnknownHostException Throw exception if host is unknown
 	 * @throws RemoteException Throw exception if remote connection failed
 	 */
-	public ChatroomWithAdapter(UUID uuid) throws UnknownHostException, RemoteException {
+	public ChatroomWithAdapter(UUID uuid) throws UnknownHostException,
+			RemoteException {
 
 		initAlgo();
-		me = new ChatUser("", new IChatUser2ModelAdapter(){
-			
+		me = new ChatUser("", new IChatUser2ModelAdapter() {
+
 			@Override
 			public <T> void receive(IChatUser remote,
 					DataPacket<? extends IChatMessage> dp) {
 				String str = dp.execute(msgAlgo, remote);
-				System.out.println(str);				
+				System.out.println(str);
 			}
-			
+
 		});
-		
-		stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_CLIENT);
+
+		stub = (IChatUser) UnicastRemoteObject.exportObject(me,
+				IInitUser.BOUND_PORT_CLIENT);
 
 		displayName = "Boyang & Xiaolei's room";
-		users.put(stub,null);
+		users.put(stub, null);
 		initMe = null;
-		
+
 		id = uuid;
 	}
 
@@ -226,8 +248,9 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public void updateUpdatable(Supplier<Component> componentFac) {
-				componentFac.get().setForeground(Color.ORANGE);;
-				chatWindowAdapter.display(componentFac);				
+				componentFac.get().setForeground(Color.ORANGE);
+				;
+				chatWindowAdapter.display(componentFac);
 			}
 
 			@Override
@@ -246,353 +269,397 @@ public class ChatroomWithAdapter implements IChatroom {
 
 		};
 		// install ADataPacketAlgoCmd into DataPacketAlgo
-		msgAlgo = new DataPacketAlgo<String, IChatUser>(new ADataPacketAlgoCmd<String, Object, IChatUser>() {
+		msgAlgo = new DataPacketAlgo<String, IChatUser>(
+				new ADataPacketAlgoCmd<String, Object, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6547790461171634944L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6547790461171634944L;
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-
-			@Override
-			/**
-			 * install default command to handle unknown command type
-			 */
-			public String apply(Class<?> index, DataPacket<Object> host,
-					IChatUser... params) {
-				
-				IChatUser remote = params[0];
-				// class type of the unknown command
-				Class<?> newCmdType = host.getData().getClass();
-				
-				ACommandRequest reqForAlgo = new CommandRequest(newCmdType);
-				unknownDataCache.put(reqForAlgo.getID(), new UnknownTypeData(host, remote));
-				
-				(new Thread(){
-					@Override
-					public void run() {
-						try {
-							remote.receive(stub, reqForAlgo.getDataPacket());
-						} catch (RemoteException e) {
-							System.out.println("Unknown data type command request failed:");
-							e.printStackTrace();
-						}
-					}
-				}).start();
-				
-				return "Unknow data type: \"" + newCmdType + "\", asking for command!";
-			}
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-
-			
-		});
-		
-		// handle String type cmd as unknown cmd type 
-		msgAlgo.setCmd(ATextMessage.class, new ADataPacketAlgoCmd<String, ATextMessage, IChatUser>() {
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 2210559989023917346L;
-
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-
-			@Override
-			public String apply(Class<?> index, DataPacket<ATextMessage> host,
-					IChatUser... params) {
-
-				IChatUser remote = params[0];
-
-				JLabel content = new JLabel(users.get(remote).getName() + " says:\n" + host.getData().getText() + "\n");
-				
-				_cmd2ModelAdpt.addToScrollable(new Supplier<Component>(){
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
 
 					@Override
-					public Component get() {
-						return content;
+					/**
+					 * install default command to handle unknown command type
+					 */
+					public String apply(Class<?> index,
+							DataPacket<Object> host, IChatUser... params) {
+
+						IChatUser remote = params[0];
+						// class type of the unknown command
+						Class<?> newCmdType = host.getData().getClass();
+
+						ACommandRequest reqForAlgo = new CommandRequest(
+								newCmdType);
+						unknownDataCache.put(reqForAlgo.getID(),
+								new UnknownTypeData(host, remote));
+
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									remote.receive(stub,
+											reqForAlgo.getDataPacket());
+								} catch (RemoteException e) {
+									System.out
+											.println("Unknown data type command request failed:");
+									e.printStackTrace();
+								}
+							}
+						}).start();
+
+						return "Unknow data type: \"" + newCmdType
+								+ "\", asking for command!";
 					}
-					
+
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+
 				});
 
-				// return status information
-				return "String Message received from: " + remote;
+		// handle String type cmd as unknown cmd type 
+		msgAlgo.setCmd(ATextMessage.class,
+				new ADataPacketAlgoCmd<String, ATextMessage, IChatUser>() {
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 2210559989023917346L;
 
-				//				IUser remote = (IUser) params[0];
-				//				chatWindowAdapter.append(remote.getName() + " says:");
-				//				chatWindowAdapter.append(host.getData());
-				//				// return status information
-				//				return "String received from " + remote;
-			}
-		});
-		
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<ATextMessage> host, IChatUser... params) {
+
+						IChatUser remote = params[0];
+
+						JLabel content = new JLabel(users.get(remote).getName()
+								+ " says:\n" + host.getData().getText() + "\n");
+
+						_cmd2ModelAdpt
+								.addToScrollable(new Supplier<Component>() {
+
+									@Override
+									public Component get() {
+										return content;
+									}
+
+								});
+
+						// return status information
+						return "String Message received from: " + remote;
+
+						//				IUser remote = (IUser) params[0];
+						//				chatWindowAdapter.append(remote.getName() + " says:");
+						//				chatWindowAdapter.append(host.getData());
+						//				// return status information
+						//				return "String received from " + remote;
+					}
+				});
+
 		// handle addMe type cmd as known cmd type 
-		msgAlgo.setCmd(AAddMe.class, new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
+		msgAlgo.setCmd(AAddMe.class,
+				new ADataPacketAlgoCmd<String, AAddMe, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = -189336880905492572L;				
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = -189336880905492572L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
 
-			@Override
-			public String apply(Class<?> index, DataPacket<AAddMe> host,
-					IChatUser... params) {
-				
-				IChatUser remote = host.getData().getUser();
-				
-				infoRequest(remote);
-				return "User joined: " + users.get(params[0]);
-			}
-		});
-		
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<AAddMe> host, IChatUser... params) {
+
+						IChatUser remote = host.getData().getUser();
+
+						infoRequest(remote);
+						return "User joined: " + users.get(params[0]);
+					}
+				});
+
 		// command for chat user info request
-		msgAlgo.setCmd(AChatUserInfoRequest.class, new ADataPacketAlgoCmd<String, AChatUserInfoRequest, IChatUser>() {
+		msgAlgo.setCmd(
+				AChatUserInfoRequest.class,
+				new ADataPacketAlgoCmd<String, AChatUserInfoRequest, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 2964027427383796628L;
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 2964027427383796628L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<AChatUserInfoRequest> host, IChatUser... params) {
-				AChatUserInfoResponse infoResp = new ChatUserInfoResponse(host.getData(),chatWindowAdapter.getName(),chatWindowAdapter.getIp());
-				(new Thread() {
 					@Override
-					public void run() {
-						try {
-							params[0].receive(stub, infoResp.getDataPacket());
-						} catch (RemoteException e) {
-							System.out.println("Chat user info response sending failed:");
-							e.printStackTrace();
-						}
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 					}
-				}).start();
-				
-				return "Sending chat user info to: " + users.get(params[0]);
-			}
-		});
-		
+
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<AChatUserInfoRequest> host,
+							IChatUser... params) {
+						AChatUserInfoResponse infoResp = new ChatUserInfoResponse(
+								host.getData(), chatWindowAdapter.getName(),
+								chatWindowAdapter.getIp());
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									params[0].receive(stub,
+											infoResp.getDataPacket());
+								} catch (RemoteException e) {
+									System.out
+											.println("Chat user info response sending failed:");
+									e.printStackTrace();
+								}
+							}
+						}).start();
+
+						return "Sending chat user info to: "
+								+ users.get(params[0]);
+					}
+				});
+
 		// command for chat user info response
-		msgAlgo.setCmd(AChatUserInfoResponse.class, new ADataPacketAlgoCmd<String, AChatUserInfoResponse, IChatUser>() {
+		msgAlgo.setCmd(
+				AChatUserInfoResponse.class,
+				new ADataPacketAlgoCmd<String, AChatUserInfoResponse, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 5105304030772119307L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 5105304030772119307L;
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<AChatUserInfoResponse> host, IChatUser... params) {
-				
-				ChatUserEntity info = userInfo.get(host.getData().getID());
-				info.setIp(host.getData().getIP());
-				info.setName(host.getData().getName());
-				users.put(params[0], info);
-				refreshList();
-				
-				userInfo.remove(host.getData().getID());
-				
-				return "User info updated from: " + users.get(params[0]);
-			}
-
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-			
-		});
-		
-		msgAlgo.setCmd(AInitUserRequest.class, new ADataPacketAlgoCmd<String, AInitUserRequest, IChatUser>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -3791322058946183906L;
-
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<AInitUserRequest> host, IChatUser... params) {
-				AInitUserResponse initResp = new InitUserResponse(host.getData(), initMe);
-				(new Thread() {
 					@Override
-					public void run() {
-						try {
-							params[0].receive(stub, initResp.getDataPacket());
-						} catch (RemoteException e) {
-							System.out.println("Init user stub response sending failed:");
-							e.printStackTrace();
+					public String apply(Class<?> index,
+							DataPacket<AChatUserInfoResponse> host,
+							IChatUser... params) {
+
+						ChatUserEntity info = userInfo.get(host.getData()
+								.getID());
+						info.setIp(host.getData().getIP());
+						info.setName(host.getData().getName());
+						users.put(params[0], info);
+						refreshList();
+
+						userInfo.remove(host.getData().getID());
+
+						return "User info updated from: "
+								+ users.get(params[0]);
+					}
+
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+
+				});
+
+		msgAlgo.setCmd(AInitUserRequest.class,
+				new ADataPacketAlgoCmd<String, AInitUserRequest, IChatUser>() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -3791322058946183906L;
+
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<AInitUserRequest> host,
+							IChatUser... params) {
+						AInitUserResponse initResp = new InitUserResponse(host
+								.getData(), initMe);
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									params[0].receive(stub,
+											initResp.getDataPacket());
+								} catch (RemoteException e) {
+									System.out
+											.println("Init user stub response sending failed:");
+									e.printStackTrace();
+								}
+							}
+						}).start();
+
+						return "Sending init user stub response to: "
+								+ users.get(params[0]);
+					}
+
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+				});
+
+		msgAlgo.setCmd(AInitUserResponse.class,
+				new ADataPacketAlgoCmd<String, AInitUserResponse, IChatUser>() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1282191495265041594L;
+
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<AInitUserResponse> host,
+							IChatUser... params) {
+
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									initUserBq.offer(host.getData().getUser(),
+											10, TimeUnit.SECONDS);
+								} catch (Exception e) {
+									System.out
+											.println("Exception happened when trying to put init user to blocking queue:");
+									e.printStackTrace();
+								}
+							}
+						}).start();
+
+						return null;
+					}
+
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+
+				});
+
+		msgAlgo.setCmd(ACommandRequest.class,
+				new ADataPacketAlgoCmd<String, ACommandRequest, IChatUser>() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1064401054222898150L;
+
+					@Override
+					@SuppressWarnings("unchecked")
+					public String apply(Class<?> index,
+							DataPacket<ACommandRequest> host,
+							IChatUser... params) {
+
+						Class<?> unknow = host.getData().getUnknownType();
+						ADataPacketAlgoCmd<String, ?, IChatUser> cmd = (ADataPacketAlgoCmd<String, ?, IChatUser>) msgAlgo
+								.getCmd(unknow);
+						ACommandResponse cmdResp = new CommandResponse(host
+								.getData(), unknow, cmd);
+
+						(new Thread() {
+							@Override
+							public void run() {
+								try {
+									params[0].receive(stub,
+											cmdResp.getDataPacket());
+								} catch (RemoteException e) {
+									System.out
+											.println("Command response failed:");
+									e.printStackTrace();
+								}
+							}
+						}).start();
+						return "Responsing command to :" + users.get(params[0]);
+					}
+
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
+
+				});
+
+		msgAlgo.setCmd(ACommandResponse.class,
+				new ADataPacketAlgoCmd<String, ACommandResponse, IChatUser>() {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -7984109318009129478L;
+
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<ACommandResponse> host,
+							IChatUser... params) {
+
+						ADataPacketAlgoCmd<String, ?, IChatUser> cmd = host
+								.getData().getCommand();
+						cmd.setCmd2ModelAdpt(_cmd2ModelAdpt);
+
+						msgAlgo.setCmd(host.getData().getUnknownType(), cmd);
+						UnknownTypeData data = unknownDataCache.remove(host
+								.getData().getID());
+
+						if (null != data.getSender()) {
+							String str = data.getDataPacket().execute(msgAlgo,
+									data.getSender());
+							System.out.println(str);
+
+							return "Installed unknown data type: "
+									+ host.getData().getUnknownType()
+									+ " from: " + users.get(data.getSender());
+						} else {
+							return "Unknown data handling failed, wrong data cache";
 						}
 					}
-				}).start();
-				
-				return "Sending init user stub response to: " + users.get(params[0]);
-			}
 
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-		});
-
-		msgAlgo.setCmd(AInitUserResponse.class, new ADataPacketAlgoCmd<String, AInitUserResponse, IChatUser>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1282191495265041594L;
-
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<AInitUserResponse> host, IChatUser... params) {
-				
-				(new Thread(){
 					@Override
-					public void run() {
-						try {
-							initUserBq.offer(host.getData().getUser(),10,TimeUnit.SECONDS);
-						} catch (Exception e) {
-							System.out.println("Exception happened when trying to put init user to blocking queue:");
-							e.printStackTrace();
-						} 
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 					}
-				}).start();
-				
-				return null;
-			}
 
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-			
-		});
-		
-		msgAlgo.setCmd(ACommandRequest.class, new ADataPacketAlgoCmd<String, ACommandRequest, IChatUser>() {
+				});
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1064401054222898150L;
-
-			@Override
-			@SuppressWarnings("unchecked")
-			public String apply(Class<?> index,
-					DataPacket<ACommandRequest> host, IChatUser... params) {
-				
-				Class<?> unknow = host.getData().getUnknownType();
-				ADataPacketAlgoCmd<String,?,IChatUser> cmd = (ADataPacketAlgoCmd<String, ?, IChatUser>) msgAlgo.getCmd(unknow);
-				ACommandResponse cmdResp = new CommandResponse(host.getData(), unknow, cmd);
-				
-				(new Thread(){
-					@Override
-					public void run() {
-						try {
-							params[0].receive(stub, cmdResp.getDataPacket());
-						} catch (RemoteException e) {
-							System.out.println("Command response failed:");
-							e.printStackTrace();
-						}
-					}
-				}).start();
-				return "Responsing command to :" + users.get(params[0]);
-			}
-
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-			
-		});
-
-		msgAlgo.setCmd(ACommandResponse.class, new ADataPacketAlgoCmd<String, ACommandResponse, IChatUser>() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -7984109318009129478L;
-
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<ACommandResponse> host, IChatUser... params) {
-				
-				ADataPacketAlgoCmd<String, ?, IChatUser> cmd = host.getData().getCommand();
-				cmd.setCmd2ModelAdpt(_cmd2ModelAdpt);
-				
-				msgAlgo.setCmd(host.getData().getUnknownType(), cmd);
-				UnknownTypeData data = unknownDataCache.remove(host.getData().getID());
-				
-				if (null!= data.getSender()) {
-					String str = data.getDataPacket().execute(msgAlgo, data.getSender());
-					System.out.println(str);
-					
-					return "Installed unknown data type: " + host.getData().getUnknownType() + " from: "
-					+ users.get(data.getSender());
-				}
-				else {
-					return "Unknown data handling failed, wrong data cache";
-				}
-			}
-
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
-			
-		});
-		
 		// handle RemoveMe type cmd as known cmd type 
-		msgAlgo.setCmd(ARemoveMe.class, new ADataPacketAlgoCmd<String, ARemoveMe, IChatUser>() {
+		msgAlgo.setCmd(ARemoveMe.class,
+				new ADataPacketAlgoCmd<String, ARemoveMe, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 3679441143550851362L;
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 3679441143550851362L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
 
-			@Override
-			public String apply(Class<?> index, DataPacket<ARemoveMe> host,
-					IChatUser... params) {
-				ChatUserEntity user = users.get(params[0]);
-				chatWindowAdapter.append("User left: " + user);
-				removeUser(host.getData().getUser());
-				return "User left: " + user;
-			}
-		});
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<ARemoveMe> host, IChatUser... params) {
+						ChatUserEntity user = users.get(params[0]);
+						chatWindowAdapter.append("User left: " + user);
+						removeUser(host.getData().getUser());
+						return "User left: " + user;
+					}
+				});
 	}
-	
+
 	/**
 	 * Get the IChatRoom2WorldAdapter associated with this chatroom
 	 * @return An instance of IChatRoom2WorldAdapter
@@ -607,12 +674,14 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param chatWindowAdapter An instance of IChatRoom2WorldAdapter
 	 * @return return boolean value for synchronize purpose
 	 */
-	public boolean setChatWindowAdapter(IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter) {
+	public boolean setChatWindowAdapter(
+			IChatRoom2WorldAdapter<ChatUserEntity> chatWindowAdapter) {
 		this.chatWindowAdapter = chatWindowAdapter;
-		
-		ChatUserEntity meInfo = new ChatUserEntity(stub, chatWindowAdapter.getName(), chatWindowAdapter.getIp());
+
+		ChatUserEntity meInfo = new ChatUserEntity(stub,
+				chatWindowAdapter.getName(), chatWindowAdapter.getIp());
 		users.put(stub, meInfo);
-		
+
 		initMe = getInitUser();
 		refreshList();
 		return true;
@@ -650,7 +719,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param friend the remote user to be invited to this chatroom
 	 */
 	public void invite(IInitUser friend) {
-		AInvitation2Chatroom invite = new AInvitation2Chatroom(){
+		AInvitation2Chatroom invite = new AInvitation2Chatroom() {
 
 			/**
 			 * 
@@ -659,7 +728,8 @@ public class ChatroomWithAdapter implements IChatroom {
 
 			@Override
 			public DataPacket<? extends IInitMessage> getDataPacket() {
-				return new DataPacket<AInvitation2Chatroom>(AInvitation2Chatroom.class, this);
+				return new DataPacket<AInvitation2Chatroom>(
+						AInvitation2Chatroom.class, this);
 			}
 
 			@Override
@@ -671,7 +741,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			public boolean mustAccept() {
 				return false;
 			}
-			
+
 		};
 
 		(new Thread() {
@@ -681,7 +751,8 @@ public class ChatroomWithAdapter implements IChatroom {
 					// send friend an InviteToChatroom message
 					friend.receive(initMe, invite.getDataPacket());
 				} catch (RemoteException e) {
-					System.out.println("Invite " + friend + " to room failed: " + e + "\n");
+					System.out.println("Invite " + friend + " to room failed: "
+							+ e + "\n");
 					e.printStackTrace();
 				}
 			}
@@ -704,8 +775,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 */
 	public HashSet<IChatUser> getUsers() {
 		return new HashSet<IChatUser>(users.keySet());
-	}	
-
+	}
 
 	@Override
 	/**
@@ -760,7 +830,7 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * one of their specific chatrooms
 	 */
 	public void addMe() {
-		AAddMe addMe = new AAddMe(){
+		AAddMe addMe = new AAddMe() {
 
 			/**
 			 * 
@@ -776,7 +846,7 @@ public class ChatroomWithAdapter implements IChatroom {
 			public IChatUser getUser() {
 				return stub;
 			}
-			
+
 		};
 		(new Thread() {
 			@Override
@@ -788,8 +858,9 @@ public class ChatroomWithAdapter implements IChatroom {
 							user.receive(stub, addMe.getDataPacket());
 						}
 					} catch (RemoteException e) {
-						System.out.println("Broadcast to add user failed!\nRemote exception invite " + ": "
-								+ user + e + "\n");
+						System.out
+								.println("Broadcast to add user failed!\nRemote exception invite "
+										+ ": " + user + e + "\n");
 						e.printStackTrace();
 					}
 				}
@@ -811,8 +882,9 @@ public class ChatroomWithAdapter implements IChatroom {
 					user.receive(stub, rmMe.getDataPacket());
 				}
 			} catch (RemoteException e) {
-				System.out.println(
-						"Broadcast to remove user failed!\nRemote exception invite " + ": " + user + e + "\n");
+				System.out
+						.println("Broadcast to remove user failed!\nRemote exception invite "
+								+ ": " + user + e + "\n");
 				e.printStackTrace();
 			}
 		}
@@ -826,12 +898,12 @@ public class ChatroomWithAdapter implements IChatroom {
 	 */
 	@Override
 	public boolean addUser(IChatUser user) {
-		boolean added = users.put(user,new ChatUserEntity(user)) != null;
+		boolean added = users.put(user, new ChatUserEntity(user)) != null;
 		// Refresh the member list to display in the GUI panel
 		infoRequest(user);
 		return added;
 	}
-	
+
 	/**
 	 * Send a user info request to a given user stub
 	 * @param user a given user stub
@@ -839,20 +911,21 @@ public class ChatroomWithAdapter implements IChatroom {
 	public void infoRequest(IChatUser user) {
 		ChatUserEntity newEntity = new ChatUserEntity(user);
 		AChatUserInfoRequest infoReq = new ChatUserInfoRequest();
-		
+
 		userInfo.put(infoReq.getID(), newEntity);
-		users.put(user,newEntity);
+		users.put(user, newEntity);
 		refreshList();
-		
+
 		chatWindowAdapter.append("User joined: " + newEntity);
-		
-		(new Thread(){
+
+		(new Thread() {
 			@Override
-			public void run(){
+			public void run() {
 				try {
 					user.receive(stub, infoReq.getDataPacket());
 				} catch (RemoteException e) {
-					System.out.println("Chat user info request sending failed:");
+					System.out
+							.println("Chat user info request sending failed:");
 					e.printStackTrace();
 				}
 			}
@@ -898,7 +971,7 @@ public class ChatroomWithAdapter implements IChatroom {
 				}
 			}
 		}).start();
-		
+
 	}
 
 	/**
@@ -921,26 +994,26 @@ public class ChatroomWithAdapter implements IChatroom {
 	 * @param user the user to chat with
 	 */
 	public void speakTo(ChatUserEntity user) {
-		
-		(new Thread(){
+
+		(new Thread() {
 			@Override
-			public void run(){
+			public void run() {
 				chatWindowAdapter.speakTo(user.getIp());
 			}
 		}).start();
 
 	}
-	
+
 	/**
 	 * Get the init user stub from a given user information
 	 * @param user a given user information
 	 */
 	public void getRemoteInitUser(IChatUser user) {
-		
+
 		AInitUserRequest initUsrReq = new InitUserRequest();
-		(new Thread(){
+		(new Thread() {
 			@Override
-			public void run(){
+			public void run() {
 				try {
 					user.receive(stub, initUsrReq.getDataPacket());
 					@SuppressWarnings("unused")

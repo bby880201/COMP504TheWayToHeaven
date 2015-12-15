@@ -18,13 +18,13 @@ import common.IInitUser;
  * @param <T> The type of the data being held.
  */
 public interface IServerRoom2WorldAdapter<T, TmRm> {
-	
+
 	/**
 	 * Return the initUser from model
 	 * @return init client model's initUser 
 	 */
 	public IInitUser getInitUser();
-	
+
 	/**
 	 * Add the data to the specific chatroom's chat window.
 	 * @param data the data to be added to GUI panel
@@ -123,35 +123,41 @@ public interface IServerRoom2WorldAdapter<T, TmRm> {
 		@Override
 		public void refreshTeam(Collection teamList) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	};
+
 	/**
 	 * Display the container to the scrollable 
 	 * @param containerSupplier
 	 */
 	public void display(Supplier<Component> containerSupplier);
+
 	/**
 	 * Getter of username
 	 * @return username
 	 */
 	public String getName();
+
 	/**
 	 * Getter of ip
 	 * @return ip
 	 */
 	public String getIp();
+
 	/**
 	 * Speak to an ip
 	 * @param ip the ip to speak to 
 	 */
 	public void speakTo(String ip);
+
 	/**
 	 * popup a frame
 	 * @param frameFac the frame
 	 */
 	public void popUp(Supplier<JFrame> frameFac);
+
 	/**
 	 * Refresh team list
 	 * @param collection the container of the team list

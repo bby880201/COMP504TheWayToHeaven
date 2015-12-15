@@ -35,7 +35,7 @@ import javax.swing.ListSelectionModel;
  *
  * @param <Usr,TmRm>
  */
-public class ServerWindow<Usr,TmRm> extends JSplitPane {
+public class ServerWindow<Usr, TmRm> extends JSplitPane {
 
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
@@ -48,7 +48,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	/**
 	 * This window
 	 */
-	private ServerWindow<Usr,TmRm> thisWindow = this;
+	private ServerWindow<Usr, TmRm> thisWindow = this;
 	/**
 	 * The message input
 	 */
@@ -137,7 +137,8 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		gbl_panel_4.columnWidths = new int[] { 0, 0 };
 		gbl_panel_4.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_4.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel_4.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel_4.rowWeights = new double[] { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+				Double.MIN_VALUE };
 		panel_4.setLayout(gbl_panel_4);
 		panel_4.setMinimumSize(new Dimension(150, 200));
 		panel_4.setMaximumSize(new Dimension(150, 1000));
@@ -154,7 +155,8 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		lsMember = new JList<Usr>();
 		lsMember.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lsMember.setToolTipText("Display the current members in the chatroom.");
-		lsMember.setBorder(new TitledBorder(null, "Member List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		lsMember.setBorder(new TitledBorder(null, "Member List",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_6.add(new JScrollPane(lsMember), BorderLayout.CENTER);
 
 		btnCreateTeam = new JButton("Create Team");
@@ -166,17 +168,17 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		gbc_btnCreateTeam.gridx = 0;
 		gbc_btnCreateTeam.gridy = 1;
 		panel_4.add(btnCreateTeam, gbc_btnCreateTeam);
-		
+
 		btnKick = new JButton("Kick Out");
 		btnKick.setToolTipText("Kick selected user");
-				
+
 		GridBagConstraints gbc_btnKick = new GridBagConstraints();
 		gbc_btnKick.insets = new Insets(0, 0, 5, 0);
 		gbc_btnKick.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnKick.gridx = 0;
 		gbc_btnKick.gridy = 2;
 		panel_4.add(btnKick, gbc_btnKick);
-		
+
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
@@ -185,21 +187,22 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		gbc_panel.gridy = 3;
 		panel_4.add(panel, gbc_panel);
 		panel.setLayout(new BorderLayout(0, 0));
-		
-		lsTeam = new JList<TmRm>();		
+
+		lsTeam = new JList<TmRm>();
 		lsTeam.setToolTipText("Display the current teams in the room.");
-		lsTeam.setBorder(new TitledBorder(null, "Team List", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		lsTeam.setBorder(new TitledBorder(null, "Team List",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.add(new JScrollPane(lsTeam), BorderLayout.CENTER);
-			
+
 		btnInstallGame = new JButton("Install Game");
-		
+
 		GridBagConstraints gbc_btnStartGame = new GridBagConstraints();
 		gbc_btnStartGame.insets = new Insets(0, 0, 5, 0);
 		gbc_btnStartGame.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnStartGame.gridx = 0;
 		gbc_btnStartGame.gridy = 4;
 		panel_4.add(btnInstallGame, gbc_btnStartGame);
-		
+
 		btnPlay = new JButton("Play!");
 		GridBagConstraints gbc_btnPlay = new GridBagConstraints();
 		gbc_btnPlay.fill = GridBagConstraints.BOTH;
@@ -222,7 +225,8 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 		btnSend.setToolTipText("Send the message.");
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.insets = new Insets(0, 0, 0, 5);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
@@ -255,7 +259,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 				Usr selected = lsMember.getSelectedValue();
 				if (null != selected) {
 					toChatroomAdapt.createTeam(selected);
-				}				
+				}
 			}
 		});
 		/**
@@ -281,7 +285,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 				//TODO change function
 			}
 		});
-		
+
 		/**
 		 * Leave the current chatroom.
 		 */
@@ -290,7 +294,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 				toChatroomAdapt.begin();
 			}
 		});
-		
+
 		/**
 		 * Let players install game 
 		 */
@@ -298,8 +302,7 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 			public void actionPerformed(ActionEvent e) {
 				if (lsMember.getModel().getSize() == 0) {
 					toChatroomAdapt.installGame();
-				}
-				else {
+				} else {
 					append("Some players haven't been assigned to a team yet!");
 				}
 			}
@@ -311,10 +314,10 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	 * @param data the data to be added to GUI panel
 	 */
 	public void append(String data) {
-		JLabel content = new JLabel("Server:\n"+data);
+		JLabel content = new JLabel("Server:\n" + data);
 		content.setForeground(Color.RED);
 		plDisplay.add(content);
-		
+
 		plDisplay.revalidate();
 		plDisplay.repaint();
 	}
@@ -343,17 +346,18 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	public void deleteWindow() {
 		toChatroomAdapt.deleteWindow(thisWindow);
 	}
-	
+
 	/**
 	 * Display a container
 	 * @param containerSupplier the container needs to be displayed
 	 */
 	public void display(Supplier<Component> containerSupplier) {
-		
+
 		plDisplay.add(containerSupplier.get());
 		plDisplay.revalidate();
 		plDisplay.repaint();
 	}
+
 	/**
 	 * Set the diplay name of the room
 	 * @param displayName
@@ -369,6 +373,5 @@ public class ServerWindow<Usr,TmRm> extends JSplitPane {
 	public void refreshTeam(Collection<TmRm> teamList) {
 		lsTeam.setListData((TmRm[]) teamList.toArray());
 	}
-	
-	
+
 }
