@@ -47,7 +47,7 @@ import javax.swing.ListSelectionModel;
 public class MainGUI<Room, Usr, ChatUsr> {
 
 	@SuppressWarnings({ "unchecked" })
-	private IView2ModelAdapter<Room, Usr,ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
+	private IView2ModelAdapter<Room, Usr, ChatUsr> toModelAdapter = IView2ModelAdapter.NULL_OBJECT;
 	private JFrame frame;
 	private JTextField tfIPInput;
 	private JTabbedPane tabbedPane;
@@ -64,7 +64,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 	 * Create the application.
 	 * @param modelAdapter An instance of the IView2ModelAdapter
 	 */
-	public MainGUI(IView2ModelAdapter<Room, Usr,ChatUsr> modelAdapter) {
+	public MainGUI(IView2ModelAdapter<Room, Usr, ChatUsr> modelAdapter) {
 		initialize();
 		toModelAdapter = modelAdapter;
 	}
@@ -82,11 +82,12 @@ public class MainGUI<Room, Usr, ChatUsr> {
 	private void initialize() {
 		frame = new JFrame();
 		frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-            	toModelAdapter.quit();
-            }
-        });
-		frame.setBounds(100, 80, Toolkit.getDefaultToolkit().getScreenSize().width - 200,
+			public void windowClosing(WindowEvent e) {
+				toModelAdapter.quit();
+			}
+		});
+		frame.setBounds(100, 80,
+				Toolkit.getDefaultToolkit().getScreenSize().width - 200,
 				Toolkit.getDefaultToolkit().getScreenSize().height - 160);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -98,13 +99,17 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbl_panel.columnWidths = new int[] { 134, 0 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-		panel.setMinimumSize(new Dimension(100,200));
-		panel.setMaximumSize(new Dimension(100,2000));
-		
+		panel.setMinimumSize(new Dimension(100, 200));
+		panel.setMaximumSize(new Dimension(100, 2000));
+
 		panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Connect To", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_1.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Connect To",
+				TitledBorder.LEADING, TitledBorder.TOP, null,
+				new Color(0, 0, 0)));
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.insets = new Insets(0, 0, 5, 0);
@@ -112,10 +117,10 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_panel_1.gridy = 0;
 		panel.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{134, 0};
-		gbl_panel_1.rowHeights = new int[]{28, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.columnWidths = new int[] { 134, 0 };
+		gbl_panel_1.rowHeights = new int[] { 28, 0, 0 };
+		gbl_panel_1.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		tfIPInput = new JTextField();
@@ -125,7 +130,8 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_tfIPInput.gridx = 0;
 		gbc_tfIPInput.gridy = 0;
 		panel_1.add(tfIPInput, gbc_tfIPInput);
-		tfIPInput.setToolTipText("Enter the IP address of the remote user you want to connect to.");
+		tfIPInput
+				.setToolTipText("Enter the IP address of the remote user you want to connect to.");
 		tfIPInput.setColumns(10);
 
 		btnChatWith = new JButton("Chat With");
@@ -134,10 +140,12 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_btnChatWith.gridx = 0;
 		gbc_btnChatWith.gridy = 1;
 		panel_1.add(btnChatWith, gbc_btnChatWith);
-		btnChatWith.setToolTipText("Build connection with the remove user specified by the IP address.");
-		
+		btnChatWith
+				.setToolTipText("Build connection with the remove user specified by the IP address.");
+
 		panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(null, "Join Room", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_2.setBorder(new TitledBorder(null, "Join Room",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
@@ -145,12 +153,12 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_panel_2.gridy = 1;
 		panel.add(panel_2, gbc_panel_2);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{0, 0};
-		gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_panel_2.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panel_2.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.columnWidths = new int[] { 0, 0 };
+		gbl_panel_2.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panel_2.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
+		gbl_panel_2.rowWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		panel_2.setLayout(gbl_panel_2);
-		
+
 		btnGetChatrooms = new JButton("Get Chatrooms");
 		GridBagConstraints gbc_btnGetChatrooms = new GridBagConstraints();
 		gbc_btnGetChatrooms.insets = new Insets(0, 0, 5, 0);
@@ -160,7 +168,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		panel_2.add(btnGetChatrooms, gbc_btnGetChatrooms);
 		btnGetChatrooms
 				.setToolTipText("Get the list of chatrooms from the remote user as specified by the IP address.");
-		
+
 		panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
 		gbc_panel_3.insets = new Insets(0, 0, 5, 0);
@@ -168,12 +176,12 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		gbc_panel_3.gridx = 0;
 		gbc_panel_3.gridy = 1;
 		panel_2.add(panel_3, gbc_panel_3);
-		
+
 		lsRooms = new JList<Room>();
 		lsRooms.setToolTipText("Display available rooms");
 		lsRooms.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lsRooms.setFixedCellWidth(200);
-		
+
 		panel_3.setLayout(new BorderLayout(0, 0));
 		panel_3.add(new JScrollPane(lsRooms), BorderLayout.CENTER);
 
@@ -187,7 +195,7 @@ public class MainGUI<Room, Usr, ChatUsr> {
 
 		btnQuit = new JButton("Quit");
 		btnQuit.setToolTipText("Quit the program.");
-		
+
 		GridBagConstraints gbc_btnQuit = new GridBagConstraints();
 		gbc_btnQuit.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnQuit.gridx = 0;
@@ -195,9 +203,10 @@ public class MainGUI<Room, Usr, ChatUsr> {
 		panel.add(btnQuit, gbc_btnQuit);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		tabbedPane
+				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
+
 		btnActionListner();
 	}
 
@@ -253,13 +262,14 @@ public class MainGUI<Room, Usr, ChatUsr> {
 	 * @param mv2mmAdapt An instance of IChatWindow2Model
 	 * @return An instance of ChattingWindow
 	 */
-	public ChattingWindow<ChatUsr> makeChatRoom(IChatWindow2Model<ChatUsr> mv2mmAdapt) {
+	public ChattingWindow<ChatUsr> makeChatRoom(
+			IChatWindow2Model<ChatUsr> mv2mmAdapt) {
 
 		ChattingWindow<ChatUsr> cw = new ChattingWindow<ChatUsr>(mv2mmAdapt);
 		tabbedPane.addTab(mv2mmAdapt.getName(), null, cw, null);
 		return cw;
 	}
-	
+
 	/**
 	 * refresh the room list of remote user
 	 * @param rooms available chat rooms

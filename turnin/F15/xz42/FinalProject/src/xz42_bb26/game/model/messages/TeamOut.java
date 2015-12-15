@@ -5,6 +5,7 @@ import java.util.UUID;
 import common.message.ARequest;
 import common.message.IChatMessage;
 import provided.datapacket.DataPacket;
+
 /**
  * This is a message to claim a team is out.
  * @author xz42, bb26
@@ -12,12 +13,11 @@ import provided.datapacket.DataPacket;
  */
 public class TeamOut extends ARequest implements IChatMessage {
 
-	
 	/**
 	 * Generated id
 	 */
 	private static final long serialVersionUID = 8353675427415511872L;
-	
+
 	/**
 	 * The UUID of the team which is out
 	 */
@@ -51,6 +51,5 @@ public class TeamOut extends ARequest implements IChatMessage {
 	public void setTeamID(UUID teamID) {
 		this.teamID = teamID;
 	}
-
 
 }

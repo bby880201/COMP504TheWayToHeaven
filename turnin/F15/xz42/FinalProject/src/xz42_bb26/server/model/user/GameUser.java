@@ -11,8 +11,8 @@ import common.IChatUser;
  * @author bb26
  *
  */
-public class GameUser implements IGameUser,Serializable {
-	
+public class GameUser implements IGameUser, Serializable {
+
 	/**
 	 * declare a static final serialVersionUID of type long to fix the warning
 	 */
@@ -22,17 +22,17 @@ public class GameUser implements IGameUser,Serializable {
 	 * Indicating if this player is navigator
 	 */
 	private final boolean isNavig;
-	
+
 	/**
 	 * Player's chat user stub
 	 */
 	private final IChatUser stub;
-	
+
 	/**
 	 * Player's name
 	 */
 	private final String name;
-	
+
 	/**
 	 * Constructor of this class
 	 * @param memb player's information

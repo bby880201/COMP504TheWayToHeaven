@@ -10,7 +10,7 @@ import provided.datapacket.DataPacket;
  * @author bb26
  *
  */
-public class StartGameMessage implements IChatMessage{
+public class StartGameMessage implements IChatMessage {
 
 	/**
 	 * Auto-generated UID. 

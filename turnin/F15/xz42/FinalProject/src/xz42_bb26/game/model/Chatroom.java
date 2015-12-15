@@ -28,6 +28,7 @@ import xz42_bb26.game.model.messages.TeamComsumeDepot;
 import xz42_bb26.game.model.messages.TeamInfoUpdate;
 import xz42_bb26.game.model.messages.TeamOut;
 import xz42_bb26.game.model.messages.TeamWins;
+
 /**
  * 
  * This is the chatroom in which the game clients communicate
@@ -68,21 +69,21 @@ public class Chatroom implements IChatroom {
 	 * Current Info of teams
 	 */
 	@SuppressWarnings("unused")
-	private HashMap<IChatUser,Team> teams;
-	
+	private HashMap<IChatUser, Team> teams;
+
 	/**
 	 * The model adapter
 	 */
 	private IChatroom2ModelAdapter model;
-	
+
 	/**
 	 * Model adapter setter
 	 * @param model the model adapter
 	 */
-	public void setChatroom2ModelAdapter(IChatroom2ModelAdapter model){
+	public void setChatroom2ModelAdapter(IChatroom2ModelAdapter model) {
 		this.model = model;
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -96,12 +97,14 @@ public class Chatroom implements IChatroom {
 		me = new GameUser(userName, new IChatUser2ModelAdapter() {
 
 			@Override
-			public <T> void receive(IChatUser remote, DataPacket<? extends IChatMessage> dp) {
+			public <T> void receive(IChatUser remote,
+					DataPacket<? extends IChatMessage> dp) {
 				String string = dp.execute(msgAlgo, remote);
 				System.out.println(string);
 			}
 		});
-		IChatUser stub = (IChatUser) UnicastRemoteObject.exportObject(me, IInitUser.BOUND_PORT_CLIENT);
+		IChatUser stub = (IChatUser) UnicastRemoteObject.exportObject(me,
+				IInitUser.BOUND_PORT_CLIENT);
 		id = UUID.randomUUID();
 		users.add(stub);
 	}
@@ -226,7 +229,7 @@ public class Chatroom implements IChatroom {
 			}
 
 			@Override
-			public void updateUpdatable(Supplier<Component> componentFac) {				
+			public void updateUpdatable(Supplier<Component> componentFac) {
 			}
 
 			@Override
@@ -236,233 +239,243 @@ public class Chatroom implements IChatroom {
 			@Override
 			public void sendMsgTo(IChatMessage msg, IChatUser chatUser) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 		};
 		// install ADataPacketAlgoCmd into DataPacketAlgo
-		msgAlgo = new DataPacketAlgo<String, IChatUser>(new ADataPacketAlgoCmd<String, Object, IChatUser>() {
+		msgAlgo = new DataPacketAlgo<String, IChatUser>(
+				new ADataPacketAlgoCmd<String, Object, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6547790461171634944L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6547790461171634944L;
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
 
-			@Override
-			/**
-			 * install default command to handle unknown command type
-			 */
-			public String apply(Class<?> index, DataPacket<Object> host,
-					IChatUser... params) {
-				
-				return null;
-			}
+					@Override
+					/**
+					 * install default command to handle unknown command type
+					 */
+					public String apply(Class<?> index,
+							DataPacket<Object> host, IChatUser... params) {
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
+						return null;
+					}
 
-			
-		});
-		
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
+
+				});
+
 		// Update Team Info when get info from other teams
-		msgAlgo.setCmd(TeamInfoUpdate.class, new ADataPacketAlgoCmd<String, TeamInfoUpdate, IChatUser>() {
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 2210559989023917346L;
+		msgAlgo.setCmd(TeamInfoUpdate.class,
+				new ADataPacketAlgoCmd<String, TeamInfoUpdate, IChatUser>() {
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 2210559989023917346L;
 
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<TeamInfoUpdate> host,
+							IChatUser... params) {
+						if (params[0] != me) {
+							model.updateTeamInfo(host.getData().getTeam());
+						}
+						return host.getData().getTeam().toString();
+					}
 
-			@Override
-			public String apply(Class<?> index, DataPacket<TeamInfoUpdate> host, IChatUser... params) {
-				if(params[0]!= me){
-					model.updateTeamInfo(host.getData().getTeam());
-				}
-				return host.getData().getTeam().toString();
-			}
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
 
+					}
+				});
 
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				
-			}
-		});
-		
 		// Update chat users when ready
-		msgAlgo.setCmd(Ready.class, new ADataPacketAlgoCmd<String, Ready, IChatUser>() {
+		msgAlgo.setCmd(Ready.class,
+				new ADataPacketAlgoCmd<String, Ready, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = -189336880905492572L;				
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = -189336880905492572L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+					}
 
-			@Override
-			public String apply(Class<?> index, DataPacket<Ready> host,
-					IChatUser... params) {
-				
-				users = host.getData().getUsers();
-				model.setDepots(host.getData().getDepots());
-//				for (IChatUser user : users) {
-//					if(user!=me){
-//						TeamInfoUpdate aInfoUpdateMessage = new TeamInfoUpdate(model.getTeam());
-//						try {
-//							user.receive(me, aInfoUpdateMessage.getDataPacket());
-//						} catch (RemoteException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//				}
-				return "Users list updated";
-			}
-		});
-		
+					@Override
+					public String apply(Class<?> index, DataPacket<Ready> host,
+							IChatUser... params) {
+
+						users = host.getData().getUsers();
+						model.setDepots(host.getData().getDepots());
+						//				for (IChatUser user : users) {
+						//					if(user!=me){
+						//						TeamInfoUpdate aInfoUpdateMessage = new TeamInfoUpdate(model.getTeam());
+						//						try {
+						//							user.receive(me, aInfoUpdateMessage.getDataPacket());
+						//						} catch (RemoteException e) {
+						//							e.printStackTrace();
+						//						}
+						//					}
+						//				}
+						return "Users list updated";
+					}
+				});
+
 		// command for a team out
-		msgAlgo.setCmd(TeamOut.class, new ADataPacketAlgoCmd<String, TeamOut, IChatUser>() {
+		msgAlgo.setCmd(TeamOut.class,
+				new ADataPacketAlgoCmd<String, TeamOut, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 2964027427383796628L;
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 2964027427383796628L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<TeamOut> host, IChatUser... params) {
-				model.aTeamOut(host.getData().getTeamID());
-				return host.getData().getTeamID()+"is out";
-			}
-		});
-		
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<TeamOut> host, IChatUser... params) {
+						model.aTeamOut(host.getData().getTeamID());
+						return host.getData().getTeamID() + "is out";
+					}
+				});
+
 		// command for a team wins
-		msgAlgo.setCmd(TeamWins.class, new ADataPacketAlgoCmd<String, TeamWins, IChatUser>() {
+		msgAlgo.setCmd(TeamWins.class,
+				new ADataPacketAlgoCmd<String, TeamWins, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 5105304030772119307L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 5105304030772119307L;
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<TeamWins> host, IChatUser... params) {
-		
-				model.aTeamWins(host.getData().getTeamID());
-				return "A team wins";
-			}
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<TeamWins> host, IChatUser... params) {
 
-			@Override
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
-			
-		});
-		
+						model.aTeamWins(host.getData().getTeamID());
+						return "A team wins";
+					}
+
+					@Override
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
+
+				});
+
 		// command for cosume a depot
-		msgAlgo.setCmd(TeamComsumeDepot.class, new ADataPacketAlgoCmd<String, TeamComsumeDepot, IChatUser>() {
+		msgAlgo.setCmd(TeamComsumeDepot.class,
+				new ADataPacketAlgoCmd<String, TeamComsumeDepot, IChatUser>() {
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
-			private static final long serialVersionUID = 2964027427383796628L;
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
+					private static final long serialVersionUID = 2964027427383796628L;
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<TeamComsumeDepot> host, IChatUser... params) {
-				model.teamConsume(host.getData().getaDepot());
-				return "depot"+host.getData().getaDepot()+"is consumed";
-			}
-		});
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<TeamComsumeDepot> host,
+							IChatUser... params) {
+						model.teamConsume(host.getData().getaDepot());
+						return "depot" + host.getData().getaDepot()
+								+ "is consumed";
+					}
+				});
 		//command for game begins
-		msgAlgo.setCmd(Begin.class, new ADataPacketAlgoCmd<String, Begin, IChatUser>() {
+		msgAlgo.setCmd(Begin.class,
+				new ADataPacketAlgoCmd<String, Begin, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6681106016892170401L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6681106016892170401L;
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<Begin> host, IChatUser... params) {
-				model.gameBigin();
-				return "Game begins!";
-			}
-		});
-		
+					@Override
+					public String apply(Class<?> index, DataPacket<Begin> host,
+							IChatUser... params) {
+						model.gameBigin();
+						return "Game begins!";
+					}
+				});
+
 		//command for a player left
-		msgAlgo.setCmd(RemoveMe.class, new ADataPacketAlgoCmd<String, RemoveMe, IChatUser>() {
+		msgAlgo.setCmd(RemoveMe.class,
+				new ADataPacketAlgoCmd<String, RemoveMe, IChatUser>() {
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -6681106016892170401L;
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = -6681106016892170401L;
 
-			/**
-			 * declare a static final serialVersionUID of type long to fix the warning
-			 */
+					/**
+					 * declare a static final serialVersionUID of type long to fix the warning
+					 */
 
-			@Override
-			/**
-			 * Set the ICmd2ModelAdapter of this command
-			 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
-			 */
-			public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
-				_cmd2ModelAdpt = cmd2ModelAdpt;
-			}
+					@Override
+					/**
+					 * Set the ICmd2ModelAdapter of this command
+					 * @param cmd2ModelAdpt An instance of ICmd2ModelAdapter
+					 */
+					public void setCmd2ModelAdpt(ICmd2ModelAdapter cmd2ModelAdpt) {
+						_cmd2ModelAdpt = cmd2ModelAdpt;
+					}
 
-			@Override
-			public String apply(Class<?> index,
-					DataPacket<RemoveMe> host, IChatUser... params) {
-				users.remove(host.getData().getUser());
-				return "A Player Leaves";
-			}
-		});
+					@Override
+					public String apply(Class<?> index,
+							DataPacket<RemoveMe> host, IChatUser... params) {
+						users.remove(host.getData().getUser());
+						return "A Player Leaves";
+					}
+				});
 	}
+
 	/**
 	 * Send a message to others that a team moves
 	 * @param team the team moving
@@ -471,6 +484,5 @@ public class Chatroom implements IChatroom {
 		TeamInfoUpdate aMessage = new TeamInfoUpdate(team);
 		send(me, aMessage);
 	}
-
 
 }

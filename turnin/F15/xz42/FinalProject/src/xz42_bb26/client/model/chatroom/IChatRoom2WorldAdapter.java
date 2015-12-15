@@ -18,13 +18,13 @@ import common.IInitUser;
  * @param <T> The type of the data being held.
  */
 public interface IChatRoom2WorldAdapter<T> {
-	
+
 	/**
 	 * Return the initUser from model
 	 * @return init client model's initUser 
 	 */
 	public IInitUser getInitUser();
-	
+
 	/**
 	 * Add the data to the specific chatroom's chat window.
 	 * @param data the data to be added to GUI panel

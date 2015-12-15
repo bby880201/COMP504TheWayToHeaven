@@ -21,7 +21,7 @@ public class StringMessage extends ATextMessage {
 	 * Content need to be sent
 	 */
 	private final String msg;
-	
+
 	/**
 	 * ID of this message. 
 	 */
@@ -33,7 +33,7 @@ public class StringMessage extends ATextMessage {
 	 * @param str A String message
 	 */
 	public StringMessage(String str) {
-		this(UUID.randomUUID(),str);
+		this(UUID.randomUUID(), str);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class StringMessage extends ATextMessage {
 	 * @param msgID UUID
 	 * @param str A String message
 	 */
-	public StringMessage(UUID msgID,String str) {
+	public StringMessage(UUID msgID, String str) {
 		this.msgID = msgID;
 		this.msg = str;
 	}

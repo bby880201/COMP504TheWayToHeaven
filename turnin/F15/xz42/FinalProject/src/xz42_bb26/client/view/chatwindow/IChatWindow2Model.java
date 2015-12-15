@@ -92,7 +92,7 @@ public interface IChatWindow2Model<T> {
 		@Override
 		public void startGame() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	};
 

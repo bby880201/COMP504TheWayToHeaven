@@ -18,22 +18,22 @@ import common.message.IChatMessage;
  *
  */
 public class ChatUser implements IChatUser {
-	
+
 	/**
 	 * The adapter used to communicate to rest parts of the application
 	 */
 	private IChatUser2ModelAdapter toModelAdap;
-	
+
 	/**
 	 * Name of the user
 	 */
 	private String name;
-		
+
 	/**
 	 * Object created time
 	 */
 	private long time;
-	
+
 	/**
 	 * Constructor of the class, take the name and an adapter for parameters
 	 * @param name  name of the user
@@ -68,12 +68,12 @@ public class ChatUser implements IChatUser {
 	public int hashCode() {
 		// using IP, name, and time to calculate hashCode.
 		int hash = 1;
-//		hash = hash * 17 + IP.hashCode();
+		//		hash = hash * 17 + IP.hashCode();
 		hash = hash * 31 + name.hashCode();
 		hash = hash * 7 + Long.valueOf(time).hashCode();
 		return hash;
 	}
-	
+
 	/**
 	 * Override the toString method of this class
 	 */
@@ -81,7 +81,7 @@ public class ChatUser implements IChatUser {
 	public String toString() {
 		Date date = new Date(time);
 		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
-		return name + " " + format.format(date);	
+		return name + " " + format.format(date);
 	}
 
 	/**
@@ -90,6 +90,6 @@ public class ChatUser implements IChatUser {
 	@Override
 	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp)
 			throws RemoteException {
-		toModelAdap.receive(sender,dp);		
+		toModelAdap.receive(sender, dp);
 	}
 }

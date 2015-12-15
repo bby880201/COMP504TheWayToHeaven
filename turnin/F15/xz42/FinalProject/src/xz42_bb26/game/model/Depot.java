@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import gov.nasa.worldwind.geom.Position;
+
 /**
  * This is a depot structure
  * @author xz42, bb26
@@ -14,7 +15,7 @@ public class Depot implements Serializable {
 	 * Generated id
 	 */
 	private static final long serialVersionUID = -3713811666017363399L;
-	
+
 	/**
 	 * The price will cost
 	 */

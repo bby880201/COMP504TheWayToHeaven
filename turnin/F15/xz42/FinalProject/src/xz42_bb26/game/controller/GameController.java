@@ -17,6 +17,7 @@ import xz42_bb26.game.model.GameUser;
 import xz42_bb26.game.model.Team;
 import xz42_bb26.game.view.GameView;
 import xz42_bb26.game.view.IModelAdapter;
+
 /**
  * This is the game controller
  * @author xz42, bb26
@@ -31,12 +32,13 @@ public class GameController {
 	 * View of the MVC
 	 */
 	private GameView view;
-	
+
 	/**
 	 * Constructor of the controller.
 	 * @param team The team.
 	 */
-	public GameController(UUID teamID, IChatUser server, String teamName, Boolean isNavigator) {
+	public GameController(UUID teamID, IChatUser server, String teamName,
+			Boolean isNavigator) {
 		model = new GameModel(new IViewAdapter() {
 
 			@Override
@@ -67,10 +69,10 @@ public class GameController {
 			@Override
 			public void gameOver() {
 				view.gameOver();
-				
+
 			}
-			
-		},teamID, server,teamName,isNavigator);
+
+		}, teamID, server, teamName, isNavigator);
 		view = new GameView(new IModelAdapter() {
 
 			@Override
@@ -97,18 +99,19 @@ public class GameController {
 			public void quit() {
 				model.quit();
 			}
-			
+
 		});
 	}
+
 	/**
 	 * Starting the Game.
 	 * @throws RemoteException
 	 */
-	public void start() throws RemoteException {	
+	public void start() throws RemoteException {
 		view.start();
 		model.start();
 	}
-	
+
 	/**
 	 * This is the main function for testing the game individually.
 	 * Can be removed.
@@ -118,16 +121,19 @@ public class GameController {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-					IChatUser server = new GameUser("aname", new IChatUser2ModelAdapter() {
-						
-						@Override
-						public <T> void receive(IChatUser remote, DataPacket<? extends IChatMessage> dp) {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-					GameController controller = new GameController(UUID.randomUUID(),server, "a team",true);
+
+					IChatUser server = new GameUser("aname",
+							new IChatUser2ModelAdapter() {
+
+								@Override
+								public <T> void receive(IChatUser remote,
+										DataPacket<? extends IChatMessage> dp) {
+									// TODO Auto-generated method stub
+
+								}
+							});
+					GameController controller = new GameController(UUID
+							.randomUUID(), server, "a team", true);
 					controller.start();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -135,5 +141,5 @@ public class GameController {
 			}
 		});
 	}
-	
+
 }

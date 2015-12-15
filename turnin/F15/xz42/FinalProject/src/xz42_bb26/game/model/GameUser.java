@@ -28,17 +28,18 @@ public class GameUser implements IChatUser {
 	 * The time user generated
 	 */
 	private long time;
+
 	/**
 	 * Constructor
 	 * @param name the client's name
 	 * @param toModel the adapter
 	 */
-	public GameUser(String name, IChatUser2ModelAdapter toModel){
+	public GameUser(String name, IChatUser2ModelAdapter toModel) {
 		this.toModelAdapter = toModel;
 		this.name = name;
 		this.time = System.currentTimeMillis();
 	}
-	
+
 	/**
 	 * Override the toString method of this class
 	 */
@@ -46,13 +47,15 @@ public class GameUser implements IChatUser {
 	public String toString() {
 		Date date = new Date(time);
 		Format format = new SimpleDateFormat("HH:mm:ss.SSS");
-		return name + " " + format.format(date);	
+		return name + " " + format.format(date);
 	}
+
 	/**
 	 * Receive messages
 	 */
 	@Override
-	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp) throws RemoteException {
+	public void receive(IChatUser sender, DataPacket<? extends IChatMessage> dp)
+			throws RemoteException {
 		toModelAdapter.receive(sender, dp);
 	}
 
